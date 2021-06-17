@@ -15,7 +15,13 @@ install: build
 test: install
 	$(SAGE_BIN) -t src/$(PACKAGE)
 
-clean:
+doc: install
+	cd docs/ && $(SAGE_BIN) -sh -c "make html"
+
+clean-doc:
+	cd docs/ && $(SAGE_BIN) -sh -c "make clean"
+
+clean: clean-doc
 	rm -rf build/
 	rm -rf dist/
 	rm -rf src/$(PACKAGE).egg-info/
