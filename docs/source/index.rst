@@ -10,8 +10,8 @@ Welcome to MQ Estimator documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   degree_of_regularity
-
+   degree_of_regularities
+   hilbert_series
 
 
 Indices and tables
