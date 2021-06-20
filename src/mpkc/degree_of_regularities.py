@@ -43,3 +43,28 @@ def semi_regular_system(n, degrees):
 
     S = HilbertSeries(n, degrees)
     return S.first_nonpositive_integer()
+
+
+def quadratic_system(n, m):
+    """
+    Return the degree of regularity for quadratic system
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+
+    EXAMPLES::
+
+        sage: from mpkc.degree_of_regularities import quadratic_system
+        sage: quadratic_system(10, 15)
+        4
+        sage: quadratic_system(15, 15)
+        16
+    """
+    if n >= m:
+        dreg = regular_system(n, [2]*m)
+    else:
+        dreg = semi_regular_system(n, [2]*m)
+
+    return dreg
