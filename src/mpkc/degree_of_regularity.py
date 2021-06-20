@@ -9,7 +9,7 @@ def regular_system(n, degrees):
 
     EXAMPLES::
 
-        sage: from mq_estimator.degree_of_regularity import regular_system as dreg_regular
+        sage: from mpkc.degree_of_regularity import regular_system as dreg_regular
         sage: dreg_regular(15, [2]*10)
         11
     """

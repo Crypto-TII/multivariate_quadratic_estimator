@@ -13,7 +13,7 @@ install: build
 	$(SAGE_BIN) -pip install .
 
 test: install
-	$(SAGE_BIN) -t src/$(PACKAGE)
+	$(SAGE_BIN) -t src/mpkc
 
 doc: install
 	cd docs/ && $(SAGE_BIN) -sh -c "make html"
