@@ -87,6 +87,8 @@ class HilbertSeries(object):
         """
         Return the series
 
+        EXAMPLES::
+
             sage: from mpkc.hilbert_series import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.series

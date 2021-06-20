@@ -1,0 +1,1 @@
+from .degree_of_regularities import degree_of_regularity

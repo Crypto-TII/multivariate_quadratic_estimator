@@ -1,6 +1,31 @@
 from .hilbert_series import HilbertSeries
 
 
+def degree_of_regularity(n, degrees):
+    """
+    Return the degree of regularity for the system of polynomial equations
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``degrees`` -- a list of integers representing the degree of the polynomials
+
+    EXAMPLES::
+
+        sage: from mpkc import degree_of_regularity
+        sage: degree_of_regularity(5, [2]*10)
+        3
+        sage: degree_of_regularity(10, [3]*5)
+        11
+    """
+    m = len(degrees)
+    if n >= m:
+        dreg = regular_system(n, degrees)
+    else:
+        dreg = semi_regular_system(n, degrees)
+    return dreg
+
+
 def regular_system(n, degrees):
     """
     Return the degree of regularity for regular system
@@ -62,9 +87,4 @@ def quadratic_system(n, m):
         sage: quadratic_system(15, 15)
         16
     """
-    if n >= m:
-        dreg = regular_system(n, [2]*m)
-    else:
-        dreg = semi_regular_system(n, [2]*m)
-
-    return dreg
+    return degree_of_regularity(n, [2]*m)
