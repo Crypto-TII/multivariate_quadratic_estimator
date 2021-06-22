@@ -4,6 +4,7 @@ SAGE_BIN=sage
 all: install
 
 build:
+	$(SAGE_BIN) -pip install build
 	$(SAGE_BIN) -python -m build
 
 uninstall:
