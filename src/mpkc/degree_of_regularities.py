@@ -66,8 +66,8 @@ def semi_regular_system(n, degrees):
     if m <= n:
         raise ValueError("the number of polynomials must be strictly greater than the number of variables")
 
-    S = HilbertSeries(n, degrees)
-    return S.first_nonpositive_integer()
+    s = HilbertSeries(n, degrees)
+    return s.first_nonpositive_integer()
 
 
 def quadratic_system(n, m):

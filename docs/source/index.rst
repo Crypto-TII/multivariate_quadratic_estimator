@@ -13,6 +13,14 @@ Welcome to MQ Estimator documentation!
    degree_of_regularities
    hilbert_series
 
+Complexities
+============
+
+.. toctree::
+   :maxdepth: 1
+
+   complexities/F5
+
 
 Indices and tables
 ==================
