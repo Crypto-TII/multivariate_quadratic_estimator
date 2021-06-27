@@ -1,7 +1,7 @@
 from .hilbert_series import HilbertSeries
 
 
-def degree_of_regularity(n, degrees):
+def generic_system(n, degrees):
     """
     Return the degree of regularity for the system of polynomial equations
 
@@ -13,9 +13,9 @@ def degree_of_regularity(n, degrees):
     EXAMPLES::
 
         sage: from mpkc import degree_of_regularity
-        sage: degree_of_regularity(5, [2]*10)
+        sage: degree_of_regularity.generic_system(5, [2]*10)
         3
-        sage: degree_of_regularity(10, [3]*5)
+        sage: degree_of_regularity.generic_system(10, [3]*5)
         11
     """
     m = len(degrees)
@@ -37,8 +37,8 @@ def regular_system(n, degrees):
 
     EXAMPLES::
 
-        sage: from mpkc.degree_of_regularities import regular_system as dreg_regular
-        sage: dreg_regular(15, [2]*10)
+        sage: from mpkc import degree_of_regularity
+        sage: degree_of_regularity.regular_system(15, [2]*10)
         11
     """
     m = len(degrees)
@@ -58,8 +58,8 @@ def semi_regular_system(n, degrees):
 
     EXAMPLES::
 
-        sage: from mpkc.degree_of_regularities import semi_regular_system as dreg_semi_regular
-        sage: dreg_semi_regular(10, [2]*15)
+        sage: from mpkc import degree_of_regularity
+        sage: degree_of_regularity.semi_regular_system(10, [2]*15)
         4
     """
     m = len(degrees)
@@ -81,10 +81,10 @@ def quadratic_system(n, m):
 
     EXAMPLES::
 
-        sage: from mpkc.degree_of_regularities import quadratic_system
-        sage: quadratic_system(10, 15)
+        sage: from mpkc import degree_of_regularity
+        sage: degree_of_regularity.quadratic_system(10, 15)
         4
-        sage: quadratic_system(15, 15)
+        sage: degree_of_regularity.quadratic_system(15, 15)
         16
     """
-    return degree_of_regularity(n, [2]*m)
+    return generic_system(n, [2] * m)
