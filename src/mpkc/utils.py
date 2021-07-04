@@ -1,6 +1,8 @@
 from sage.arith.misc import is_prime_power
 from sage.functions.log import log
 from sage.functions.other import ceil
+from sage.groups.affine_gps.affine_group import AffineGroup
+from sage.rings.finite_rings.finite_field_base import is_FiniteField
 from mpkc.series.nmonomial import NMonomialSeries
 
 
@@ -97,3 +99,35 @@ def nmonomials_up_to_degree(d, n, q=None):
     """
     series = NMonomialSeries(n, q)
     return series.nmonomials_up_to_degree(d)
+
+
+def random_affine_map(base_field, nvars):
+    """
+    Return a random invertible affine map
+
+    TESTS::
+
+        sage: from mpkc.utils import random_affine_map
+        sage: M, v = random_affine_map(GF(3), 4)
+        sage: M.base_ring()
+        Finite Field of size 3
+        sage: M.is_invertible()
+        True
+        sage: M.dimensions()
+        (4, 4)
+        sage: v.base_ring()
+        Finite Field of size 3
+        sage: v.length()
+        4
+    """
+    if not is_FiniteField(base_field):
+        raise TypeError("base_field must be an instance of sage FiniteField")
+
+    if nvars < 1:
+        raise ValueError("nvars must be >= 1")
+
+    affine_map = AffineGroup(nvars, base_field).random_element()
+    matrix_ = affine_map.A()
+    vector_ = affine_map.b()
+
+    return matrix_, vector_
