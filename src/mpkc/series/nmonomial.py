@@ -16,7 +16,7 @@ class NMonomialSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.nmonomial_series import NMonomialSeries
+            sage: from mpkc.series.nmonomial import NMonomialSeries
             sage: NM = NMonomialSeries(n=6, q=5)
             sage: NM
             Class for the number of monomials in the polynomial ring in 6 variables over F_5
@@ -46,7 +46,7 @@ class NMonomialSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.nmonomial_series import NMonomialSeries
+            sage: from mpkc.series.nmonomial import NMonomialSeries
             sage: NM = NMonomialSeries(n=6, q=5)
             sage: NM.series_monomials_of_degree()
             1 + 6*z + 21*z^2 + 56*z^3 + 126*z^4 + 246*z^5 + 426*z^6 + O(z^7)
@@ -59,7 +59,7 @@ class NMonomialSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.nmonomial_series import NMonomialSeries
+            sage: from mpkc.series.nmonomial import NMonomialSeries
             sage: NM = NMonomialSeries(n=6, q=5)
             sage: NM.series_monomials_up_to_degree()
             1 + 7*z + 28*z^2 + 84*z^3 + 210*z^4 + 456*z^5 + 882*z^6 + O(z^7)
@@ -76,7 +76,7 @@ class NMonomialSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.nmonomial_series import NMonomialSeries
+            sage: from mpkc.series.nmonomial import NMonomialSeries
             sage: NM = NMonomialSeries(n=6, q=5)
             sage: NM.nmonomials_of_degree(4)
             126
@@ -97,7 +97,7 @@ class NMonomialSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.nmonomial_series import NMonomialSeries
+            sage: from mpkc.series.nmonomial import NMonomialSeries
             sage: NM = NMonomialSeries(n=6, q=5)
             sage: NM.nmonomials_up_to_degree(4)
             210

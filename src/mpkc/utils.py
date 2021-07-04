@@ -1,7 +1,7 @@
 from sage.arith.misc import is_prime_power
 from sage.functions.log import log
 from sage.functions.other import ceil
-from mpkc.nmonomial_series import NMonomialSeries
+from mpkc.series.nmonomial import NMonomialSeries
 
 
 def ngates(q, n):

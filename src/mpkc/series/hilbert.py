@@ -15,7 +15,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(10, [2]*15)
             sage: H
             Hilbert series for system with 10 variables and 15 polynomials
@@ -33,7 +33,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.nvariables
             5
@@ -47,7 +47,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.degrees
             [2, 2, 2, 2, 2, 2, 2]
@@ -61,7 +61,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.precision
             14
@@ -75,7 +75,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.ring
             Power Series Ring in z over Rational Field
@@ -89,7 +89,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(5, [2]*7)
             sage: H.series
             1 + 5*z + 8*z^2 - 14*z^4 - 14*z^5 + 8*z^7 + 5*z^8 + z^9 + O(z^14)
@@ -103,7 +103,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(10, [2]*15)
             sage: H.npolynomials
             15
@@ -116,7 +116,7 @@ class HilbertSeries(object):
 
         EXAMPLES::
 
-            sage: from mpkc.hilbert_series import HilbertSeries
+            sage: from mpkc.series.hilbert import HilbertSeries
             sage: H = HilbertSeries(10, [2]*15)
             sage: H.first_nonpositive_integer()
             4
