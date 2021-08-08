@@ -1239,6 +1239,45 @@ class Rainbow:
         return f"Rainbow signature over GF({q}) with {n} variables and {m} polynomials"
 
 
+def Rainbow128():
+    """
+    Return an instance of Rainbow with 128-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.rainbow import Rainbow128
+        sage: Rainbow128()
+        Rainbow signature over GF(16) with 100 variables and 64 polynomials
+    """
+    return Rainbow(q=16, n=100, v=[36, 68])
+
+
+def Rainbow192():
+    """
+    Return an instance of Rainbow with 192-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.rainbow import Rainbow192
+        sage: Rainbow192()
+        Rainbow signature over GF(256) with 148 variables and 80 polynomials
+    """
+    return Rainbow(q=256, n=148, v=[68, 100])
+
+
+def Rainbow256():
+    """
+    Return an instance of Rainbow with 256-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.rainbow import Rainbow256
+        sage: Rainbow256()
+        Rainbow signature over GF(256) with 196 variables and 100 polynomials
+    """
+    return Rainbow(q=256, n=196, v=[96, 132])
+
+
 def generate_instances(sec_level_classical, sec_level_quantum, min_q=2, max_q=256, min_nvars=1, max_nvars=196):
     """
     Generate instances of Rainbow satisfying the security level

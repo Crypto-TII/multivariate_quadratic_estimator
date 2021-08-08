@@ -1072,14 +1072,41 @@ class GeMSS:
 
 
 def GeMSS128():
+    """
+    Return an instance of GeMSS with 128-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.gemss import GeMSS128
+        sage: GeMSS128()
+        GeMSS with D=513, n=174, Δ=12, v=12
+    """
     return GeMSS(D=513, n=174, delta=12, v=12)
 
 
 def GeMSS192():
+    """
+    Return an instance of GeMSS with 192-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.gemss import GeMSS192
+        sage: GeMSS192()
+        GeMSS with D=513, n=265, Δ=22, v=20
+    """
     return GeMSS(D=513, n=265, delta=22, v=20)
 
 
 def GeMSS256():
+    """
+    Return an instance of GeMSS with 256-bit security
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes.gemss import GeMSS256
+        sage: GeMSS256()
+        GeMSS with D=513, n=354, Δ=30, v=33
+    """
     return GeMSS(D=513, n=354, delta=30, v=33)
 
 
