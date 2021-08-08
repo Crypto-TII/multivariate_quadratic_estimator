@@ -1,1 +1,1 @@
-from . import F5
+from . import F5, kpg
