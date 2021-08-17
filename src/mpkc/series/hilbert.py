@@ -1,10 +1,11 @@
 from sage.all import ZZ, QQ
 from sage.misc.misc_c import prod
 from sage.rings.power_series_ring import PowerSeriesRing
+from sage.arith.misc import is_prime_power
 
 
 class HilbertSeries(object):
-    def __init__(self, n, degrees):
+    def __init__(self, n, degrees, q=None):
         """
         Construct an instance of Hilbert series
 
@@ -12,6 +13,7 @@ class HilbertSeries(object):
 
         - ``n`` -- no of variables
         - ``degrees`` -- a list of integers representing the degree of the polynomials
+        - ``q`` -- order of the finite field (default: None)
 
         EXAMPLES::
 
@@ -19,12 +21,23 @@ class HilbertSeries(object):
             sage: H = HilbertSeries(10, [2]*15)
             sage: H
             Hilbert series for system with 10 variables and 15 polynomials
+            sage: H = HilbertSeries(10, [2]*15, q=2)
+            sage: H
+            Hilbert series for system with 10 variables and 15 polynomials over F_2
         """
+
+        self._q = q
         self._nvariables = n
         self._degrees = degrees
         self._ring = PowerSeriesRing(QQ, 'z', default_prec=2*len(self._degrees))
         z = self._ring.gen()
-        self._series = prod([1 - z ** d for d in degrees]) / (1 - z) ** n
+        if q is not None:
+            if not is_prime_power(q):
+                raise ValueError("the order of finite field q must be a prime power")
+
+            self._series = prod([(1 - z ** d) / (1 - z ** (d * q)) for d in degrees]) * ((1 - z ** q) / (1 - z)) ** n
+        else:
+            self._series = prod([1 - z ** d for d in degrees]) / (1 - z) ** n
 
     @property
     def nvariables(self):
@@ -90,9 +103,12 @@ class HilbertSeries(object):
         EXAMPLES::
 
             sage: from mpkc.series.hilbert import HilbertSeries
-            sage: H = HilbertSeries(5, [2]*7)
+            sage: H = HilbertSeries(4, [2]*5)
             sage: H.series
-            1 + 5*z + 8*z^2 - 14*z^4 - 14*z^5 + 8*z^7 + 5*z^8 + z^9 + O(z^14)
+            1 + 4*z + 5*z^2 - 5*z^4 - 4*z^5 - z^6 + O(z^10)
+            sage: H = HilbertSeries(4, [2]*5, q=2)
+            sage: H.series
+            1 + 4*z + z^2 - 16*z^3 - 14*z^4 + 40*z^5 + 50*z^6 - 80*z^7 - 125*z^8 + 140*z^9 + O(z^10)
         """
         return self._series
 
@@ -129,4 +145,7 @@ class HilbertSeries(object):
             raise ValueError("unable to find a nonpositive coefficient in the series")
 
     def __repr__(self):
-        return f"Hilbert series for system with {self.nvariables} variables and {self.npolynomials} polynomials"
+        text = f"Hilbert series for system with {self.nvariables} variables and {self.npolynomials} polynomials"
+        if self._q is not None:
+            text += f" over F_{self._q}"
+        return text

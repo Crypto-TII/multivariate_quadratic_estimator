@@ -1,7 +1,7 @@
 from mpkc.series.hilbert import HilbertSeries
 
 
-def generic_system(n, degrees):
+def generic_system(n, degrees, q=None):
     """
     Return the degree of regularity for the system of polynomial equations
 
@@ -9,6 +9,7 @@ def generic_system(n, degrees):
 
     - ``n`` -- no. of variables
     - ``degrees`` -- a list of integers representing the degree of the polynomials
+    - ``q`` -- order of the finite field (default: None)
 
     EXAMPLES::
 
@@ -22,7 +23,7 @@ def generic_system(n, degrees):
     if n >= m:
         dreg = regular_system(n, degrees)
     else:
-        dreg = semi_regular_system(n, degrees)
+        dreg = semi_regular_system(n, degrees, q=q)
     return dreg
 
 
@@ -47,7 +48,7 @@ def regular_system(n, degrees):
     return sum((d - 1) for d in degrees) + 1
 
 
-def semi_regular_system(n, degrees):
+def semi_regular_system(n, degrees, q=None):
     """
     Return the degree of regularity for semi-regular system
 
@@ -55,22 +56,25 @@ def semi_regular_system(n, degrees):
 
     - ``n`` -- no. of variables
     - ``degrees`` -- a list of integers representing the degree of the polynomials
+    - ``q`` -- order of the finite field (default: None)
 
     EXAMPLES::
 
         sage: from mpkc import degree_of_regularity
         sage: degree_of_regularity.semi_regular_system(10, [2]*15)
         4
+        sage: degree_of_regularity.semi_regular_system(10, [2]*15, q=2)
+        3
     """
     m = len(degrees)
     if m <= n:
         raise ValueError("the number of polynomials must be strictly greater than the number of variables")
 
-    s = HilbertSeries(n, degrees)
+    s = HilbertSeries(n, degrees, q=q)
     return s.first_nonpositive_integer()
 
 
-def quadratic_system(n, m):
+def quadratic_system(n, m, q=None):
     """
     Return the degree of regularity for quadratic system
 
@@ -78,13 +82,16 @@ def quadratic_system(n, m):
 
     - ``n`` -- no. of variables
     - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field (default: None)
 
     EXAMPLES::
 
         sage: from mpkc import degree_of_regularity
         sage: degree_of_regularity.quadratic_system(10, 15)
         4
+        sage: degree_of_regularity.quadratic_system(10, 15, q=2)
+        3
         sage: degree_of_regularity.quadratic_system(15, 15)
         16
     """
-    return generic_system(n, [2] * m)
+    return generic_system(n, [2] * m, q=q)
