@@ -4,9 +4,10 @@ from sage.functions.other import ceil
 from sage.groups.affine_gps.affine_group import AffineGroup
 from sage.rings.finite_rings.finite_field_base import is_FiniteField
 from mpkc.series.nmonomial import NMonomialSeries
+from sage.functions.other import binomial
 
 
-def ngates(q, n):
+def ngates(q, n, theta=0):
     """
     Return the number of gates for the given number of multiplications in a finite field
 
@@ -14,6 +15,7 @@ def ngates(q, n):
 
     - ``q`` -- order of the finite field
     - ``n`` -- no. of multiplications
+    - ``theta`` -- exponent of the conversion factor
 
     EXAMPLES::
 
@@ -30,7 +32,10 @@ def ngates(q, n):
     """
     if not is_prime_power(q):
         raise ValueError("q must be a prime power")
-    return n * (2 * log(q, 2) ** 2 + log(q, 2))
+    if theta:
+        return n * log(q, 2) ** theta
+    else:
+        return n * (2 * log(q, 2) ** 2 + log(q, 2))
 
 
 def nbits(q, n):
@@ -131,3 +136,41 @@ def random_affine_map(base_field, nvars):
     vector_ = affine_map.b()
 
     return matrix_, vector_
+
+
+def truncate(x, precision):
+    """
+    Truncates a float
+
+    INPUT:
+
+    - ``x`` -- value to be truncated
+    - ``precision`` -- number of decimal places to after which the ``x`` is truncated
+
+    EXAMPLES::
+
+        sage: from mpkc.utils import truncate
+        sage: truncate(3.2030404, 3)
+        3.203
+    """
+    return float(int(x * 10 ** precision) / 10 ** precision)
+
+
+def sum_of_binomial_coefficients(n, l):
+    r"""
+    Return the `\sum_{j=0}^{l} \binom{n}{j}`
+
+    INPUT:
+
+    - ``n`` -- a non-negative integer
+    - ``l`` -- a non-negative integer
+
+    EXAMPLES::
+
+        sage: from mpkc.utils import sum_of_binomial_coefficients
+        sage: sum_of_binomial_coefficients(5, 2)
+        16
+    """
+    if l < 0:
+        raise ValueError('l must be a non-negative integer')
+    return sum(binomial(n, j) for j in range(l + 1))
