@@ -1,5 +1,5 @@
 from sage.functions.log import log
-from mpkc.algorithms import F5
+from mpkc.algorithms import HybridApproach
 
 
 def min_npolynomials(security_level, q, w=2):
@@ -53,7 +53,7 @@ def min_npolynomials(security_level, q, w=2):
         raise ValueError("the valid parameter for security_level is {80, 100, 128, 192, 256}")
 
     m = 1
-    while log(F5.quadratic.hybrid_approach.complexity.time(q, m, m, w), 2) < security_level:
+    while log(HybridApproach(n=m, m=m, q=q, w=w).time_complexity_quadratic_system(), 2) < security_level:
         m += 1
 
     return m

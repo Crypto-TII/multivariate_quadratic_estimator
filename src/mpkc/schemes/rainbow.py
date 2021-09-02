@@ -989,11 +989,11 @@ class Rainbow:
         - ``use_quantum`` -- whether to return the complexity in quantum settings (True/False)
         - ``use_gate_count`` -- whether to return the complexity in the number of gate counts (True/False)
         """
-        from mpkc.algorithms import F5
+        from mpkc.algorithms import HybridApproach
         q = self.base_field.order()
         m = self.npolynomials
 
-        nmul = F5.quadratic.hybrid_approach.complexity.time(q, m, m, use_quantum=use_quantum)
+        nmul = HybridApproach(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity_quadratic_system()
         if use_gate_count:
             complexity = self._ngates_(nmul)
         else:
