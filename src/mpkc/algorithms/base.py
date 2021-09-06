@@ -1,3 +1,4 @@
+import functools
 from sage.arith.misc import is_prime_power
 
 
@@ -50,6 +51,7 @@ class BaseAlgorithm:
         self._m = m
         self._q = q
         self._w = w
+        self._optimal_parameters = dict()
 
     def nvariables(self):
         """
@@ -182,3 +184,34 @@ class BaseAlgorithm:
             False
         """
         return self.nvariables() == self.npolynomials()
+
+    def optimal_parameters(self):
+        """
+        Return a dictionary of optimal parameters
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=10, m=10).optimal_parameters()
+            {}
+        """
+        return self._optimal_parameters
+
+
+def optimal_parameter(func):
+    """
+    Decorator to indicate optimization parameter in BaseAlgorithm
+
+    INPUT:
+
+    - ``f`` -- a method of a BaseAlgoritm subclass
+    """
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        name = func.__name__
+        self = args[0]
+
+        if name not in self._optimal_parameters:
+            self._optimal_parameters[name] = func(*args, **kwargs)
+        return self._optimal_parameters[name]
+    return wrapper
