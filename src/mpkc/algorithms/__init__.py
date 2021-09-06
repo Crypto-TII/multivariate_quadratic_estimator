@@ -4,3 +4,4 @@ from .kpg import KPG
 from .mht import MHT
 from .dinur2 import DinurSecond
 from .exhaustive_search import ExhaustiveSearch
+from .cgmta import CGMTA
