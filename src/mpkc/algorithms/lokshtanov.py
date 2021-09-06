@@ -1,0 +1,141 @@
+"""
+Module to compute the time and memory complexity of Losktanov et al.'s algorithm
+
+The Losktanov et al.'s is an algorithm to solve the MQ problem
+
+[LPT+17]  Lokshtanov, D.,  Paturi, R., Tamaki, S., Williams, R., and Yu, H. Beating brute force for systems of
+polynomial equation sover finite fields. In Proceedings of the Twenty-Eighth Annual ACM-SIAM Symposium on Discrete
+Algorithms, SODA ’17, page 2190–2202, USA, 2017. Society for Industrial and Applied Mathematics.
+"""
+from sage.arith.misc import is_power_of_two
+from sage.functions.log import log
+from sage.functions.other import floor
+from sage.rings.infinity import Infinity
+from sage.rings.finite_rings.finite_field_constructor import GF
+from .base import BaseAlgorithm, optimal_parameter
+from ..series.nmonomial import NMonomialSeries
+
+
+class Lokshtanov(BaseAlgorithm):
+    def __init__(self, n, m, q):
+        """
+        Construct an instance of Lokshtanov et al.'s estimator
+
+        INPUT:
+
+        - ``q`` -- order of the finite field
+        - ``n`` -- no. of variables
+        - ``m`` -- no. of polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: E = Lokshtanov(n=10, m=12, q=9)
+            sage: E
+            Lokshtanov et al.'s estimator for the MQ problem
+        """
+        super().__init__(n=n, m=m, q=q)
+
+    @optimal_parameter
+    def delta(self):
+        """
+        Return the optimal delta for Lokshtanov et al.'s algorithm
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: E = Lokshtanov(n=10, m=12, q=9)
+            sage: E.delta()
+            1/10
+        """
+        min_time_complexity = Infinity
+        optimal_delta = None
+        n, m = self.nvariables(), self.npolynomials()
+
+        for np in range(1, min(m - 2, n)):
+            delta = np / n
+            time_complexity = self._C(n - 1, delta)
+            if time_complexity < min_time_complexity:
+                min_time_complexity = time_complexity
+                optimal_delta = delta
+
+        return optimal_delta
+
+    def time_complexity(self):
+        """
+        Return the time complexity of lokshtanov et al.'s algorithm
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: E = Lokshtanov(n=10, m=12, q=9)
+            sage: float(log(E.time_complexity(), 2))
+            212.576588724275
+        """
+        delta = self.delta()
+        if not 0 < delta < 1:
+            raise ValueError("delta must be in the range 0 < delta < 1")
+        if delta is None:
+            return Infinity
+
+        q = self.order_of_the_field()
+        n = self.nvariables()
+        return 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, delta) for i in range(1, n)])
+
+    def memory_complexity(self):
+        """
+        Return the memory complexity of Lokshtanov et al.'s algorithm
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: E = Lokshtanov(n=10, m=12, q=9)
+            sage: float(log(E.memory_complexity(), 2))
+            30.622995719758727
+        """
+        delta = self.delta()
+        if delta is None:
+            return Infinity
+
+        n = self.nvariables()
+        np = floor(n * delta)
+        q = self.order_of_the_field()
+        resulting_degree = 2 * (q - 1) * (np + 2)
+        M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
+        return M + log(n, 2) * q ** (n - np)
+
+    def tilde_o_time(self):
+        """
+        Return the Ō time complexity of Lokshtanov et al.'s algorithm
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: E = Lokshtanov(n=10, m=12, q=9)
+            sage: float(log(E.tilde_o_time(), 2))
+            31.62000188938707
+        """
+        e = 2.718
+        q = self.order_of_the_field()
+        n = self.nvariables()
+        if q == 2:
+            time = q ** (0.8765 * n)
+        elif is_power_of_two(q):
+            time = q ** (0.9 * n)
+        elif log(GF(q).characteristic(), 2) < 8 * e:
+            time = q ** (0.9975 * n)
+        else:
+            d = GF(q).degree()
+            time = q ** n * (log(q, 2) / (2 * e * d))
+
+        return time
+
+    def _C(self, n, delta):
+        q = self.order_of_the_field()
+        np = floor(delta * n)
+        resulting_degree = 2 * (q - 1) * (np + 2)
+        M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
+        return n * (q ** (n - np) + M * q ** np * n ** (6 * q))
+
+    def __repr__(self):
+        return f"Lokshtanov et al.'s estimator for the MQ problem"

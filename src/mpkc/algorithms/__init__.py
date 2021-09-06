@@ -6,3 +6,4 @@ from .dinur2 import DinurSecond
 from .exhaustive_search import ExhaustiveSearch
 from .cgmta import CGMTA
 from .bjorklund import Bjorklund
+from .lokshtanov import Lokshtanov
