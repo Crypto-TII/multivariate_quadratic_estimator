@@ -37,29 +37,29 @@ class Lokshtanov(BaseAlgorithm):
         super().__init__(n=n, m=m, q=q)
 
     @optimal_parameter
-    def delta(self):
+    def δ(self):
         """
-        Return the optimal delta for Lokshtanov et al.'s algorithm
+        Return the optimal δ for Lokshtanov et al.'s algorithm
 
         EXAMPLES::
 
             sage: from mpkc.algorithms import Lokshtanov
             sage: E = Lokshtanov(n=10, m=12, q=9)
-            sage: E.delta()
+            sage: E.δ()
             1/10
         """
-        min_time_complexity = Infinity
-        optimal_delta = None
+        min_complexity = Infinity
+        optimal_δ = None
         n, m = self.nvariables(), self.npolynomials()
 
         for np in range(1, min(m - 2, n)):
-            delta = np / n
-            time_complexity = self._C(n - 1, delta)
-            if time_complexity < min_time_complexity:
-                min_time_complexity = time_complexity
-                optimal_delta = delta
+            δ = np / n
+            time_complexity = self._C(n - 1, δ)
+            if time_complexity < min_complexity:
+                min_complexity = time_complexity
+                optimal_δ = δ
 
-        return optimal_delta
+        return optimal_δ
 
     def time_complexity(self):
         """
@@ -72,15 +72,15 @@ class Lokshtanov(BaseAlgorithm):
             sage: float(log(E.time_complexity(), 2))
             212.576588724275
         """
-        delta = self.delta()
-        if not 0 < delta < 1:
-            raise ValueError("delta must be in the range 0 < delta < 1")
-        if delta is None:
+        δ = self.δ()
+        if not 0 < δ < 1:
+            raise ValueError("δ must be in the range 0 < δ < 1")
+        if δ is None:
             return Infinity
 
         q = self.order_of_the_field()
         n = self.nvariables()
-        return 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, delta) for i in range(1, n)])
+        return 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
 
     def memory_complexity(self):
         """
@@ -93,12 +93,12 @@ class Lokshtanov(BaseAlgorithm):
             sage: float(log(E.memory_complexity(), 2))
             30.622995719758727
         """
-        delta = self.delta()
-        if delta is None:
+        δ = self.δ()
+        if δ is None:
             return Infinity
 
         n = self.nvariables()
-        np = floor(n * delta)
+        np = floor(n * δ)
         q = self.order_of_the_field()
         resulting_degree = 2 * (q - 1) * (np + 2)
         M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)

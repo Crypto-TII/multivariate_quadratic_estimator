@@ -195,7 +195,32 @@ class BaseAlgorithm:
             sage: BaseAlgorithm(n=10, m=10).optimal_parameters()
             {}
         """
+        if self.has_optimal_parameter() and not self._optimal_parameters:
+            for f in self._optimal_parameter_methods_():
+                _ = f()
         return self._optimal_parameters
+
+    def has_optimal_parameter(self):
+        """
+        Return `True` if the algorithm has optimal parameter
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=10, m=10).has_optimal_parameter()
+            False
+        """
+        return len(self._optimal_parameter_methods_()) > 0
+
+    def _optimal_parameter_methods_(self):
+        """
+        Return a list of methods decorated with @optimal_parameter
+        """
+        import inspect
+
+        def is_optimal_parameter_method(object):
+            return inspect.ismethod(object) and object.__name__ == "optimal_parameter"
+        return [f for (_, f) in inspect.getmembers(self, predicate=is_optimal_parameter_method)]
 
 
 def optimal_parameter(func):
@@ -206,12 +231,11 @@ def optimal_parameter(func):
 
     - ``f`` -- a method of a BaseAlgoritm subclass
     """
-    @functools.wraps(func)
-    def wrapper(*args, **kwargs):
+    def optimal_parameter(*args, **kwargs):
         name = func.__name__
         self = args[0]
 
         if name not in self._optimal_parameters:
             self._optimal_parameters[name] = func(*args, **kwargs)
         return self._optimal_parameters[name]
-    return wrapper
+    return optimal_parameter

@@ -36,16 +36,9 @@ class Bjorklund(BaseAlgorithm):
         super().__init__(n=n, m=m)
         self._nsolutions = nsolutions
         self._k = floor(log(nsolutions + 1, 2))
-
-    @staticmethod
-    def _T(n, m, λ):
-        if n <= 1:
-            return 1
-        else:
-            l = floor(λ * n)
-            T1 = (n + (l + 2) * m * sum_of_binomial_coefficients(n, 2) + (n - l) * 2 ** (n - l))
-            s = 48 * n + 1
-            return s * sum_of_binomial_coefficients(n - l, l + 4) * (Bjorklund._T(l, l + 2, λ) + T1)
+        self._time_complexity = None
+        self._memory_complexity = None
+        self._λ = None
 
     def nsolutions(self):
         """
@@ -72,19 +65,23 @@ class Bjorklund(BaseAlgorithm):
             sage: E.λ()
             3/10
         """
+        if self._λ is not None:
+            return self._λ
+
         n, m = self.nvariables(), self.npolynomials()
         k = self._k
-        min_time_complexity = Infinity
+        min_complexity = Infinity
         optimal_λ = None
 
         for l in range(3, min(m, n - 1)):
             λ_ = l / n
-            time_complexity = Bjorklund._T(n, m + k + 2, λ_)
-            if time_complexity < min_time_complexity:
-                min_time_complexity = time_complexity
+            complexity = Bjorklund._T(n, m + k + 2, λ_)
+            if complexity < min_complexity:
+                min_complexity = complexity
                 optimal_λ = λ_
 
-        return optimal_λ
+        self._λ = optimal_λ
+        return self._λ
 
     def time_complexity(self):
         """
@@ -97,12 +94,16 @@ class Bjorklund(BaseAlgorithm):
             sage: float(log(E.time_complexity(), 2))
             35.48523010807851
         """
+        if self._time_complexity is not None:
+            return self._time_complexity
+
         λ = self.λ()
         k = self._k
         n, m = self.nvariables(), self.npolynomials()
 
         temp = 8 * k * log(n, 2)
-        return temp * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])
+        self._time_complexity = temp * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])
+        return self._time_complexity
 
     def memory_complexity(self):
         """
@@ -115,6 +116,9 @@ class Bjorklund(BaseAlgorithm):
             sage: float(log(E.memory_complexity(), 2))
             10.89550378006907
         """
+        if self._memory_complexity is not None:
+            return self._memory_complexity
+
         def S(_n, _m, _λ):
             if _n <= 1:
                 return 0
@@ -125,7 +129,8 @@ class Bjorklund(BaseAlgorithm):
 
         n, m = self.nvariables(), self.npolynomials()
         λ = self.λ()
-        return S(n, m, λ)
+        self._memory_complexity = S(n, m, λ)
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """
@@ -140,6 +145,16 @@ class Bjorklund(BaseAlgorithm):
         """
         n = self.nvariables()
         return 2 ** (0.803225 * n)
+
+    @staticmethod
+    def _T(n, m, λ):
+        if n <= 1:
+            return 1
+        else:
+            l = floor(λ * n)
+            T1 = (n + (l + 2) * m * sum_of_binomial_coefficients(n, 2) + (n - l) * 2 ** (n - l))
+            s = 48 * n + 1
+            return s * sum_of_binomial_coefficients(n - l, l + 4) * (Bjorklund._T(l, l + 2, λ) + T1)
 
     def __repr__(self):
         return f"Björklund et al.'s estimator for the MQ problem"
