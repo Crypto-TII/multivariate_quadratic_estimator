@@ -119,6 +119,20 @@ class BaseAlgorithm:
         """
         return self._q
 
+    def is_defined_over_finite_field(self):
+        """
+        Return `True` if the algorithm is defined over a finite field
+
+        TESTS::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=10, m=5).is_defined_over_finite_field()
+            False
+            sage: BaseAlgorithm(n=10, m=5, q=256).is_defined_over_finite_field()
+            True
+        """
+        return self.order_of_the_field() is not None
+
     def linear_algebra_constant(self):
         """
         Return the linear algebra constant
