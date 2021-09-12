@@ -76,7 +76,7 @@ def nmonomials_of_degree(d, n, q=None):
         sage: nmonomials_of_degree(d=2, n=10, q=2)
         45
     """
-    series = NMonomialSeries(n, q)
+    series = NMonomialSeries(n, q, max_prec=d+1)
     return series.nmonomials_of_degree(d)
 
 
@@ -102,7 +102,7 @@ def nmonomials_up_to_degree(d, n, q=None):
         sage: nmonomials_up_to_degree(d=2, n=10, q=2)
         56
     """
-    series = NMonomialSeries(n, q)
+    series = NMonomialSeries(n, q, max_prec=d+1)
     return series.nmonomials_up_to_degree(d)
 
 

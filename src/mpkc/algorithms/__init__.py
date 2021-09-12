@@ -9,3 +9,4 @@ from .cgmta import CGMTA
 from .bjorklund import Bjorklund
 from .lokshtanov import Lokshtanov
 from .boolean_solve_fxl import BooleanSolveFXL
+from .crossbred import Crossbred
