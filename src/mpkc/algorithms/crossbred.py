@@ -122,7 +122,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.k()
-            7
+            5
         """
         if self._k is None:
             _ = self.time_complexity()
@@ -138,7 +138,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.D()
-            4
+            3
         """
         if self._D is None:
             _ = self.time_complexity()
@@ -154,7 +154,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.d()
-            2
+            1
         """
         if self._d is None:
             _ = self.time_complexity()
@@ -202,7 +202,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.admissible_parameters()[:5]
-            [(1, 3, 2), (1, 4, 2), (1, 5, 2), (2, 3, 2), (2, 4, 2)]
+            [(1, 2, 1), (1, 3, 1), (1, 4, 1), (1, 3, 2), (1, 5, 1)]
         """
         n = self.nvariables()
         max_D = self.max_D()
@@ -215,7 +215,7 @@ class Crossbred(BaseAlgorithm):
                              if (0 <= coefficient)
                              and (monomial.exponents()[0][0] > monomial.exponents()[0][1])
                              and (monomial.exponents()[0][0] <= max_D)
-                             and (1 < monomial.exponents()[0][1])]
+                             and (1 <= monomial.exponents()[0][1])]
             admissible_parameters.extend([(k, D, d) for D, d in possibles_D_d])
 
         return admissible_parameters
@@ -237,7 +237,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.time_complexity(), 2))
-            20.97751060223222
+            20.3663736923649
             sage: float(log(E.time_complexity(k=4, D=6, d=4), 2))
             29.775157881382952
         """
@@ -268,11 +268,14 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.memory_complexity(), 2))
-            19.934452517671986
+            8.027905996569885
         """
         D = self.D()
-        n = self.nvariables()
-        return binomial(n + D, D) ** 2
+        k = self.k()
+        d = self.d()
+        ncols_pre_step = self.ncols_in_preprocessing_step(k, D, d)
+        ncols_lin_step = self.ncols_in_linearization_step(k, d)
+        return ncols_pre_step ** 2 + ncols_lin_step ** 2
 
     def tilde_o_time(self):
         """
@@ -283,7 +286,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.tilde_o_time(), 2))
-            17.367141694552362
+            16.782447984412244
         """
         k, D, d = self.k(), self.D(), self.d()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
