@@ -20,7 +20,9 @@ def generic_system(n, degrees, q=None):
         11
     """
     m = len(degrees)
-    if n >= m:
+    if n > m:
+        dreg = regular_system(n, degrees)
+    elif n == m and q is None:
         dreg = regular_system(n, degrees)
     else:
         dreg = semi_regular_system(n, degrees, q=q)
@@ -67,7 +69,7 @@ def semi_regular_system(n, degrees, q=None):
         3
     """
     m = len(degrees)
-    if m <= n:
+    if m < n:
         raise ValueError("the number of polynomials must be strictly greater than the number of variables")
 
     s = HilbertSeries(n, degrees, q=q)
