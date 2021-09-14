@@ -50,6 +50,9 @@ class BooleanSolveFXL(BaseAlgorithm):
         self._variant = None
         self._time_complexity = None
 
+        self._compute_optimal_k_ = self._compute_time_complexity_
+        self._compute_optimal_variant_ = self._compute_time_complexity_
+
     @optimal_parameter
     def k(self):
         """
@@ -63,7 +66,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             4
         """
         if self._k is None:
-            self._compute_time_complexity_()
+            self._compute_optimal_k_()
         return self._k
 
     @optimal_parameter
@@ -79,12 +82,19 @@ class BooleanSolveFXL(BaseAlgorithm):
             'deterministic'
         """
         if self._variant is None:
-            self._compute_time_complexity_()
+            self._compute_optimal_variant_()
         return self._variant
 
-    def time_complexity(self):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of BooleanSolve and FXL algorithms
+
+        INPUT:
+
+        - ``k`` -- the optimal `k` (default: None)
+        - ``variant`` -- the selected variant (default: None)
+
+        If `k` and `variant` are specified, the function returns the time complexity w.r.t the given parameters
 
         EXAMPLES::
 
@@ -92,10 +102,20 @@ class BooleanSolveFXL(BaseAlgorithm):
             sage: E = BooleanSolveFXL(n=10, m=12, q=7)
             sage: float(log(E.time_complexity(), 2))
             27.599017034509096
+            sage: float(log(E.time_complexity(k=2, variant="las_vegas"), 2))
+            33.35111811760744
         """
-        if self._time_complexity is None:
+
+        k = kwargs.get('k', None)
+        variant = kwargs.get('variant', None)
+
+        if k is not None and variant is not None:
+            time_complexity = self._time_complexity_(k, variant)
+        else:
             self._compute_time_complexity_()
-        return self._time_complexity
+            time_complexity = self._time_complexity
+
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -143,8 +163,6 @@ class BooleanSolveFXL(BaseAlgorithm):
         min_time_complexity = Infinity
 
         n, m = self.nvariables(), self.npolynomials()
-        q = self.order_of_the_field()
-        w = self.linear_algebra_constant()
 
         optimal_k = optimal_variant = None
 
@@ -152,13 +170,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             a = 0 if self.is_overdefined_system() else 1
             for k in range(a, n):
 
-                time_complexity = None
-                wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
-
-                if variant == "las_vegas":
-                    time_complexity = 3 * binomial(n - k + 2, 2) * q ** k * binomial(n - k + wit_deg, wit_deg) ** 2
-                elif variant == "deterministic":
-                    time_complexity = q ** k * m * binomial(n - k + wit_deg, wit_deg) ** w
+                time_complexity = self._time_complexity_(k, variant)
 
                 if time_complexity < min_time_complexity:
                     min_time_complexity = time_complexity
@@ -168,6 +180,30 @@ class BooleanSolveFXL(BaseAlgorithm):
         self._time_complexity = min_time_complexity
         self._k = optimal_k
         self._variant = optimal_variant
+
+    def _time_complexity_(self, k, variant):
+        """
+        Return the time complexity for the given parameter
+
+        INPUT:
+
+        - ``k`` -- the value `k`
+        - ``variant`` -- the variant of the algorithm
+        """
+        n, m = self.nvariables(), self.npolynomials()
+        q = self.order_of_the_field()
+        w = self.linear_algebra_constant()
+
+        wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
+
+        if variant == "las_vegas":
+            time_complexity = 3 * binomial(n - k + 2, 2) * q ** k * binomial(n - k + wit_deg, wit_deg) ** 2
+        elif variant == "deterministic":
+            time_complexity = q ** k * m * binomial(n - k + wit_deg, wit_deg) ** w
+        else:
+            raise ValueError("variant must either be las_vegas or deterministic")
+
+        return time_complexity
 
     def __repr__(self):
         return f"BooleanSolve and FXL estimators for the MQ problem"

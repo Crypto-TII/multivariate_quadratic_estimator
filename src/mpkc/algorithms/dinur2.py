@@ -51,9 +51,15 @@ class DinurSecond(BaseAlgorithm):
             self._compute_time_complexity_()
         return self._n1
 
-    def time_complexity(self):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of the Dinur's second algorithm
+
+        INPUT:
+
+        - ``n1`` -- the parameter `n1` (default: None)
+
+        If `n1` is provided, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -61,10 +67,20 @@ class DinurSecond(BaseAlgorithm):
             sage: E = DinurSecond(n=10, m=12)
             sage: E.time_complexity().numerical_approx()
             57434.4699066345
+            sage: E.time_complexity(n1=2).numerical_approx()
+            58848.1441779413
         """
-        if self._time_complexity is None:
-            self._compute_time_complexity_()
-        return self._time_complexity
+
+        n1 = kwargs.get("n1", None)
+
+        if n1 is not None:
+            time_complexity = self._time_complexity_(n1)
+        else:
+            if self._time_complexity is None:
+                self._compute_time_complexity_()
+            time_complexity = self._time_complexity
+
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -92,15 +108,27 @@ class DinurSecond(BaseAlgorithm):
         optimal_n1 = None
 
         for n1 in range(1, max_n1 + 1):
-            time_complexity = 16 * log(n, 2) * 2 ** n1 * sum_of_binomial_coefficients(n - n1, n1 + 3) +\
-                              n1 * n * 2 ** (n - n1) + \
-                              2 ** (self._n - 2 * n1 + 1) * sum_of_binomial_coefficients(self._n, 2)
+            time_complexity = self._time_complexity_(n1)
             if time_complexity < min_time_complexity:
                 optimal_n1 = n1
                 min_time_complexity = time_complexity
 
         self._n1 = optimal_n1
         self._time_complexity = min_time_complexity
+
+    def _time_complexity_(self, n1):
+        """
+        Return the time complexity for the given parameter
+
+        INPUT:
+
+        - ``n1`` -- the parameter `n1`
+        """
+        n = self.nvariables()
+
+        return 16 * log(n, 2) * 2 ** n1 * sum_of_binomial_coefficients(n - n1, n1 + 3) + \
+               n1 * n * 2 ** (n - n1) + \
+               2 ** (n - 2 * n1 + 1) * sum_of_binomial_coefficients(n, 2)
 
     def __repr__(self):
         return f"Dinur's second estimator for the MQ problem"

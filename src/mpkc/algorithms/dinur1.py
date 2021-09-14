@@ -71,9 +71,16 @@ class DinurFirst(BaseAlgorithm):
             self._compute_kappa_and_lambda_()
         return self._kappa
 
-    def time_complexity(self):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of Dinur's first algorithm
+
+        INPUT:
+
+        - ``κ`` -- the parameter `κ` (kappa)
+        - ``λ`` -- the parameter `λ`
+
+        If `κ` and `λ` are specified, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -81,9 +88,11 @@ class DinurFirst(BaseAlgorithm):
             sage: E = DinurFirst(n=10, m=12)
             sage: float(log(E.time_complexity(), 2))
             26.819919688075288
+            sage: float(log(E.time_complexity(κ=0.9, λ=0.9), 2))
+            16.73237302312492
         """
-        lambda_ = self.λ()
-        kappa = self.κ()
+        lambda_ = kwargs.get('λ', self.λ())
+        kappa = kwargs.get('κ', self.κ())
         n = self.nvariables()
         k = self._k
 

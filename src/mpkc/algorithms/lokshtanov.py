@@ -61,9 +61,15 @@ class Lokshtanov(BaseAlgorithm):
 
         return optimal_δ
 
-    def time_complexity(self):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of lokshtanov et al.'s algorithm
+
+        INPUT:
+
+        - ``δ`` -- the parameter `δ`
+
+        If `δ` is specified, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -71,8 +77,11 @@ class Lokshtanov(BaseAlgorithm):
             sage: E = Lokshtanov(n=10, m=12, q=9)
             sage: float(log(E.time_complexity(), 2))
             212.576588724275
+            sage: float(log(E.time_complexity(δ=2/10), 2))
+            214.16804105519708
         """
-        δ = self.δ()
+        δ = kwargs.get('δ', self.δ())
+
         if not 0 < δ < 1:
             raise ValueError("δ must be in the range 0 < δ < 1")
         if δ is None:

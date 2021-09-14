@@ -83,9 +83,15 @@ class Bjorklund(BaseAlgorithm):
         self._λ = optimal_λ
         return self._λ
 
-    def time_complexity(self):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of Bjorklund et al.'s algorithm
+
+        INPUT:
+
+        - ``λ`` -- the λ value (default: None)
+
+        If λ is specified, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -93,17 +99,20 @@ class Bjorklund(BaseAlgorithm):
             sage: E = Bjorklund(n=10, m=12)
             sage: float(log(E.time_complexity(), 2))
             35.48523010807851
+            sage: float(log(E.time_complexity(λ=7/10), 2))
+            49.97565549640329
         """
-        if self._time_complexity is not None:
-            return self._time_complexity
+        λ = kwargs.get('λ', None)
 
-        λ = self.λ()
-        k = self._k
-        n, m = self.nvariables(), self.npolynomials()
+        if λ is not None:
+            time_complexity = self._time_complexity_(λ)
+        else:
+            if self._time_complexity is not None:
+                time_complexity = self._time_complexity
+            else:
+                time_complexity = self._time_complexity = self._time_complexity_(self.λ())
 
-        temp = 8 * k * log(n, 2)
-        self._time_complexity = temp * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])
-        return self._time_complexity
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -155,6 +164,19 @@ class Bjorklund(BaseAlgorithm):
             T1 = (n + (l + 2) * m * sum_of_binomial_coefficients(n, 2) + (n - l) * 2 ** (n - l))
             s = 48 * n + 1
             return s * sum_of_binomial_coefficients(n - l, l + 4) * (Bjorklund._T(l, l + 2, λ) + T1)
+
+    def _time_complexity_(self, λ):
+        """
+        Return the time complexity w.r.t. λ
+
+        INPUT:
+
+        - ``λ`` -- the λ value
+        """
+        n, m = self.nvariables(), self.npolynomials()
+        k = self._k
+
+        return 8 * k * log(n, 2) * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])
 
     def __repr__(self):
         return f"Björklund et al.'s estimator for the MQ problem"
