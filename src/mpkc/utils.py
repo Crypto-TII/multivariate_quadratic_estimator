@@ -3,8 +3,8 @@ from sage.functions.log import log
 from sage.functions.other import ceil
 from sage.groups.affine_gps.affine_group import AffineGroup
 from sage.rings.finite_rings.finite_field_base import is_FiniteField
-from mpkc.series.nmonomial import NMonomialSeries
 from sage.functions.other import binomial
+from .series.nmonomial import NMonomialSeries
 
 
 def ngates(q, n, theta=0):

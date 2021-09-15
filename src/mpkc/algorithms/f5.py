@@ -1,6 +1,6 @@
 from sage.functions.other import binomial
-from mpkc import degree_of_regularity
 from .base import BaseAlgorithm
+from .. import degree_of_regularity
 
 
 class F5(BaseAlgorithm):

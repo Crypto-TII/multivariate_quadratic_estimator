@@ -11,7 +11,7 @@ from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.rings.power_series_ring import PowerSeriesRing
 from sage.rings.rational_field import QQ
 from sage.structure.sequence import Sequence
-from mpkc.utils import random_affine_map
+from ..utils import random_affine_map
 
 
 class GeMSS:

@@ -1,4 +1,4 @@
-from mpkc.series.hilbert import HilbertSeries
+from .series.hilbert import HilbertSeries
 
 
 def generic_system(n, degrees, q=None):

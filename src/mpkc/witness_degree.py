@@ -1,4 +1,4 @@
-from mpkc.series.hilbert import HilbertSeries
+from .series.hilbert import HilbertSeries
 
 
 def semi_regular_system(n, degrees, q=None):

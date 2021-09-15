@@ -7,7 +7,7 @@ from sage.misc.misc_c import prod
 from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.rings.finite_rings.all import FiniteField
 from sage.structure.sequence import Sequence
-from mpkc.utils import random_affine_map
+from ..utils import random_affine_map
 
 
 class Rainbow:
@@ -989,11 +989,11 @@ class Rainbow:
         - ``use_quantum`` -- whether to return the complexity in quantum settings (True/False)
         - ``use_gate_count`` -- whether to return the complexity in the number of gate counts (True/False)
         """
-        from mpkc.algorithms import HybridApproach
+        from ..algorithms import HybridF5
         q = self.base_field.order()
         m = self.npolynomials
 
-        nmul = HybridApproach(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity()
+        nmul = HybridF5(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity()
         if use_gate_count:
             complexity = self._ngates_(nmul)
         else:

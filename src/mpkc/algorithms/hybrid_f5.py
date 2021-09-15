@@ -1,7 +1,7 @@
 from .base import BaseAlgorithm
 
 
-class HybridApproach(BaseAlgorithm):
+class HybridF5(BaseAlgorithm):
     def __init__(self, q, n, m, w=2, use_quantum=False, **kwargs):
         """
         Return an instance of hybrid approach complexity estimator
@@ -17,8 +17,8 @@ class HybridApproach(BaseAlgorithm):
 
         EXAMPLES::
 
-            sage: from mpkc.algorithms import HybridApproach
-            sage: H = HybridApproach(q=256, n=5, m=10)
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
             sage: H
             Complexity estimator for hybrid approach with 5 variables and 10 polynomials
         """
@@ -36,8 +36,8 @@ class HybridApproach(BaseAlgorithm):
 
         EXAMPLES::
 
-            sage: from mpkc.algorithms import HybridApproach
-            sage: H = HybridApproach(q=31, n=5, m=5, degrees=[3]*5)
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=31, n=5, m=5, degrees=[3]*5)
             sage: H.degree_of_polynomials()
             [3, 3, 3, 3, 3]
         """
@@ -49,11 +49,11 @@ class HybridApproach(BaseAlgorithm):
 
         EXAMPLES::
 
-            sage: from mpkc.algorithms import HybridApproach
-            sage: H = HybridApproach(q=31, n=5, m=10, use_quantum=False)
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=31, n=5, m=10, use_quantum=False)
             sage: H.use_quantum()
             False
-            sage: H = HybridApproach(q=31, n=5, m=10, use_quantum=True)
+            sage: H = HybridF5(q=31, n=5, m=10, use_quantum=True)
             sage: H.use_quantum()
             True
         """
@@ -65,14 +65,14 @@ class HybridApproach(BaseAlgorithm):
 
         EXAMPLES::
 
-            sage: from mpkc.algorithms import HybridApproach
-            sage: H = HybridApproach(q=31, n=23, m=23)
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=31, n=23, m=23)
             sage: H.optimal_nfixed_vars()
             2
 
         TESTS::
 
-            sage: H = HybridApproach(q=256, n=10, m=10)
+            sage: H = HybridF5(q=256, n=10, m=10)
             sage: H.optimal_nfixed_vars()
             1
         """
@@ -85,14 +85,14 @@ class HybridApproach(BaseAlgorithm):
 
         EXAMPLES::
 
-            sage: from mpkc.algorithms import HybridApproach
-            sage: H = HybridApproach(q=256, n=10, m=10)
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=10, m=10)
             sage: H.time_complexity()
             6412806400
 
         TESTS::
 
-            sage: H = HybridApproach(q=256, n=10, m=15)
+            sage: H = HybridF5(q=256, n=10, m=15)
             sage: H.time_complexity()
             1002001
         """
