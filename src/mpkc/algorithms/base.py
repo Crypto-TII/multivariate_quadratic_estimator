@@ -77,7 +77,7 @@ class BaseAlgorithm:
         """
         return self._m
 
-    def time_complexity(self, **kwars):
+    def time_complexity(self, **kwargs):
         """
         Return the time complexity of the algorithm
 

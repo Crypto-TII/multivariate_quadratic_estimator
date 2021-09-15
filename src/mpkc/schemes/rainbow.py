@@ -993,7 +993,7 @@ class Rainbow:
         q = self.base_field.order()
         m = self.npolynomials
 
-        nmul = HybridApproach(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity_quadratic_system()
+        nmul = HybridApproach(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity()
         if use_gate_count:
             complexity = self._ngates_(nmul)
         else:

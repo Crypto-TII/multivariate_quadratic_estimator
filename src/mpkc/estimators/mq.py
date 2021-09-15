@@ -53,7 +53,7 @@ def min_npolynomials(security_level, q, w=2):
         raise ValueError("the valid parameter for security_level is {80, 100, 128, 192, 256}")
 
     m = 1
-    while log(HybridApproach(n=m, m=m, q=q, w=w).time_complexity_quadratic_system(), 2) < security_level:
+    while log(HybridApproach(n=m, m=m, q=q, w=w).time_complexity(), 2) < security_level:
         m += 1
 
     return m
