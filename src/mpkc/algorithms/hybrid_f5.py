@@ -1,4 +1,5 @@
-from .base import BaseAlgorithm
+from .base import BaseAlgorithm, optimal_parameter
+from .f5 import F5
 
 
 class HybridF5(BaseAlgorithm):
@@ -59,29 +60,37 @@ class HybridF5(BaseAlgorithm):
         """
         return self._use_quantum
 
-    def optimal_nfixed_vars(self):
+    @optimal_parameter
+    def k(self):
         """
-        Return the optimal no. of fixed variables
+        Return `k`, i.e. the optimal no. of fixed variables
 
         EXAMPLES::
 
             sage: from mpkc.algorithms import HybridF5
             sage: H = HybridF5(q=31, n=23, m=23)
-            sage: H.optimal_nfixed_vars()
+            sage: H.k()
             2
 
         TESTS::
 
             sage: H = HybridF5(q=256, n=10, m=10)
-            sage: H.optimal_nfixed_vars()
+            sage: H.k()
             1
         """
-        min_finder = lambda iterable: min(range(len(iterable)), key=iterable.__getitem__)
-        return self._hybrid_approach_(min_finder)
+        n = self.nvariables()
+        complexities = [self._time_complexity_(k) for k in range(n)]
+        return min(range(len(complexities)), key=complexities.__getitem__)
 
     def time_complexity(self, **kwargs):
         """
         Return the complexity of hybrid approach
+
+        INPUT:
+
+        - ``k`` -- no. of fixed variables
+
+        If `k` is specified, the function returns the time complexity w.r.t the given parameter
 
         EXAMPLES::
 
@@ -95,32 +104,66 @@ class HybridF5(BaseAlgorithm):
             sage: H = HybridF5(q=256, n=10, m=15)
             sage: H.time_complexity()
             1002001
+            sage: H.time_complexity(k=2)
+            1784217600
         """
-        min_finder = lambda iterable: min(iterable)
-        return self._hybrid_approach_(min_finder)
+        n = self.nvariables()
+        k = kwargs.get('k', self.k())
 
-    def _hybrid_approach_(self, min_finder):
+        if not 0 <= k <= n:
+            raise ValueError(f'k must be in the range 0 <= k <= {n}')
+
+        return self._time_complexity_(k)
+
+    def memory_complexity(self):
+        """
+        Return the memory complexity
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: E = HybridF5(n=10, m=12, q=7)
+            sage: E.memory_complexity()
+            14400
+        """
+        n, m = self.nvariables(), self.npolynomials()
+        q = self.order_of_the_field()
+        w = self.linear_algebra_constant()
+        degrees = self.degree_of_polynomials()
+        k = self.k()
+
+        return F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+
+    def tilde_o_time(self):
+        """
+        Return the Ō time complexity of hybrid-F5 algorithm for quadratic system
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: E = HybridF5(n=10, m=12, q=7)
+            sage: E.tilde_o_time()
+            4939200
+        """
+        return self.time_complexity()
+
+    def _time_complexity_(self, k):
+        """
+        Return the time complexity w.r.t. `k`.
+
+        INPUT:
+
+        - ``k`` -- no. of fixed variables
+        """
         n, m = self.nvariables(), self.npolynomials()
         if self.is_underdefined_system():
             n -= (n - m)
-
-        if self.use_quantum():
-            def multiplier(x, e):
-                return x ** (e / 2)
-        else:
-            def multiplier(x, e):
-                return x ** e
-
-        from .f5 import F5
 
         q = self.order_of_the_field()
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
 
-        complexities = [
-            multiplier(q, k) * F5(n=n-k, m=m, q=q, w=w, degrees=degrees).time_complexity() for k in range(n)
-        ]
-        return min_finder(complexities)
+        return q ** (k / 2 if self.use_quantum() else k) * F5(n=n-k, m=m, q=q, w=w, degrees=degrees).time_complexity()
 
     def __repr__(self):
         n, m = self.nvariables(), self.npolynomials()
