@@ -130,5 +130,18 @@ class DinurSecond(BaseAlgorithm):
                n1 * n * 2 ** (n - n1) + \
                2 ** (n - 2 * n1 + 1) * sum_of_binomial_coefficients(n, 2)
 
+    def tilde_o_time(self):
+        """
+        Return the Ō time complexity of dinur's second algorithm
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms.dinur2 import DinurSecond
+            sage: E = DinurSecond(n=10, m=12)
+            sage: E.tilde_o_time()
+            283.68541077888506
+        """
+        return 2 ** ((1 - 1./(2.7*2)) * self._n)
+
     def __repr__(self):
         return f"Dinur's second estimator for the MQ problem"

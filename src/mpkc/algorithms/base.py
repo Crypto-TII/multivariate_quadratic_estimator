@@ -105,6 +105,20 @@ class BaseAlgorithm:
         """
         raise NotImplementedError
 
+    def tilde_o_time(self):
+        """
+        Return the Ō time complexity
+
+        TESTS::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=10, m=5).tilde_o_time()
+            Traceback (most recent call last):
+            ...
+            NotImplementedError
+        """
+        raise NotImplementedError
+
     def order_of_the_field(self):
         """
         Return the order of the field

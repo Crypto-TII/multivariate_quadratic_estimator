@@ -23,7 +23,7 @@ class DinurFirst(BaseAlgorithm):
 
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
-        - ``nsol`` -- number of solutions (default: 1)
+        - ``nsolutions`` -- number of solutions (default: 1)
 
         EXAMPLES::
 

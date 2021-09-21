@@ -66,5 +66,18 @@ class KPG(BaseAlgorithm):
         n, m = self.nvariables(), self.npolynomials()
         return m * n ** 2
 
+    def tilde_o_time(self):
+        """
+        Return the Ō time complexity
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import KPG
+            sage: E = KPG(n=183, m=12, q=4, w=2.8)
+            sage: E.tilde_o_time()
+            1
+        """
+        return 1
+
     def __repr__(self):
         return f"KPG estimator for the MQ problem"
