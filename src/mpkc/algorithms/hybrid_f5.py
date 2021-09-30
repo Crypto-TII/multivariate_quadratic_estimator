@@ -31,6 +31,11 @@ class HybridF5(BaseAlgorithm):
         self._use_quantum = use_quantum
         self._degrees = degrees
 
+        if self.is_underdefined_system():
+            self._n_reduced = n - (n - m)
+        else:
+            self._n_reduced = n
+
     def degree_of_polynomials(self):
         """
         Return a list of degree of the polynomials
@@ -60,6 +65,22 @@ class HybridF5(BaseAlgorithm):
         """
         return self._use_quantum
 
+    def nvariables_reduced(self):
+        """
+        Return the no. of variables after fixing some values
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=31, n=5, m=10)
+            sage: H.nvariables_reduced()
+            5
+            sage: G = HybridF5(q=31, n=25, m=20)
+            sage: G.nvariables_reduced()
+            20
+        """
+        return self._n_reduced
+
     @optimal_parameter
     def k(self):
         """
@@ -77,8 +98,11 @@ class HybridF5(BaseAlgorithm):
             sage: H = HybridF5(q=256, n=10, m=10)
             sage: H.k()
             1
+            sage: H = HybridF5(q=256, n=20, m=10)
+            sage: H.k()
+            1
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         complexities = [self._time_complexity_(k) for k in range(n)]
         return min(range(len(complexities)), key=complexities.__getitem__)
 
@@ -155,10 +179,7 @@ class HybridF5(BaseAlgorithm):
 
         - ``k`` -- no. of fixed variables
         """
-        n, m = self.nvariables(), self.npolynomials()
-        if self.is_underdefined_system():
-            n -= (n - m)
-
+        n, m = self.nvariables_reduced(), self.npolynomials()
         q = self.order_of_the_field()
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
