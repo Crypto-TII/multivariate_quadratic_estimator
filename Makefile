@@ -25,4 +25,5 @@ clean-doc:
 clean: clean-doc
 	rm -rf build/
 	rm -rf dist/
+	rm -rf scripts/*.sage.py
 	rm -rf src/$(PACKAGE).egg-info/
