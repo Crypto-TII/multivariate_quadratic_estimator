@@ -8,7 +8,7 @@ equations. In  D.  Naccache  and  P.  Paillier,  editors,Public  KeyCryptography
 2002. Springer Berlin Heidelberg.
 """
 
-from sage.functions.other import sqrt
+from sage.functions.other import sqrt, floor
 from sage.misc.functional import numerical_approx
 from .base import BaseAlgorithm
 
@@ -27,7 +27,7 @@ class CGMTA(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import CGMTA
-            sage: E = CGMTA(n=12, m=10, q=3)
+            sage: E = CGMTA(n=41, m=10, q=3)
             sage: E
             CGMT-A estimator for the MQ problem
         """
@@ -35,7 +35,10 @@ class CGMTA(BaseAlgorithm):
             raise ValueError("m must be <= n")
 
         super().__init__(n=n, m=m, q=q)
-        self._k = min(m / 2, sqrt(n / 2 - sqrt(n / 2)))
+        self._k = min(m / 2, floor(sqrt(n / 2 - sqrt(n / 2))))
+
+        if not 2 * self._k ** 2 <= n - 2 * self._k or not m - 2 * self._k < 2 * self._k ** 2 :
+            raise ValueError(f'The condition 2k^2 <= n - 2k must be satisfied')
 
     def time_complexity(self):
         """
@@ -44,9 +47,9 @@ class CGMTA(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import CGMTA
-            sage: E = CGMTA(n=12, m=10, q=3)
+            sage: E = CGMTA(n=41, m=10, q=3)
             sage: E.time_complexity()
-            14900.9039071367
+            4374.00000000000
         """
         m = self.npolynomials()
         q = self.order_of_the_field()
@@ -60,9 +63,9 @@ class CGMTA(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import CGMTA
-            sage: E = CGMTA(n=12, m=10, q=3)
+            sage: E = CGMTA(n=41, m=10, q=3)
             sage: E.memory_complexity()
-            29.8679427555961
+            162.000000000000
         """
         q = self.order_of_the_field()
         k = self._k
@@ -75,9 +78,9 @@ class CGMTA(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import CGMTA
-            sage: E = CGMTA(n=12, m=10, q=3)
+            sage: E = CGMTA(n=41, m=10, q=3)
             sage: E.tilde_o_time()
-            7450.45195356836
+            2187.00000000000
         """
         m = self.npolynomials()
         q = self.order_of_the_field()

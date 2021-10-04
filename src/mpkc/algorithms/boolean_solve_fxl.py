@@ -49,7 +49,7 @@ class BooleanSolveFXL(BaseAlgorithm):
         self._k = None
         self._variant = None
         self._time_complexity = None
-
+        self._memory_complexity = None
         self._compute_optimal_k_ = self._compute_time_complexity_
         self._compute_optimal_variant_ = self._compute_time_complexity_
 
@@ -128,11 +128,14 @@ class BooleanSolveFXL(BaseAlgorithm):
             sage: E.memory_complexity()
             7056
         """
-        n, m = self.nvariables(), self.npolynomials()
-        q = self.order_of_the_field()
-        k = self.k()
-        wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
-        return max(binomial(n - k + wit_deg, wit_deg) ** 2, m * n ** 2)
+        if self._memory_complexity is None:
+            n, m = self.nvariables(), self.npolynomials()
+            q = self.order_of_the_field()
+            k = self.k()
+            wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
+            self._memory_complexity = max(binomial(n - k + wit_deg, wit_deg) ** 2, m * n ** 2)
+
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """

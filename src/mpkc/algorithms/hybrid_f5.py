@@ -30,6 +30,8 @@ class HybridF5(BaseAlgorithm):
         super().__init__(n, m, q=q, w=w)
         self._use_quantum = use_quantum
         self._degrees = degrees
+        self._time_complexity = None
+        self._memory_complexity = None
 
         if self.is_underdefined_system():
             self._n_reduced = n - (n - m)
@@ -134,10 +136,19 @@ class HybridF5(BaseAlgorithm):
         n = self.nvariables()
         k = kwargs.get('k', self.k())
 
-        if not 0 <= k <= n:
-            raise ValueError(f'k must be in the range 0 <= k <= {n}')
+        if k == self.k():
+            if self._time_complexity is None:
+                self._time_complexity = self._time_complexity_(k)
+                time_complexity = self._time_complexity
+            else:
+                time_complexity = self._time_complexity
+        else:
+            if not 0 <= k <= n:
+                raise ValueError(f'k must be in the range 0 <= k <= {n}')
+            else:
+                time_complexity = self._time_complexity_(k)
 
-        return self._time_complexity_(k)
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -150,13 +161,15 @@ class HybridF5(BaseAlgorithm):
             sage: E.memory_complexity()
             14400
         """
-        n, m = self.nvariables(), self.npolynomials()
-        q = self.order_of_the_field()
-        w = self.linear_algebra_constant()
-        degrees = self.degree_of_polynomials()
-        k = self.k()
+        if self._memory_complexity is None:
+            n, m = self.nvariables(), self.npolynomials()
+            q = self.order_of_the_field()
+            w = self.linear_algebra_constant()
+            degrees = self.degree_of_polynomials()
+            k = self.k()
+            self._memory_complexity =  F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
 
-        return F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """

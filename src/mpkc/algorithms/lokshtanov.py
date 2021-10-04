@@ -35,6 +35,8 @@ class Lokshtanov(BaseAlgorithm):
             Lokshtanov et al.'s estimator for the MQ problem
         """
         super().__init__(n=n, m=m, q=q)
+        self._time_complexity = None
+        self._memory_complexity = None
 
     @optimal_parameter
     def δ(self):
@@ -80,16 +82,26 @@ class Lokshtanov(BaseAlgorithm):
             sage: float(log(E.time_complexity(δ=2/10), 2))
             214.16804105519708
         """
-        δ = kwargs.get('δ', self.δ())
-
-        if not 0 < δ < 1:
-            raise ValueError("δ must be in the range 0 < δ < 1")
-        if δ is None:
-            return Infinity
-
         q = self.order_of_the_field()
         n = self.nvariables()
-        return 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
+        δ = kwargs.get('δ', self.δ())
+
+        if δ is None:
+            return Infinity
+        else:
+            if not 0 < δ < 1:
+                raise ValueError("δ must be in the range 0 < δ < 1")
+
+            if δ == self.δ():
+                if self._time_complexity is None:
+                    self._time_complexity = 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
+                    time_complexity = self._time_complexity
+                else:
+                    time_complexity = self._time_complexity
+            else:
+                time_complexity = 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
+
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -102,16 +114,18 @@ class Lokshtanov(BaseAlgorithm):
             sage: float(log(E.memory_complexity(), 2))
             30.622995719758727
         """
-        δ = self.δ()
-        if δ is None:
-            return Infinity
+        if self._memory_complexity is None:
+            δ = self.δ()
+            if δ is None:
+                return Infinity
 
-        n = self.nvariables()
-        np = floor(n * δ)
-        q = self.order_of_the_field()
-        resulting_degree = 2 * (q - 1) * (np + 2)
-        M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
-        return M + log(n, 2) * q ** (n - np)
+            n = self.nvariables()
+            np = floor(n * δ)
+            q = self.order_of_the_field()
+            resulting_degree = 2 * (q - 1) * (np + 2)
+            M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
+            self._memory_complexity =  M + log(n, 2) * q ** (n - np)
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """

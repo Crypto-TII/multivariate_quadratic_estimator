@@ -120,7 +120,6 @@ class MQEstimator(object):
             |    DinurFirst    | 23.6655729769094 | 20.4938554492408 | λ: 9/14, κ: 3/14 |
             |   DinurSecond    | 20.3499998825216 | 15.8017083589165 |      n1: 2       |
             | ExhaustiveSearch | 17.9660208563962 | 11.7206717868256 |                  |
-            |      CGMTA       | 13.8179396863345 | 4.30775129297308 |                  |
             |    Bjorklund     | 42.4516669331353 | 15.3160789459123 |      λ: 1/5      |
             |    Lokshtanov    | 67.1234362737997 | 16.1050592581276 |     δ: 1/15      |
             | BooleanSolveFXL  | 20.3398500028846 | 11.7206717868256 |      k: 14       |
@@ -142,6 +141,24 @@ class MQEstimator(object):
                            optimal_parameters])
 
         return table
+
+    def fastest_algorithm(self, use_tilde_o_time=False):
+        """
+         Return the algorithm with the smallest time complexity
+
+         INPUT:
+
+         - ``use_tilde_o_time`` -- use Ō time complexity (default: False)
+
+         EXAMPLES::
+
+             sage: from mpkc import MQEstimator
+             sage: E = MQEstimator(n=15, m=15, q=2)
+             sage: E.fastest_algorithm()
+             Complexity estimator for hybrid approach with 15 variables and 15 polynomials
+         """
+        key = lambda algorithm: algorithm.tilde_o_time() if use_tilde_o_time else algorithm.time_complexity()
+        return min(self.algorithms(), key=key)
 
     def __repr__(self):
         algorithm = self.algorithms()[0]

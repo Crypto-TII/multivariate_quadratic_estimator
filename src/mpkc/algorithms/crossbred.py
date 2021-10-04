@@ -44,10 +44,11 @@ class Crossbred(BaseAlgorithm):
         """
         super().__init__(n=n, m=m, q=q, w=w)
         self._max_D = max_D
-
         self._k = None
         self._D = None
         self._d = None
+        self._time_complexity = None
+        self._memory_complexity = None
 
     def max_D(self):
         """
@@ -249,15 +250,17 @@ class Crossbred(BaseAlgorithm):
             return self._time_complexity_(k, D, d)
 
         min_time_complexity = Infinity
-        for (k, D, d) in self.admissible_parameters():
-            time_complexity = self._time_complexity_(k, D, d)
-            if time_complexity < min_time_complexity:
-                min_time_complexity = time_complexity
-                self._k = k
-                self._D = D
-                self._d = d
+        if self._time_complexity is None:
+            for (k, D, d) in self.admissible_parameters():
+                time_complexity = self._time_complexity_(k, D, d)
+                if time_complexity < min_time_complexity:
+                    min_time_complexity = time_complexity
+                    self._k = k
+                    self._D = D
+                    self._d = d
+            self._time_complexity = min_time_complexity
 
-        return min_time_complexity
+        return self._time_complexity
 
     def memory_complexity(self):
         """
@@ -270,12 +273,15 @@ class Crossbred(BaseAlgorithm):
             sage: float(log(E.memory_complexity(), 2))
             8.027905996569885
         """
-        D = self.D()
-        k = self.k()
-        d = self.d()
-        ncols_pre_step = self.ncols_in_preprocessing_step(k, D, d)
-        ncols_lin_step = self.ncols_in_linearization_step(k, d)
-        return ncols_pre_step ** 2 + ncols_lin_step ** 2
+        if self._memory_complexity is None:
+            D = self.D()
+            k = self.k()
+            d = self.d()
+            ncols_pre_step = self.ncols_in_preprocessing_step(k, D, d)
+            ncols_lin_step = self.ncols_in_linearization_step(k, d)
+            self._memory_complexity = ncols_pre_step ** 2 + ncols_lin_step ** 2
+
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """

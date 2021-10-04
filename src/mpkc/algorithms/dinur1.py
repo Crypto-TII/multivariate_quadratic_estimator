@@ -38,6 +38,8 @@ class DinurFirst(BaseAlgorithm):
         self._k = floor(log(nsolutions + 1, 2))
         self._kappa = None
         self._lambda = None
+        self._time_complexity = None
+        self._memory_complexity = None
 
     @optimal_parameter
     def λ(self):
@@ -91,18 +93,27 @@ class DinurFirst(BaseAlgorithm):
             sage: float(log(E.time_complexity(κ=0.9, λ=0.9), 2))
             16.73237302312492
         """
-        lambda_ = kwargs.get('λ', self.λ())
-        kappa = kwargs.get('κ', self.κ())
         n = self.nvariables()
         k = self._k
+        lambda_ = kwargs.get('λ', self.λ())
+        kappa = kwargs.get('κ', self.κ())
 
-        def w(i):
+        def w(i, kappa):
             return floor((n - i) * (1 - kappa))
 
-        def n1(i):
+        def n1(i, kappa):
             return floor((n - i) * kappa)
 
-        return 8 * k * log(n, 2) * sum([self._T(n - i, n1(i), w(i), lambda_) for i in range(1, n)])
+        if lambda_ == self.λ() and kappa == self.κ():
+            if self._time_complexity is None:
+                self._time_complexity = 8 * k * log(n, 2) * \
+                                        sum([self._T(n - i, n1(i, kappa), w(i, kappa), lambda_) for i in range(1, n)])
+            time_complexity = self._time_complexity
+        else:
+            time_complexity = 8 * k * log(n, 2) * \
+                              sum([self._T(n - i, n1(i, kappa), w(i, kappa), lambda_) for i in range(1, n)])
+
+        return time_complexity
 
     def memory_complexity(self):
         """
@@ -115,9 +126,12 @@ class DinurFirst(BaseAlgorithm):
             sage: float(log(E.memory_complexity(), 2))
             15.909893083770042
         """
-        kappa = self.κ()
-        n = self.nvariables()
-        return (48 * n + 1) * 2 ** (floor((1 - kappa) * n))
+        if self._memory_complexity is None:
+            kappa = self.κ()
+            n = self.nvariables()
+            self._memory_complexity = (48 * n + 1) * 2 ** (floor((1 - kappa) * n))
+
+        return self._memory_complexity
 
     def _compute_kappa_and_lambda_(self):
         min_complexity = Infinity

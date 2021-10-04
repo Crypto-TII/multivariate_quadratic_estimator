@@ -34,6 +34,8 @@ class F5(BaseAlgorithm):
         super().__init__(n, m, q=q, w=w)
         self._nsolutions = nsolutions
         self._degrees = degrees
+        self._time_complexity = None
+        self._memory_complexity = None
 
     def degree_of_polynomials(self):
         """
@@ -79,17 +81,20 @@ class F5(BaseAlgorithm):
             sage: F5(n=10, m=12, q=5).time_complexity()
             64128064
         """
-        if self.is_overdefined_system():
-            complexity = self.time_complexity_semi_regular_system()
-        else:
-            complexity = self.time_complexity_regular_system()
+        if self._time_complexity is None:
+            if self.is_overdefined_system():
+                complexity = self.time_complexity_semi_regular_system()
+            else:
+                complexity = self.time_complexity_regular_system()
 
-        if self.nsolutions() == 1:
-            fglm_complexity = 0
-        else:
-            fglm_complexity = self.time_complexity_fglm()
+            if self.nsolutions() == 1:
+                fglm_complexity = 0
+            else:
+                fglm_complexity = self.time_complexity_fglm()
 
-        return complexity + fglm_complexity
+            self._time_complexity = complexity + fglm_complexity
+
+        return self._time_complexity
 
     def time_complexity_fglm(self):
         """
@@ -168,11 +173,13 @@ class F5(BaseAlgorithm):
             sage: F5_.memory_complexity()
             64128064
         """
-        n = self.nvariables()
-        q = self.order_of_the_field()
-        degrees = self.degree_of_polynomials()
-        dreg = degree_of_regularity.generic_system(n=n, degrees=degrees, q=q)
-        return binomial(n + dreg, dreg) ** 2
+        if self._memory_complexity is None:
+            n = self.nvariables()
+            q = self.order_of_the_field()
+            degrees = self.degree_of_polynomials()
+            dreg = degree_of_regularity.generic_system(n=n, degrees=degrees, q=q)
+            self._memory_complexity =  binomial(n + dreg, dreg) ** 2
+        return self._memory_complexity
 
     def tilde_o_time(self):
         """
