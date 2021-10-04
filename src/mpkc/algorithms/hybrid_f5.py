@@ -159,7 +159,7 @@ class HybridF5(BaseAlgorithm):
             sage: from mpkc.algorithms import HybridF5
             sage: E = HybridF5(n=10, m=12, q=7)
             sage: E.memory_complexity()
-            14400
+            7056
         """
         if self._memory_complexity is None:
             n, m = self.nvariables(), self.npolynomials()

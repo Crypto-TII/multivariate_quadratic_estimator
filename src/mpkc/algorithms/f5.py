@@ -171,14 +171,14 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=12, q=5)
             sage: F5_.memory_complexity()
-            64128064
+            25050025
         """
         if self._memory_complexity is None:
-            n = self.nvariables()
+            n, m = self.nvariables(), self.npolynomials()
             q = self.order_of_the_field()
             degrees = self.degree_of_polynomials()
             dreg = degree_of_regularity.generic_system(n=n, degrees=degrees, q=q)
-            self._memory_complexity =  binomial(n + dreg, dreg) ** 2
+            self._memory_complexity = max(binomial(n + dreg - 1, dreg) ** 2, m * n ** 2)
         return self._memory_complexity
 
     def tilde_o_time(self):

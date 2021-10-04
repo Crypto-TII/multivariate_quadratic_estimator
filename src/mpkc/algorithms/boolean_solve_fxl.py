@@ -11,6 +11,7 @@ equations, In B. Preneel, editor,Advancesin Cryptology — EUROCRYPT 2000, pages
 SpringerBerlin Heidelberg.
 """
 from sage.arith.misc import binomial
+from sage.functions.log import log
 from sage.rings.infinity import Infinity
 from .base import BaseAlgorithm, optimal_parameter
 from .. import witness_degree
@@ -126,14 +127,20 @@ class BooleanSolveFXL(BaseAlgorithm):
             sage: from mpkc.algorithms import BooleanSolveFXL
             sage: E = BooleanSolveFXL(n=10, m=12, q=7)
             sage: E.memory_complexity()
-            7056
+            3136
         """
         if self._memory_complexity is None:
             n, m = self.nvariables(), self.npolynomials()
             q = self.order_of_the_field()
             k = self.k()
             wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
-            self._memory_complexity = max(binomial(n - k + wit_deg, wit_deg) ** 2, m * n ** 2)
+            if self.variant() == "las_vegas":
+                a = binomial(n - k + 2, 2)
+                T = binomial(n - k + wit_deg - 2, wit_deg)
+                N = binomial(n - k + wit_deg, wit_deg)
+                self._memory_complexity = m * a + (T * a * log(N, 2) + N * log(m, 2)) / log(q, 2)
+            else:
+                self._memory_complexity = max(binomial(n - k + wit_deg - 1, wit_deg) ** 2, m * n ** 2)
 
         return self._memory_complexity
 
