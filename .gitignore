@@ -140,3 +140,6 @@ cython_debug/
 
 # JetBrains IDE
 .idea/
+
+# Sage-generated python file
+scripts/*.sage.py
