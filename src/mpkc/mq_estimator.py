@@ -34,7 +34,7 @@ class MQEstimator(object):
 
             try:
                 algorithm = Algorithm(**arg_and_values)
-            except ValueError:
+            except (ValueError, TypeError):
                 continue
 
             if algorithm.is_defined_over_finite_field() and q != algorithm.order_of_the_field():
@@ -64,7 +64,7 @@ class MQEstimator(object):
 
         TESTS::
 
-            sage: E = MQEstimator(n=10, m=15)
+            sage: E = MQEstimator(n=10, m=15, q=3)
             sage: E.algorithms()
             [Complexity estimator for F5 with 10 variables and 15 polynomials,
              Complexity estimator for hybrid approach with 10 variables and 15 polynomials,
@@ -96,7 +96,7 @@ class MQEstimator(object):
 
         TESTS::
 
-            sage: E = MQEstimator(n=10, m=15)
+            sage: E = MQEstimator(n=10, m=15, q=3)
             sage: E.algorithm_names()
             ['F5',
              'HybridF5',
@@ -123,7 +123,7 @@ class MQEstimator(object):
 
         TESTS::
 
-            sage: E = MQEstimator(n=10, m=15)
+            sage: E = MQEstimator(n=10, m=15, q=3)
             sage: E.nalgorithms()
             6
         """

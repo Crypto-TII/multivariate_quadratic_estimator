@@ -11,19 +11,19 @@ pages  3–21,Cham, 2018. Springer International Publishing.
 Cryptologye Print Archive, Report 2020/1058, 2020.https://eprint.iacr.org/2020/1058.
 """
 
+from sage.all import Integer
 from sage.functions.log import log
-from sage.functions.other import binomial
 from sage.rings.all import QQ
 from sage.rings.infinity import Infinity
 from sage.rings.power_series_ring import PowerSeriesRing
 from .base import BaseAlgorithm, optimal_parameter
 from ..series.hilbert import HilbertSeries
 from ..series.nmonomial import NMonomialSeries
-from ..utils import nmonomials_of_degree, nmonomials_up_to_degree
+from ..utils import nmonomials_up_to_degree
 
 
 class Crossbred(BaseAlgorithm):
-    def __init__(self, n, m, q=None, w=2, max_D=10):
+    def __init__(self, n, m, q, w=2, max_D=10):
         """
         Construct an instance of crossbred estimator
 
@@ -42,6 +42,9 @@ class Crossbred(BaseAlgorithm):
             sage: E
             Crossbred estimator for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         super().__init__(n=n, m=m, q=q, w=w)
         self._max_D = max_D
         self._k = None

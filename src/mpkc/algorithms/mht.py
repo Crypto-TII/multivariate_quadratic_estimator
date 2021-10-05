@@ -6,7 +6,7 @@ The MHT is an algorithm to solve the MQ problem when  m * (m + 3) / 2 <= n
 [MHT13] Miura, H., Hashimoto, Y., and Takagi, T. Extended algorithm for solving underdefined multivariate quadratic
 equations. In Post-Quantum Cryptography, 2013. Springer Berlin Heidelberg.
 """
-
+from sage.all import Integer
 from sage.arith.misc import is_power_of_two
 from .base import BaseAlgorithm
 
@@ -18,9 +18,9 @@ class MHT(BaseAlgorithm):
 
         INPUT:
 
-        - ``q`` -- order of the finite field
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
+        - ``q`` -- order of the finite field
         - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
 
         EXAMPLES::
@@ -30,6 +30,9 @@ class MHT(BaseAlgorithm):
             sage: E
             MHT estimator for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         if not m * (m + 3) / 2 <= n:
             raise ValueError(f'The parameter n should be grater than or equal to m * (m + 3) / 2')
 

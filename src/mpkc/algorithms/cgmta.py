@@ -7,7 +7,7 @@ The CGMT-A is an algorithm to solve the MQ problem
 equations. In  D.  Naccache  and  P.  Paillier,  editors,Public  KeyCryptography, pages 211–227, Berlin, Heidelberg,
 2002. Springer Berlin Heidelberg.
 """
-
+from sage.all import Integer
 from sage.functions.other import sqrt, floor
 from sage.misc.functional import numerical_approx
 from .base import BaseAlgorithm
@@ -20,9 +20,9 @@ class CGMTA(BaseAlgorithm):
 
         INPUT:
 
-        - ``q`` -- order of the finite field
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
+        - ``q`` -- order of the finite field
 
         EXAMPLES::
 
@@ -31,6 +31,9 @@ class CGMTA(BaseAlgorithm):
             sage: E
             CGMT-A estimator for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         if not m <= n:
             raise ValueError("m must be <= n")
 

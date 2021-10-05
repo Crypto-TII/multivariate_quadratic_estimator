@@ -1,18 +1,19 @@
+from sage.all import Integer
 from sage.functions.log import log
 from sage.misc.functional import numerical_approx
 from .base import BaseAlgorithm
 
 
 class ExhaustiveSearch(BaseAlgorithm):
-    def __init__(self, q, n, m, nsolutions=1):
+    def __init__(self, n, m, q, nsolutions=1):
         """
         Construct an instance of Exhaustive Search estimator
 
         INPUT:
 
-        - ``q`` -- order of the finite field
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
+        - ``q`` -- order of the finite field
         - ``nsolutions`` -- number of solutions (default: 1)
 
         EXAMPLES::
@@ -22,6 +23,9 @@ class ExhaustiveSearch(BaseAlgorithm):
             sage: E
             Exhaustive search estimator for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         super().__init__(n=n, m=m, q=q)
         self._nsolutions = nsolutions
 

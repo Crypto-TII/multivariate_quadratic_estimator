@@ -1,17 +1,18 @@
+from sage.all import Integer
 from .base import BaseAlgorithm, optimal_parameter
 from .f5 import F5
 
 
 class HybridF5(BaseAlgorithm):
-    def __init__(self, q, n, m, w=2, use_quantum=False, **kwargs):
+    def __init__(self, n, m, q, w=2, use_quantum=False, **kwargs):
         """
         Return an instance of hybrid approach complexity estimator
 
         INPUT:
 
-        - ``q`` -- order of the finite field
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
+        - ``q`` -- order of the finite field
         - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
         - ``use_quantum`` -- return the complexity using quantum computer (default: False)
         - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m)
@@ -23,6 +24,9 @@ class HybridF5(BaseAlgorithm):
             sage: H
             Complexity estimator for hybrid approach with 5 variables and 10 polynomials
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         degrees = kwargs.get('degrees', [2] * m)
         if len(degrees) != m:
             raise ValueError(f"len(degrees) must be equal to {m}")

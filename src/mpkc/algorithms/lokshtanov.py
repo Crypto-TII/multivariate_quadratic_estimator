@@ -7,6 +7,7 @@ The Losktanov et al.'s is an algorithm to solve the MQ problem
 polynomial equation sover finite fields. In Proceedings of the Twenty-Eighth Annual ACM-SIAM Symposium on Discrete
 Algorithms, SODA ’17, page 2190–2202, USA, 2017. Society for Industrial and Applied Mathematics.
 """
+from sage.all import Integer
 from sage.arith.misc import is_power_of_two
 from sage.functions.log import log
 from sage.functions.other import floor
@@ -23,9 +24,9 @@ class Lokshtanov(BaseAlgorithm):
 
         INPUT:
 
-        - ``q`` -- order of the finite field
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
+        - ``q`` -- order of the finite field
 
         EXAMPLES::
 
@@ -34,6 +35,9 @@ class Lokshtanov(BaseAlgorithm):
             sage: E
             Lokshtanov et al.'s estimator for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         super().__init__(n=n, m=m, q=q)
         self._time_complexity = None
         self._memory_complexity = None

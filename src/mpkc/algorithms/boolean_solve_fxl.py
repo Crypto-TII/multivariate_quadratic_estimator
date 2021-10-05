@@ -10,6 +10,7 @@ boolean systems. CoRR,abs/1112.6263, 2011.
 equations, In B. Preneel, editor,Advancesin Cryptology — EUROCRYPT 2000, pages 392–407, Berlin, Heidelberg, 2000.
 SpringerBerlin Heidelberg.
 """
+from sage.all import Integer
 from sage.arith.misc import binomial
 from sage.functions.log import log
 from sage.rings.infinity import Infinity
@@ -20,7 +21,7 @@ from .. import witness_degree
 class BooleanSolveFXL(BaseAlgorithm):
     variants = ("las_vegas", "deterministic")
 
-    def __init__(self, n, m, q=None, w=2):
+    def __init__(self, n, m, q, w=2):
         """
         Construct an instance of BooleanSolve and FXL estimator
 
@@ -38,6 +39,9 @@ class BooleanSolveFXL(BaseAlgorithm):
             sage: E
             BooleanSolve and FXL estimators for the MQ problem
         """
+        if not isinstance(q, (int, Integer)):
+            raise TypeError("q must be an integer")
+
         super().__init__(n=n, m=m, q=q, w=w)
 
         if self.is_defined_over_finite_field():
