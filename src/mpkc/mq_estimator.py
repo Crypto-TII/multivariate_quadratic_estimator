@@ -37,6 +37,9 @@ class MQEstimator(object):
             except ValueError:
                 continue
 
+            if algorithm.is_defined_over_finite_field() and q != algorithm.order_of_the_field():
+                continue
+
             self._algorithms.append(algorithm)
             setattr(self, algorithm.__module__.split('.')[-1], algorithm)
 
@@ -47,7 +50,7 @@ class MQEstimator(object):
         EXAMPLES::
 
             sage: from mpkc import MQEstimator
-            sage: E = MQEstimator(n=10, m=15)
+            sage: E = MQEstimator(n=10, m=15, q=2)
             sage: E.algorithms()
             [Complexity estimator for F5 with 10 variables and 15 polynomials,
              Complexity estimator for hybrid approach with 10 variables and 15 polynomials,
@@ -55,6 +58,17 @@ class MQEstimator(object):
              Dinur's second estimator for the MQ problem,
              Exhaustive search estimator for the MQ problem,
              Björklund et al.'s estimator for the MQ problem,
+             Lokshtanov et al.'s estimator for the MQ problem,
+             BooleanSolve and FXL estimators for the MQ problem,
+             Crossbred estimator for the MQ problem]
+
+        TESTS::
+
+            sage: E = MQEstimator(n=10, m=15)
+            sage: E.algorithms()
+            [Complexity estimator for F5 with 10 variables and 15 polynomials,
+             Complexity estimator for hybrid approach with 10 variables and 15 polynomials,
+             Exhaustive search estimator for the MQ problem,
              Lokshtanov et al.'s estimator for the MQ problem,
              BooleanSolve and FXL estimators for the MQ problem,
              Crossbred estimator for the MQ problem]
@@ -68,7 +82,7 @@ class MQEstimator(object):
         EXAMPLES::
 
             sage: from mpkc import MQEstimator
-            sage: E = MQEstimator(n=10, m=15)
+            sage: E = MQEstimator(n=10, m=15, q=2)
             sage: E.algorithm_names()
             ['F5',
              'HybridF5',
@@ -76,6 +90,17 @@ class MQEstimator(object):
              'DinurSecond',
              'ExhaustiveSearch',
              'Bjorklund',
+             'Lokshtanov',
+             'BooleanSolveFXL',
+             'Crossbred']
+
+        TESTS::
+
+            sage: E = MQEstimator(n=10, m=15)
+            sage: E.algorithm_names()
+            ['F5',
+             'HybridF5',
+             'ExhaustiveSearch',
              'Lokshtanov',
              'BooleanSolveFXL',
              'Crossbred']
@@ -89,12 +114,18 @@ class MQEstimator(object):
         EXAMPLES::
 
             sage: from mpkc import MQEstimator
-            sage: E0 = MQEstimator(n=10, m=15)
+            sage: E0 = MQEstimator(n=10, m=15, q=2)
             sage: E0.nalgorithms()
             9
             sage: E1 = MQEstimator(n=183, m=12, q=4)
             sage: E1.nalgorithms()
-            11
+            8
+
+        TESTS::
+
+            sage: E = MQEstimator(n=10, m=15)
+            sage: E.nalgorithms()
+            6
         """
         return len(self.algorithms())
 
@@ -124,6 +155,21 @@ class MQEstimator(object):
             |    Lokshtanov    | 67.1234362737997 | 16.1050592581276 |          δ: 1/15          |
             | BooleanSolveFXL  | 20.3398500028846 | 5.82580271452019 | k: 14, variant: las_vegas |
             |    Crossbred     | 17.9309653178356 | 8.98013957763916 |      D: 3, k: 7, d: 1     |
+            +------------------+------------------+------------------+---------------------------+
+
+        TESTS::
+
+            sage: E = MQEstimator(n=15, m=15, q=3)  # DinurFirst, DinurSecond, and Bjorklund are skipped for q != 2
+            sage: print(E.table())
+            +------------------+------------------+------------------+---------------------------+
+            |    algorithm     |       time       |      memory      |         parameters        |
+            +------------------+------------------+------------------+---------------------------+
+            |        F5        | 62.0451351868504 | 30.4845619006049 |                           |
+            |     HybridF5     | 24.6342598527691 | 8.55074678538324 |           k: 10           |
+            | ExhaustiveSearch | 24.0760096597596 | 11.7206717868256 |                           |
+            |    Lokshtanov    | 98.2276112460722 | 24.2667243293558 |          δ: 1/15          |
+            | BooleanSolveFXL  | 28.5293250129808 | 5.71135505102049 | k: 14, variant: las_vegas |
+            |    Crossbred     | 23.9402101398093 | 16.0457809877246 |      D: 4, k: 6, d: 1     |
             +------------------+------------------+------------------+---------------------------+
         """
         table = PrettyTable()

@@ -32,7 +32,7 @@ class DinurFirst(BaseAlgorithm):
             sage: E
             Dinur's first estimator for the MQ problem
         """
-        super().__init__(n=n, m=m)
+        super().__init__(n=n, m=m, q=2)
         self._nsolutions = nsolutions
 
         self._k = floor(log(nsolutions + 1, 2))

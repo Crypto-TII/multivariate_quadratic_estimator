@@ -30,7 +30,7 @@ class DinurSecond(BaseAlgorithm):
             sage: E
             Dinur's second estimator for the MQ problem
         """
-        super().__init__(n=n, m=m)
+        super().__init__(n=n, m=m, q=2)
         self._n1 = None
         self._time_complexity = None
         self._memory_complexity = None
