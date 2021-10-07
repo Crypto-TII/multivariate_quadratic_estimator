@@ -53,6 +53,7 @@ class Crossbred(BaseAlgorithm):
         self._time_complexity = None
         self._memory_complexity = None
 
+    @property
     def max_D(self):
         """
         Return the upper bound of the degree of the initial Macaulay matrix
@@ -61,10 +62,36 @@ class Crossbred(BaseAlgorithm):
 
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5, max_D=9)
-            sage: E.max_D()
+            sage: E.max_D
             9
         """
         return self._max_D
+
+    @max_D.setter
+    def max_D(self, value):
+        """
+        Set new upper bound of the degree of the initial Macaulay matrix
+
+        TESTS::
+
+            sage: from mpkc.algorithms import Crossbred
+            sage: E = Crossbred(n=10, m=12, q=5, max_D=6)
+            sage: E.admissible_parameter_series(1)
+            -1 - 2*x - 2*y - 2*x*y + 9*y^2 + 65*x^3 + 9*x^2*y + 9*x*y^2 + 20*y^3 + 439*x^4 + 119*x^3*y + 9*x^2*y^2 +
+            20*x*y^3 - 35*y^4 + 1705*x^5 + 658*x^4*y + 20*x^3*y^2 + 20*x^2*y^3 - 35*x*y^4 - 89*y^5 + 4892*x^6 +
+            2419*x^5*y + 64*x^4*y^2 + 20*x^3*y^3 - 35*x^2*y^4 - 89*x*y^5 + 77*y^6 + O(x, y)^7
+            sage: E.max_D = 5
+            sage: E.admissible_parameter_series(1)
+            -1 - 2*x - 2*y - 2*x*y + 9*y^2 + 65*x^3 + 9*x^2*y + 9*x*y^2 + 20*y^3 + 439*x^4 + 119*x^3*y + 9*x^2*y^2 +
+            20*x*y^3 - 35*y^4 + 1705*x^5 + 658*x^4*y + 20*x^3*y^2 + 20*x^2*y^3 - 35*x*y^4 - 89*y^5 + O(x, y)^6
+        """
+        self._max_D = value
+        self._k = None
+        self._D = None
+        self._d = None
+        self._time_complexity = None
+        self._memory_complexity = None
+        self._optimal_parameters = dict()
 
     def ncols_in_preprocessing_step(self, k, D, d):
         """
@@ -181,7 +208,7 @@ class Crossbred(BaseAlgorithm):
         """
         n, m = self.nvariables(), self.npolynomials()
         q = self.order_of_the_field()
-        max_D = self.max_D()
+        max_D = self.max_D
 
         R = PowerSeriesRing(QQ, names=['x', 'y'], default_prec=max_D + 1)
         x, y = R.gens()
@@ -209,7 +236,7 @@ class Crossbred(BaseAlgorithm):
             [(1, 2, 1), (1, 3, 1), (1, 4, 1), (1, 3, 2), (1, 5, 1)]
         """
         n = self.nvariables()
-        max_D = self.max_D()
+        max_D = self.max_D
 
         admissible_parameters = []
         for k in range(1, n):
