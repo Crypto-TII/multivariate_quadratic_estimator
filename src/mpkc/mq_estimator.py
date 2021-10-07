@@ -6,7 +6,7 @@ from .algorithms import HybridF5
 
 
 class MQEstimator(object):
-    def __init__(self, n, m, q=None, w=2, nsolutions=1):
+    def __init__(self, n, m, q=None, w=2, nsolutions=1, **kwargs):
         """
         Construct an instance of MQ Estimator
 
@@ -14,20 +14,31 @@ class MQEstimator(object):
 
         - ``n`` -- no. of variables
         - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
+        - ``q`` -- order of the finite field (default: None)
         - ``w`` -- linear algebra constant (default: 2)
         - ``nsolutions`` -- no. of solutions (default: 1)
+        - ``excluded_algorithms`` -- a list/tuple of excluded algorithms (default: None)
 
         EXAMPLES::
 
             sage: from mpkc import MQEstimator
             sage: MQEstimator(n=10, m=5)
             MQ Estimator for system with 10 variables and 5 equations
+
+
         """
-        constructor_args = locals()
+        constructor_args = {arg: value for (arg, value) in locals().items()
+                            if arg in ('n', 'm', 'q', 'w', 'nsolutions')}
+
+        excluded_algorithms = kwargs.get("excluded_algorithms", tuple())
+        if excluded_algorithms and any(not issubclass(Algorithm, BaseAlgorithm) for Algorithm in excluded_algorithms):
+            raise TypeError(f"all excluded algorithms must be a subclass of {BaseAlgorithm.__name__}")
 
         self._algorithms = []
-        for Algorithm in BaseAlgorithm.__subclasses__():
+        included_algorithms = (Algorithm for Algorithm in BaseAlgorithm.__subclasses__()
+                               if Algorithm not in excluded_algorithms)
+
+        for Algorithm in included_algorithms:
             alg_constructor_args = inspect.getargs(Algorithm.__init__.__code__).args
             arg_and_values = {arg: constructor_args[arg] for arg in alg_constructor_args
                               if arg in constructor_args and arg != 'self'}
@@ -166,6 +177,17 @@ class MQEstimator(object):
             +------------------+------------------+------------------+---------------------------+
             |        F5        | 62.0451351868504 | 30.4845619006049 |                           |
             |     HybridF5     | 24.6342598527691 | 8.55074678538324 |           k: 10           |
+            | ExhaustiveSearch | 24.0760096597596 | 11.7206717868256 |                           |
+            |    Lokshtanov    | 98.2276112460722 | 24.2667243293558 |          δ: 1/15          |
+            | BooleanSolveFXL  | 28.5293250129808 | 5.71135505102049 | k: 14, variant: las_vegas |
+            |    Crossbred     | 23.9402101398093 | 16.0457809877246 |      D: 4, k: 6, d: 1     |
+            +------------------+------------------+------------------+---------------------------+
+            sage: from mpkc.algorithms import F5, HybridF5
+            sage: E = MQEstimator(n=15, m=15, q=3, excluded_algorithms=[F5, HybridF5])  # tests excluded algorithms
+            sage: print(E.table())
+            +------------------+------------------+------------------+---------------------------+
+            |    algorithm     |       time       |      memory      |         parameters        |
+            +------------------+------------------+------------------+---------------------------+
             | ExhaustiveSearch | 24.0760096597596 | 11.7206717868256 |                           |
             |    Lokshtanov    | 98.2276112460722 | 24.2667243293558 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.5293250129808 | 5.71135505102049 | k: 14, variant: las_vegas |
