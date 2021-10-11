@@ -68,7 +68,7 @@ class Bjorklund(BaseAlgorithm):
         if self._λ is not None:
             return self._λ
 
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         k = self._k
         min_complexity = Infinity
         optimal_λ = None
@@ -101,6 +101,13 @@ class Bjorklund(BaseAlgorithm):
             35.48523010807851
             sage: float(log(E.time_complexity(λ=7/10), 2))
             49.97565549640329
+
+        TESTS::
+
+            sage: E0 = Bjorklund(n=15, m=12)
+            sage: E1 = Bjorklund(n=16, m=12)
+            sage: E0.time_complexity().numerical_approx() == E1.time_complexity().numerical_approx()
+            True
         """
         λ = kwargs.get('λ', None)
 
@@ -124,6 +131,13 @@ class Bjorklund(BaseAlgorithm):
             sage: E = Bjorklund(n=10, m=12)
             sage: float(log(E.memory_complexity(), 2))
             10.89550378006907
+
+        TESTS::
+
+            sage: E0 = Bjorklund(n=15, m=12)
+            sage: E1 = Bjorklund(n=16, m=12)
+            sage: E0.memory_complexity().numerical_approx() == E1.memory_complexity().numerical_approx()
+            True
         """
         if self._memory_complexity is not None:
             return self._memory_complexity
@@ -136,7 +150,7 @@ class Bjorklund(BaseAlgorithm):
                 l = floor(_λ * _n)
                 return S(l, l + 2, _λ) + 2 ** (_n - l) * log(s, 2) + _m * sum_of_binomial_coefficients(_n, 2)
 
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         λ = self.λ()
         self._memory_complexity = S(n, m, λ)
         return self._memory_complexity
@@ -152,7 +166,7 @@ class Bjorklund(BaseAlgorithm):
             sage: float(log(E.tilde_o_time(), 2))
             8.03225
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         return 2 ** (0.803225 * n)
 
     @staticmethod
@@ -173,7 +187,7 @@ class Bjorklund(BaseAlgorithm):
 
         - ``λ`` -- the λ value
         """
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         k = self._k
 
         return 8 * k * log(n, 2) * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])

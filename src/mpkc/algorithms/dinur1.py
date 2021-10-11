@@ -92,8 +92,15 @@ class DinurFirst(BaseAlgorithm):
             26.819919688075288
             sage: float(log(E.time_complexity(κ=0.9, λ=0.9), 2))
             16.73237302312492
+
+        TESTS::
+
+            sage: E0 = DinurFirst(n=15, m=12)
+            sage: E1 = DinurFirst(n=17, m=12)
+            sage: E0.time_complexity().numerical_approx() == E1.time_complexity().numerical_approx()
+            True
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         k = self._k
         lambda_ = kwargs.get('λ', self.λ())
         kappa = kwargs.get('κ', self.κ())
@@ -125,17 +132,24 @@ class DinurFirst(BaseAlgorithm):
             sage: E = DinurFirst(n=10, m=12)
             sage: float(log(E.memory_complexity(), 2))
             15.909893083770042
+
+        TESTS::
+
+            sage: E0 = DinurFirst(n=15, m=12)
+            sage: E1 = DinurFirst(n=17, m=12)
+            sage: E0.memory_complexity().numerical_approx() == E1.memory_complexity().numerical_approx()
+            True
         """
         if self._memory_complexity is None:
             kappa = self.κ()
-            n = self.nvariables()
+            n = self.nvariables_reduced()
             self._memory_complexity = (48 * n + 1) * 2 ** (floor((1 - kappa) * n))
 
         return self._memory_complexity
 
     def _compute_kappa_and_lambda_(self):
         min_complexity = Infinity
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         k = self._k
         optimal_kappa = None
         optimal_lambda = None
@@ -166,7 +180,7 @@ class DinurFirst(BaseAlgorithm):
             sage: float(log(E.tilde_o_time(), 2))
             6.943
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         return 2 ** (0.6943 * n)
 
     def _T(self, n, n1, w, lambda_):

@@ -29,6 +29,11 @@ class KPG(BaseAlgorithm):
             sage: E = KPG(n=183, m=12, q=4, w=2.8)
             sage: E
             KPG estimator for the MQ problem
+
+        TESTS::
+
+            sage: E.nvariables() == E.nvariables_reduced()
+            True
         """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
@@ -40,6 +45,7 @@ class KPG(BaseAlgorithm):
             raise ValueError(f'The condition m(m + 1) < n must be satisfied')
 
         super().__init__(n=n, m=m, q=q, w=w)
+        self._n_reduced = n
 
     def time_complexity(self):
         """

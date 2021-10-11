@@ -113,7 +113,7 @@ class Crossbred(BaseAlgorithm):
         if not d < D:
             raise ValueError("d must be smaller than D")
 
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         q = self.order_of_the_field()
 
         nms0 = NMonomialSeries(n=k, q=q, max_prec=D+1)
@@ -206,7 +206,7 @@ class Crossbred(BaseAlgorithm):
             sage: E.admissible_parameter_series(2)
             -1 - 3*x - 3*y - 10*x^2 - 3*x*y + 6*y^2 + O(x, y)^3
         """
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         q = self.order_of_the_field()
         max_D = self.max_D
 
@@ -235,7 +235,7 @@ class Crossbred(BaseAlgorithm):
             sage: E.admissible_parameters()[:5]
             [(1, 2, 1), (1, 3, 1), (1, 4, 1), (1, 3, 2), (1, 5, 1)]
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         max_D = self.max_D
 
         admissible_parameters = []
@@ -271,6 +271,13 @@ class Crossbred(BaseAlgorithm):
             20.3663736923649
             sage: float(log(E.time_complexity(k=4, D=6, d=4), 2))
             29.775157881382952
+
+        TESTS::
+
+            sage: E0 = Crossbred(n=15, m=12, q=5)
+            sage: E1 = Crossbred(n=16, m=12, q=5)
+            sage: E0.time_complexity().numerical_approx() == E1.time_complexity().numerical_approx()
+            True
         """
         k = kwargs.get('k', None)
         D = kwargs.get('D', None)
@@ -302,6 +309,13 @@ class Crossbred(BaseAlgorithm):
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.memory_complexity(), 2))
             8.027905996569885
+
+        TESTS::
+
+            sage: E0 = Crossbred(n=15, m=12, q=5)
+            sage: E1 = Crossbred(n=16, m=12, q=5)
+            sage: E0.memory_complexity().numerical_approx() == E1.memory_complexity().numerical_approx()
+            True
         """
         if self._memory_complexity is None:
             D = self.D()
@@ -328,13 +342,13 @@ class Crossbred(BaseAlgorithm):
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
         nl = self.ncols_in_linearization_step(k=k, d=d)
         q = self.order_of_the_field()
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         w = self.linear_algebra_constant()
 
         return np ** 2 + q ** (n - k) * nl ** w
 
     def _time_complexity_(self, k, D, d):
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         w = self.linear_algebra_constant()
         q = self.order_of_the_field()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)

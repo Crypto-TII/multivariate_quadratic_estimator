@@ -1,4 +1,3 @@
-import functools
 from sage.arith.misc import is_prime_power
 
 
@@ -52,6 +51,7 @@ class BaseAlgorithm:
         self._q = q
         self._w = w
         self._optimal_parameters = dict()
+        self._n_reduced = None
 
     def nvariables(self):
         """
@@ -64,6 +64,25 @@ class BaseAlgorithm:
             10
         """
         return self._n
+
+    def nvariables_reduced(self):
+        """
+        Return the no. of variables after fixing some values
+
+        TESTS::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=5, m=10).nvariables_reduced()
+            5
+            sage: BaseAlgorithm(n=25, m=20).nvariables_reduced()
+            20
+        """
+        if self._n_reduced is not None:
+            return self._n_reduced
+
+        n, m = self.nvariables(), self.npolynomials()
+        self._n_reduced = n - (n - m) if self.is_underdefined_system() else n
+        return self._n_reduced
 
     def npolynomials(self):
         """"

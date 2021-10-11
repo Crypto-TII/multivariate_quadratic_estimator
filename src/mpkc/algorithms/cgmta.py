@@ -30,6 +30,11 @@ class CGMTA(BaseAlgorithm):
             sage: E = CGMTA(n=41, m=10, q=3)
             sage: E
             CGMT-A estimator for the MQ problem
+
+        TESTS::
+
+            sage: E.nvariables() == E.nvariables_reduced()
+            True
         """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
@@ -40,8 +45,10 @@ class CGMTA(BaseAlgorithm):
         super().__init__(n=n, m=m, q=q)
         self._k = min(m / 2, floor(sqrt(n / 2 - sqrt(n / 2))))
 
-        if not 2 * self._k ** 2 <= n - 2 * self._k or not m - 2 * self._k < 2 * self._k ** 2 :
+        if not 2 * self._k ** 2 <= n - 2 * self._k or not m - 2 * self._k < 2 * self._k ** 2:
             raise ValueError(f'The condition 2k^2 <= n - 2k must be satisfied')
+
+        self._n_reduced = n
 
     def time_complexity(self):
         """

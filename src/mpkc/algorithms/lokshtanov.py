@@ -56,7 +56,7 @@ class Lokshtanov(BaseAlgorithm):
         """
         min_complexity = Infinity
         optimal_δ = None
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
 
         for np in range(1, min(m - 2, n)):
             δ = np / n
@@ -85,9 +85,16 @@ class Lokshtanov(BaseAlgorithm):
             212.576588724275
             sage: float(log(E.time_complexity(δ=2/10), 2))
             214.16804105519708
+
+        TESTS::
+
+            sage: E0 = Lokshtanov(n=15, m=12, q=9)
+            sage: E1 = Lokshtanov(n=17, m=12, q=9)
+            sage: E0.time_complexity().numerical_approx() == E1.time_complexity().numerical_approx()
+            True
         """
         q = self.order_of_the_field()
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         δ = kwargs.get('δ', self.δ())
 
         if δ is None:
@@ -117,18 +124,25 @@ class Lokshtanov(BaseAlgorithm):
             sage: E = Lokshtanov(n=10, m=12, q=9)
             sage: float(log(E.memory_complexity(), 2))
             30.622995719758727
+
+        TESTS::
+
+            sage: E0 = Lokshtanov(n=15, m=12, q=9)
+            sage: E1 = Lokshtanov(n=17, m=12, q=9)
+            sage: E0.memory_complexity().numerical_approx() == E1.memory_complexity().numerical_approx()
+            True
         """
         if self._memory_complexity is None:
             δ = self.δ()
             if δ is None:
                 return Infinity
 
-            n = self.nvariables()
+            n = self.nvariables_reduced()
             np = floor(n * δ)
             q = self.order_of_the_field()
             resulting_degree = 2 * (q - 1) * (np + 2)
             M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
-            self._memory_complexity =  M + log(n, 2) * q ** (n - np)
+            self._memory_complexity = M + log(n, 2) * q ** (n - np)
         return self._memory_complexity
 
     def tilde_o_time(self):
@@ -144,7 +158,7 @@ class Lokshtanov(BaseAlgorithm):
         """
         e = 2.718
         q = self.order_of_the_field()
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         if q == 2:
             time = q ** (0.8765 * n)
         elif is_power_of_two(q):

@@ -37,11 +37,6 @@ class HybridF5(BaseAlgorithm):
         self._time_complexity = None
         self._memory_complexity = None
 
-        if self.is_underdefined_system():
-            self._n_reduced = n - (n - m)
-        else:
-            self._n_reduced = n
-
     def degree_of_polynomials(self):
         """
         Return a list of degree of the polynomials
@@ -70,22 +65,6 @@ class HybridF5(BaseAlgorithm):
             True
         """
         return self._use_quantum
-
-    def nvariables_reduced(self):
-        """
-        Return the no. of variables after fixing some values
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import HybridF5
-            sage: H = HybridF5(q=31, n=5, m=10)
-            sage: H.nvariables_reduced()
-            5
-            sage: G = HybridF5(q=31, n=25, m=20)
-            sage: G.nvariables_reduced()
-            20
-        """
-        return self._n_reduced
 
     @optimal_parameter
     def k(self):
@@ -137,7 +116,6 @@ class HybridF5(BaseAlgorithm):
             sage: H.time_complexity(k=2)
             1784217600
         """
-        n = self.nvariables()
         k = kwargs.get('k', self.k())
 
         if k == self.k():
@@ -147,6 +125,7 @@ class HybridF5(BaseAlgorithm):
             else:
                 time_complexity = self._time_complexity
         else:
+            n = self.nvariables_reduced()
             if not 0 <= k <= n:
                 raise ValueError(f'k must be in the range 0 <= k <= {n}')
             else:
@@ -166,12 +145,12 @@ class HybridF5(BaseAlgorithm):
             7056
         """
         if self._memory_complexity is None:
-            n, m = self.nvariables(), self.npolynomials()
+            n, m = self.nvariables_reduced(), self.npolynomials()
             q = self.order_of_the_field()
             w = self.linear_algebra_constant()
             degrees = self.degree_of_polynomials()
             k = self.k()
-            self._memory_complexity =  F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+            self._memory_complexity = F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
 
         return self._memory_complexity
 

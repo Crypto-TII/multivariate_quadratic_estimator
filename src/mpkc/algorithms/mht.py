@@ -29,6 +29,11 @@ class MHT(BaseAlgorithm):
             sage: E = MHT(n=183, m=12, q=4, w=2.8)
             sage: E
             MHT estimator for the MQ problem
+
+        TESTS::
+
+            sage: E.nvariables() == E.nvariables_reduced()
+            True
         """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
@@ -37,6 +42,7 @@ class MHT(BaseAlgorithm):
             raise ValueError(f'The parameter n should be grater than or equal to m * (m + 3) / 2')
 
         super().__init__(n=n, m=m, q=q, w=w)
+        self._n_reduced = n
 
     def time_complexity(self):
         """

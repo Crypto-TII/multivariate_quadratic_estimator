@@ -52,8 +52,15 @@ class ExhaustiveSearch(BaseAlgorithm):
             sage: E = ExhaustiveSearch(q=3, n=10, m=12)
             sage: E.time_complexity()
             61880.4962217569
+
+        TESTS::
+
+            sage: E0 = ExhaustiveSearch(n=15, m=12, q=3)
+            sage: E1 = ExhaustiveSearch(n=17, m=12, q=3)
+            sage: E0.time_complexity() == E1.time_complexity()
+            True
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         nsolutions = self.nsolutions()
         q = self.order_of_the_field()
         if q == 2:
@@ -73,8 +80,15 @@ class ExhaustiveSearch(BaseAlgorithm):
             sage: E = ExhaustiveSearch(q=3, n=10, m=12)
             sage: E.memory_complexity()
             1200
+
+        TESTS::
+
+            sage: E0 = ExhaustiveSearch(n=15, m=12, q=3)
+            sage: E1 = ExhaustiveSearch(n=17, m=12, q=3)
+            sage: E0.memory_complexity() == E1.memory_complexity()
+            True
         """
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         return m * n ** 2
 
     def tilde_o_time(self):
@@ -89,7 +103,7 @@ class ExhaustiveSearch(BaseAlgorithm):
             59049
         """
         q = self.order_of_the_field()
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         return q ** n
 
     def __repr__(self):

@@ -80,6 +80,10 @@ class F5(BaseAlgorithm):
             64128064
             sage: F5(n=10, m=12, q=5).time_complexity()
             64128064
+            sage: F0 = F5(n=15, m=12)
+            sage: F1 = F5(n=17, m=12)
+            sage: F0.time_complexity() == F1.time_complexity()
+            True
         """
         if self._time_complexity is None:
             if self.is_overdefined_system():
@@ -107,7 +111,7 @@ class F5(BaseAlgorithm):
             sage: F5_.time_complexity_fglm()
             80
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         D = self.nsolutions()
         return n * D ** 3
 
@@ -120,17 +124,17 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=5)
             sage: F5_.time_complexity_regular_system()
-            626250625
+            1102500
 
         TESTS::
 
             sage: F5(n=15, m=5, degrees=[2]*5).time_complexity_regular_system()
-            37558440000
+            1102500
         """
         if not (self.is_square_system() or self.is_underdefined_system()):
             raise ValueError("regularity assumption is valid only on square or underdefined system")
 
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.regular_system(n, degrees)
@@ -155,7 +159,7 @@ class F5(BaseAlgorithm):
         if not self.is_overdefined_system():
             raise ValueError("semi regularity assumption is valid only on overdefined system")
 
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         w = self.linear_algebra_constant()
         q = self.order_of_the_field()
         degrees = self.degree_of_polynomials()
@@ -172,9 +176,16 @@ class F5(BaseAlgorithm):
             sage: F5_ = F5(n=10, m=12, q=5)
             sage: F5_.memory_complexity()
             25050025
+
+        TESTS::
+
+            sage: F0 = F5(n=15, m=12)
+            sage: F1 = F5(n=17, m=12)
+            sage: F0.memory_complexity() == F1.memory_complexity()
+            True
         """
         if self._memory_complexity is None:
-            n, m = self.nvariables(), self.npolynomials()
+            n, m = self.nvariables_reduced(), self.npolynomials()
             q = self.order_of_the_field()
             degrees = self.degree_of_polynomials()
             dreg = degree_of_regularity.generic_system(n=n, degrees=degrees, q=q)

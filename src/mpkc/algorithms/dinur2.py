@@ -7,7 +7,6 @@ The Dinur's second is an algorithm to solve the MQ problem over F_2
 Springer-Verlag, 2021.
 """
 from sage.functions.log import log
-from sage.functions.other import ceil
 from sage.rings.infinity import Infinity
 from ..utils import sum_of_binomial_coefficients
 from .base import BaseAlgorithm, optimal_parameter
@@ -69,6 +68,13 @@ class DinurSecond(BaseAlgorithm):
             57434.4699066345
             sage: E.time_complexity(n1=2).numerical_approx()
             58848.1441779413
+
+        TESTS::
+
+            sage: E0 = DinurSecond(n=15, m=12)
+            sage: E1 = DinurSecond(n=17, m=12)
+            sage: E0.time_complexity().numerical_approx() == E1.time_complexity().numerical_approx()
+            True
         """
 
         n1 = kwargs.get("n1", None)
@@ -97,12 +103,12 @@ class DinurSecond(BaseAlgorithm):
             return self._memory_complexity
 
         n1 = self.n1()
-        n = self.nvariables()
+        n = self.nvariables_reduced()
         self._memory_complexity = 8 * (n1 + 1) * sum_of_binomial_coefficients(n - n1, n1 + 3)
         return self._memory_complexity
 
     def _compute_time_complexity_(self):
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials()
         max_n1 = ((m - 2) // 2) - 1
         min_time_complexity = Infinity
         optimal_n1 = None
@@ -124,7 +130,7 @@ class DinurSecond(BaseAlgorithm):
 
         - ``n1`` -- the parameter `n1`
         """
-        n = self.nvariables()
+        n = self.nvariables_reduced()
 
         return 16 * log(n, 2) * 2 ** n1 * sum_of_binomial_coefficients(n - n1, n1 + 3) + \
                n1 * n * 2 ** (n - n1) + \
