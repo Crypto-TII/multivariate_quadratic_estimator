@@ -11,23 +11,23 @@ from ..utils import random_affine_map
 
 
 class Rainbow:
+    """
+    Construct an instance of Rainbow.
+
+    INPUT:
+
+    - ``q`` -- order of the finite field
+    - ``n`` -- no. of variables
+    - ``v`` -- a list of integers denoting the size of each vinegar variables
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes import Rainbow
+        sage: R = Rainbow(q=16, n=10, v=[3, 6, 9])
+        sage: R
+        Rainbow signature over GF(16) with 10 variables and 7 polynomials
+    """
     def __init__(self, q, n, v):
-        """
-        Construct an instance of Rainbow.
-
-        INPUT:
-
-        - ``q`` -- order of the finite field
-        - ``n`` -- no. of variables
-        - ``v`` -- a list of integers denoting the size of each vinegar variables
-
-        EXAMPLES::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R = Rainbow(q=16, n=10, v=[3, 6, 9])
-            sage: R
-            Rainbow signature over GF(16) with 10 variables and 7 polynomials
-        """
         if any(number >= n for number in v):
             raise ValueError("all integers in v must be strictly less than n")
 

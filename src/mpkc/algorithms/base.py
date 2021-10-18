@@ -184,16 +184,13 @@ class BaseAlgorithm:
         """
         Return `True` if the system is overdefined
 
-        EXAMPLES::
+        TESTS::
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=5, m=10).is_overdefined_system()
             True
             sage: BaseAlgorithm(n=10, m=5).is_overdefined_system()
             False
-
-        TESTS::
-
             sage: BaseAlgorithm(n=10, m=10).is_overdefined_system()
             False
         """
@@ -203,16 +200,13 @@ class BaseAlgorithm:
         """
         Return `True` if the system is underdefined
 
-        EXAMPLES::
+        TESTS::
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=10, m=5).is_underdefined_system()
             True
             sage: BaseAlgorithm(n=5, m=10).is_underdefined_system()
             False
-
-        TESTS::
-
             sage: BaseAlgorithm(n=10, m=10).is_underdefined_system()
             False
         """
@@ -222,7 +216,7 @@ class BaseAlgorithm:
         """
         Return `True` is the system is square, i.e. there are equal no. of variables and polynomials
 
-        EXAMPLES::
+        TESTS::
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=10, m=10).is_square_system()
@@ -236,7 +230,7 @@ class BaseAlgorithm:
         """
         Return a dictionary of optimal parameters
 
-        EXAMPLES::
+        TESTS::
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=10, m=10).optimal_parameters()
@@ -251,7 +245,7 @@ class BaseAlgorithm:
         """
         Return `True` if the algorithm has optimal parameter
 
-        EXAMPLES::
+        TESTS::
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=10, m=10).has_optimal_parameter()

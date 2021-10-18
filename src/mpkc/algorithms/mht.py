@@ -12,29 +12,29 @@ from .base import BaseAlgorithm
 
 
 class MHT(BaseAlgorithm):
+    """
+    Construct an instance of MHT estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+    - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import MHT
+        sage: E = MHT(n=183, m=12, q=4, w=2.8)
+        sage: E
+        MHT estimator for the MQ problem
+
+    TESTS::
+
+        sage: E.nvariables() == E.nvariables_reduced()
+        True
+    """
     def __init__(self, n, m, q, w=2):
-        """
-        Construct an instance of MHT estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-        - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import MHT
-            sage: E = MHT(n=183, m=12, q=4, w=2.8)
-            sage: E
-            MHT estimator for the MQ problem
-
-        TESTS::
-
-            sage: E.nvariables() == E.nvariables_reduced()
-            True
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 

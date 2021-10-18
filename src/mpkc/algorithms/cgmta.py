@@ -14,28 +14,28 @@ from .base import BaseAlgorithm
 
 
 class CGMTA(BaseAlgorithm):
+    """
+    Construct an instance of CGMT-A estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import CGMTA
+        sage: E = CGMTA(n=41, m=10, q=3)
+        sage: E
+        CGMT-A estimator for the MQ problem
+
+    TESTS::
+
+        sage: E.nvariables() == E.nvariables_reduced()
+        True
+    """
     def __init__(self, n, m, q):
-        """
-        Construct an instance of CGMT-A estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import CGMTA
-            sage: E = CGMTA(n=41, m=10, q=3)
-            sage: E
-            CGMT-A estimator for the MQ problem
-
-        TESTS::
-
-            sage: E.nvariables() == E.nvariables_reduced()
-            True
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 

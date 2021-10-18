@@ -15,23 +15,23 @@ from ..utils import sum_of_binomial_coefficients
 
 
 class DinurFirst(BaseAlgorithm):
+    """
+    Construct an instance of Dinur's first estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``nsolutions`` -- number of solutions (default: 1)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import DinurFirst
+        sage: E = DinurFirst(n=10, m=12)
+        sage: E
+        Dinur's first estimator for the MQ problem
+    """
     def __init__(self, n, m, nsolutions=1):
-        """
-        Construct an instance of Dinur's first estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``nsolutions`` -- number of solutions (default: 1)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import DinurFirst
-            sage: E = DinurFirst(n=10, m=12)
-            sage: E
-            Dinur's first estimator for the MQ problem
-        """
         super().__init__(n=n, m=m, q=2)
         self._nsolutions = nsolutions
 

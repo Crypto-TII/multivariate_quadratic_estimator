@@ -16,23 +16,23 @@ from ..utils import sum_of_binomial_coefficients
 
 
 class Bjorklund(BaseAlgorithm):
+    """
+    Construct an instance of bjorklund et al.'s estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``nsolutions`` -- number of solutions (default: 1)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import Bjorklund
+        sage: E = Bjorklund(n=10, m=12)
+        sage: E
+        Björklund et al.'s estimator for the MQ problem
+    """
     def __init__(self, n, m, nsolutions=1):
-        """
-        Construct an instance of bjorklund et al.'s estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``nsolutions`` -- number of solutions (default: 1)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import Bjorklund
-            sage: E = Bjorklund(n=10, m=12)
-            sage: E
-            Björklund et al.'s estimator for the MQ problem
-        """
         super().__init__(n=n, m=m, q=2)
         self._nsolutions = nsolutions
         self._k = floor(log(nsolutions + 1, 2))

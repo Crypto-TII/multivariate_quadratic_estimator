@@ -23,25 +23,25 @@ from ..utils import nmonomials_up_to_degree
 
 
 class Crossbred(BaseAlgorithm):
+    """
+    Construct an instance of crossbred estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+    - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
+    - ``max_D`` -- upper bound to the parameter D (default: 10)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import Crossbred
+        sage: E = Crossbred(n=10, m=12, q=5)
+        sage: E
+        Crossbred estimator for the MQ problem
+    """
     def __init__(self, n, m, q, w=2, max_D=10):
-        """
-        Construct an instance of crossbred estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-        - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
-        - ``max_D`` -- upper bound to the parameter D (default: 10)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import Crossbred
-            sage: E = Crossbred(n=10, m=12, q=5)
-            sage: E
-            Crossbred estimator for the MQ problem
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 

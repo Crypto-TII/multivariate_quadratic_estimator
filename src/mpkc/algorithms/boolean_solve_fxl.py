@@ -19,26 +19,26 @@ from .. import witness_degree
 
 
 class BooleanSolveFXL(BaseAlgorithm):
-    variants = ("las_vegas", "deterministic")
+    """
+    Construct an instance of BooleanSolve and FXL estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+    - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import BooleanSolveFXL
+        sage: E = BooleanSolveFXL(n=10, m=12, q=7)
+        sage: E
+        BooleanSolve and FXL estimators for the MQ problem
+    """
+    _variants = ("las_vegas", "deterministic")
 
     def __init__(self, n, m, q, w=2):
-        """
-        Construct an instance of BooleanSolve and FXL estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-        - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import BooleanSolveFXL
-            sage: E = BooleanSolveFXL(n=10, m=12, q=7)
-            sage: E
-            BooleanSolve and FXL estimators for the MQ problem
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
@@ -180,7 +180,7 @@ class BooleanSolveFXL(BaseAlgorithm):
 
         optimal_k = optimal_variant = None
 
-        for variant in BooleanSolveFXL.variants:
+        for variant in BooleanSolveFXL._variants:
             a = 0 if self.is_overdefined_system() else 1
             for k in range(a, n):
 

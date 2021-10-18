@@ -5,27 +5,26 @@ from sage.arith.misc import is_prime_power
 
 
 class HilbertSeries(object):
+    """
+    Construct an instance of Hilbert series
+
+    INPUT:
+
+    - ``n`` -- no of variables
+    - ``degrees`` -- a list of integers representing the degree of the polynomials
+    - ``q`` -- order of the finite field (default: None)
+
+    EXAMPLES::
+
+        sage: from mpkc.series.hilbert import HilbertSeries
+        sage: H = HilbertSeries(10, [2]*15)
+        sage: H
+        Hilbert series for system with 10 variables and 15 polynomials
+        sage: H = HilbertSeries(10, [2]*15, q=2)
+        sage: H
+        Hilbert series for system with 10 variables and 15 polynomials over F_2
+    """
     def __init__(self, n, degrees, q=None):
-        """
-        Construct an instance of Hilbert series
-
-        INPUT:
-
-        - ``n`` -- no of variables
-        - ``degrees`` -- a list of integers representing the degree of the polynomials
-        - ``q`` -- order of the finite field (default: None)
-
-        EXAMPLES::
-
-            sage: from mpkc.series.hilbert import HilbertSeries
-            sage: H = HilbertSeries(10, [2]*15)
-            sage: H
-            Hilbert series for system with 10 variables and 15 polynomials
-            sage: H = HilbertSeries(10, [2]*15, q=2)
-            sage: H
-            Hilbert series for system with 10 variables and 15 polynomials over F_2
-        """
-
         self._q = q
         self._nvariables = n
         self._degrees = degrees

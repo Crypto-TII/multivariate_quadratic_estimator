@@ -15,28 +15,28 @@ from ..utils import random_affine_map
 
 
 class GeMSS:
+    """
+    Construct an instance of GeMSS
+
+    INPUT:
+
+    - ``D`` -- maximum degree of the HFE polynomial
+    - ``n`` -- degree of the extension field
+    - ``delta`` -- no. of minus
+    - ``v`` -- no. of vinegar variables in the HFEv polynomial
+
+    EXAMPLES::
+
+        sage: from mpkc.schemes import GeMSS
+        sage: G = GeMSS(D=17, n=11, delta=4, v=3)
+        sage: G
+        GeMSS with D=17, n=11, Δ=4, v=3
+        sage: msg = G.random_message()
+        sage: signature = G.sign(msg)
+        sage: G.is_valid_signature(signature, msg)
+        True
+    """
     def __init__(self, D, n, delta, v):
-        """
-        Construct an instance of GeMSS
-
-        INPUT:
-
-        - ``D`` -- maximum degree of the HFE polynomial
-        - ``n`` -- degree of the extension field
-        - ``delta`` -- no. of minus
-        - ``v`` -- no. of vinegar variables in the HFEv polynomial
-
-        EXAMPLES::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=3)
-            sage: G
-            GeMSS with D=17, n=11, Δ=4, v=3
-            sage: msg = G.random_message()
-            sage: signature = G.sign(msg)
-            sage: G.is_valid_signature(signature, msg)
-            True
-        """
         self._base_field = FiniteField(2)
 
         self._max_deg_of_hfe_polynomial = D

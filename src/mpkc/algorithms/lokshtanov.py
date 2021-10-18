@@ -18,23 +18,23 @@ from ..series.nmonomial import NMonomialSeries
 
 
 class Lokshtanov(BaseAlgorithm):
+    """
+    Construct an instance of Lokshtanov et al.'s estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import Lokshtanov
+        sage: E = Lokshtanov(n=10, m=12, q=9)
+        sage: E
+        Lokshtanov et al.'s estimator for the MQ problem
+    """
     def __init__(self, n, m, q):
-        """
-        Construct an instance of Lokshtanov et al.'s estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import Lokshtanov
-            sage: E = Lokshtanov(n=10, m=12, q=9)
-            sage: E
-            Lokshtanov et al.'s estimator for the MQ problem
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 

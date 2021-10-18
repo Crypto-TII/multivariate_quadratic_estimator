@@ -6,20 +6,59 @@
 Welcome to MQ Estimator documentation!
 ======================================
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-   degree_of_regularities
-   hilbert_series
-
-Complexities
-============
+Algorithms
+==========
 
 .. toctree::
-   :maxdepth: 1
 
-   complexities/F5
+   algorithms/bjorklund
+   algorithms/boolean_solve_fxl
+   algorithms/cgmta
+   algorithms/crossbred
+   algorithms/dinur1
+   algorithms/dinur2
+   algorithms/exhaustive_search
+   algorithms/f5
+   algorithms/hybrid_f5
+   algorithms/kpg
+   algorithms/lokshtanov
+   algorithms/mht
+
+
+Schemes
+=======
+
+.. toctree::
+
+   schemes/rainbow
+   schemes/gemss
+
+
+Series
+======
+
+.. toctree::
+
+   series/hilbert
+   series/nmonomial
+
+
+Complexity Estimator
+====================
+
+.. toctree::
+
+   mq_estimator
+
+
+Others
+======
+
+.. toctree::
+
+   degree_of_regularity
+   utils
+   witness_degree
 
 
 Indices and tables

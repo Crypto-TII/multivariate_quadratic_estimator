@@ -4,26 +4,26 @@ from .. import degree_of_regularity
 
 
 class F5(BaseAlgorithm):
+    """
+    Return an instance of F5 complexity estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the base field (default: None)
+    - ``w`` -- linear algebra constant (default: 2)
+    - ``nsolutions`` -- no. of solutions (default: 1)
+    - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import F5
+        sage: F5_ = F5(n=10, m=5)
+        sage: F5_
+        Complexity estimator for F5 with 10 variables and 5 polynomials
+    """
     def __init__(self, n, m, q=None, w=2, nsolutions=1, **kwargs):
-        """
-        Return an instance of F5 complexity estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the base field (default: None)
-        - ``w`` -- linear algebra constant (default: 2)
-        - ``nsolutions`` -- no. of solutions (default: 1)
-        - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import F5
-            sage: F5_ = F5(n=10, m=5)
-            sage: F5_
-            Complexity estimator for F5 with 10 variables and 5 polynomials
-        """
         if not nsolutions >= 1:
             raise ValueError("nsolutions must be >= 1")
 

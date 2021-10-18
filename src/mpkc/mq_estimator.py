@@ -6,27 +6,25 @@ from .algorithms import HybridF5
 
 
 class MQEstimator(object):
+    """
+    Construct an instance of MQ Estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field (default: None)
+    - ``w`` -- linear algebra constant (default: 2)
+    - ``nsolutions`` -- no. of solutions (default: 1)
+    - ``excluded_algorithms`` -- a list/tuple of excluded algorithms (default: None)
+
+    EXAMPLES::
+
+        sage: from mpkc import MQEstimator
+        sage: MQEstimator(n=10, m=5)
+        MQ Estimator for system with 10 variables and 5 equations
+    """
     def __init__(self, n, m, q=None, w=2, nsolutions=1, **kwargs):
-        """
-        Construct an instance of MQ Estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field (default: None)
-        - ``w`` -- linear algebra constant (default: 2)
-        - ``nsolutions`` -- no. of solutions (default: 1)
-        - ``excluded_algorithms`` -- a list/tuple of excluded algorithms (default: None)
-
-        EXAMPLES::
-
-            sage: from mpkc import MQEstimator
-            sage: MQEstimator(n=10, m=5)
-            MQ Estimator for system with 10 variables and 5 equations
-
-
-        """
         constructor_args = {arg: value for (arg, value) in locals().items()
                             if arg in ('n', 'm', 'q', 'w', 'nsolutions')}
 

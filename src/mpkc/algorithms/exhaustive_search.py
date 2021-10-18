@@ -5,24 +5,24 @@ from .base import BaseAlgorithm
 
 
 class ExhaustiveSearch(BaseAlgorithm):
+    """
+    Construct an instance of Exhaustive Search estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+    - ``q`` -- order of the finite field
+    - ``nsolutions`` -- number of solutions (default: 1)
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import ExhaustiveSearch
+        sage: E = ExhaustiveSearch(q=3, n=10, m=12)
+        sage: E
+        Exhaustive search estimator for the MQ problem
+    """
     def __init__(self, n, m, q, nsolutions=1):
-        """
-        Construct an instance of Exhaustive Search estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-        - ``q`` -- order of the finite field
-        - ``nsolutions`` -- number of solutions (default: 1)
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import ExhaustiveSearch
-            sage: E = ExhaustiveSearch(q=3, n=10, m=12)
-            sage: E
-            Exhaustive search estimator for the MQ problem
-        """
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 

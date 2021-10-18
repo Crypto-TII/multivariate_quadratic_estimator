@@ -4,23 +4,23 @@ from sage.rings.all import QQ
 
 
 class NMonomialSeries(object):
+    """
+    Construct an instance of the series of a polynomial ring
+
+    INPUT:
+
+    - ``n`` -- the number of variables
+    - ``q`` -- the size of the field (default: None)
+    - ``max_prec`` -- degree of the series (default: None)
+
+    EXAMPLES::
+
+        sage: from mpkc.series.nmonomial import NMonomialSeries
+        sage: NM = NMonomialSeries(n=6, q=5)
+        sage: NM
+        Class for the number of monomials in the polynomial ring in 6 variables over F_5
+    """
     def __init__(self, n, q=None, max_prec=None):
-        """
-        Construct an instance of the series of a polynomial ring
-
-        INPUT:
-
-        - ``n`` -- the number of variables
-        - ``q`` -- the size of the field (default: None)
-        - ``max_prec`` -- degree of the series (default: None)
-
-        EXAMPLES::
-
-            sage: from mpkc.series.nmonomial import NMonomialSeries
-            sage: NM = NMonomialSeries(n=6, q=5)
-            sage: NM
-            Class for the number of monomials in the polynomial ring in 6 variables over F_5
-        """
         self._n = n
         if max_prec is not None:
             self._max_prec = max_prec

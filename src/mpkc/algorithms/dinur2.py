@@ -13,22 +13,22 @@ from .base import BaseAlgorithm, optimal_parameter
 
 
 class DinurSecond(BaseAlgorithm):
+    """
+    Construct an instance of Dinur's second estimator
+
+    INPUT:
+
+    - ``n`` -- no. of variables
+    - ``m`` -- no. of polynomials
+
+    EXAMPLES::
+
+        sage: from mpkc.algorithms import DinurSecond
+        sage: E = DinurSecond(n=10, m=12)
+        sage: E
+        Dinur's second estimator for the MQ problem
+    """
     def __init__(self, n, m):
-        """
-        Construct an instance of Dinur's second estimator
-
-        INPUT:
-
-        - ``n`` -- no. of variables
-        - ``m`` -- no. of polynomials
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import DinurSecond
-            sage: E = DinurSecond(n=10, m=12)
-            sage: E
-            Dinur's second estimator for the MQ problem
-        """
         super().__init__(n=n, m=m, q=2)
         self._n1 = None
         self._time_complexity = None
