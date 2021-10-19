@@ -1,3 +1,5 @@
+import functools
+
 from sage.arith.misc import is_prime_power
 
 
@@ -272,6 +274,7 @@ def optimal_parameter(func):
 
     - ``f`` -- a method of a BaseAlgoritm subclass
     """
+    @functools.wraps(func)
     def optimal_parameter(*args, **kwargs):
         name = func.__name__
         self = args[0]

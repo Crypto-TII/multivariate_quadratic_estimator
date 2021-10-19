@@ -4,8 +4,17 @@ from .f5 import F5
 
 
 class HybridF5(BaseAlgorithm):
-    """
-    Return an instance of hybrid approach complexity estimator
+    r"""
+    Construct an instance of HybridF5
+
+    HybridF5 is an algorithm to solve systems of polynomials over a finite field proposed in [BFP09]_, [BFP12]_. The
+    algorithm is a tradeoff between exhaustive search and Groebner bases computation. The idea is to fix the value of,
+    say, $k$ variables and compute the Groebner bases of $q^{k}$ subsystems, where $q$ is the order of the finite
+    field. The Grobner bases computation is done using F5 algorithm.
+
+    .. SEEALSO::
+
+        :class:`mpkc.algorithms.f5.F5` -- class to compute the complexity of F5 algorithm.
 
     INPUT:
 
@@ -14,7 +23,7 @@ class HybridF5(BaseAlgorithm):
     - ``q`` -- order of the finite field
     - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
     - ``use_quantum`` -- return the complexity using quantum computer (default: False)
-    - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m)
+    - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m, i.e. quadratic system)
 
     EXAMPLES::
 
@@ -93,13 +102,19 @@ class HybridF5(BaseAlgorithm):
 
     def time_complexity(self, **kwargs):
         """
-        Return the complexity of hybrid approach
+        Return the complexity of HybridF5
 
         INPUT:
 
-        - ``k`` -- no. of fixed variables
+        - ``k`` -- no. of fixed variables (default: None)
 
-        If `k` is specified, the function returns the time complexity w.r.t the given parameter
+        .. NOTE::
+
+            If ``k`` is specified, the function returns the time complexity w.r.t the given parameter
+
+        .. SEEALSO::
+
+            :meth:`mpkc.algorithms.f5.F5.time_complexity`
 
         EXAMPLES::
 
@@ -107,6 +122,8 @@ class HybridF5(BaseAlgorithm):
             sage: H = HybridF5(q=256, n=10, m=10)
             sage: H.time_complexity()
             6412806400
+            sage: H.time_complexity(k=2)
+            108551798784
 
         TESTS::
 
@@ -135,7 +152,11 @@ class HybridF5(BaseAlgorithm):
 
     def memory_complexity(self):
         """
-        Return the memory complexity
+        Return the memory complexity of HybridF5
+
+        .. SEEALSO::
+
+            :meth:`mpkc.algorithms.f5.F5.memory_complexity`
 
         EXAMPLES::
 
@@ -156,7 +177,11 @@ class HybridF5(BaseAlgorithm):
 
     def tilde_o_time(self):
         """
-        Return the Ō time complexity of hybrid-F5 algorithm for quadratic system
+        Return the Ō time complexity of HybridF5
+
+        .. SEEALSO::
+
+            :meth:`mpkc.algorithms.f5.F5.tilde_o_time`
 
         EXAMPLES::
 
@@ -185,3 +210,160 @@ class HybridF5(BaseAlgorithm):
     def __repr__(self):
         n, m = self.nvariables(), self.npolynomials()
         return f"Complexity estimator for hybrid approach with {n} variables and {m} polynomials"
+
+    # all methods below are implemented to overwrite the parent's docstring while keeping the implementation
+
+    def has_optimal_parameter(self):
+        """
+        Return `True` if the algorithm has optimal parameter
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.has_optimal_parameter()
+            True
+        """
+        return super().has_optimal_parameter()
+
+    def is_defined_over_finite_field(self):
+        """
+        Return `True` if the algorithm is defined over a finite field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.is_defined_over_finite_field()
+            True
+        """
+        return super().is_defined_over_finite_field()
+
+    def is_overdefined_system(self):
+        """
+        Return `True` if the system is overdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.is_overdefined_system()
+            True
+            sage: E = HybridF5(q=256, n=10, m=10)
+            sage: E.is_overdefined_system()
+            False
+        """
+        return super().is_overdefined_system()
+
+    def is_square_system(self):
+        """
+        Return `True` if the system is square, there are equal no. of variables and polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.is_square_system()
+            False
+            sage: E = HybridF5(q=256, n=10, m=10)
+            sage: E.is_square_system()
+            True
+        """
+        return super().is_square_system()
+
+    def is_underdefined_system(self):
+        """
+        Return `True` if the system is underdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.is_underdefined_system()
+            False
+            sage: E = HybridF5(q=256, n=10, m=5)
+            sage: E.is_underdefined_system()
+            True
+        """
+        return super().is_underdefined_system()
+
+    def linear_algebra_constant(self):
+        """
+        Return the linear algebra constant
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10, w=2)
+            sage: H.linear_algebra_constant()
+            2
+        """
+        return super().linear_algebra_constant()
+
+    def npolynomials(self):
+        """
+        Return the number of polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.npolynomials()
+            10
+        """
+        return super().npolynomials()
+
+    def nvariables(self):
+        """
+        Return the number of variables
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.nvariables()
+            5
+        """
+        return super().nvariables()
+
+    def nvariables_reduced(self):
+        """
+        Return the no. of variables after fixing some values
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.nvariables_reduced()
+            5
+            sage: E = HybridF5(q=256, n=12, m=10)
+            sage: E.nvariables_reduced()
+            10
+        """
+        return super().nvariables_reduced()
+
+    def optimal_parameters(self):
+        """
+        Return a dictionary of optimal parameters
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=15, m=10)
+            sage: H.optimal_parameters()
+            {'k': 1}
+        """
+        return super().optimal_parameters()
+
+    def order_of_the_field(self):
+        """
+        Return the order of the field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=15, m=10)
+            sage: H.order_of_the_field()
+            256
+        """
+        return super().order_of_the_field()

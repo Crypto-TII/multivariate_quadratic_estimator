@@ -61,6 +61,14 @@ Others
    witness_degree
 
 
+References
+==========
+
+.. toctree::
+
+   references
+
+
 Indices and tables
 ==================
 
