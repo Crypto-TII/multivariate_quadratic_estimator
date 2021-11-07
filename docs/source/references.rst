@@ -32,6 +32,10 @@ References
 
 **A**
 
+.. [JV18] \Antoine Joux and Vanessa Vitse.
+          *A Crossbred Algorithm for Solving Boolean Polynomial Systems*
+          https://link.springer.com/chapter/10.1007/978-3-319-76620-1_1
+
 .. _ref-B:
 
 **B**
@@ -67,6 +71,10 @@ References
 .. _ref-J:
 
 **J**
+
+.. [Dua20] \João Diogo Duarte.
+            *On the Complexity of the Crossbred Algorithm*
+            https://eprint.iacr.org/2020/1058.
 
 .. _ref-K:
 
