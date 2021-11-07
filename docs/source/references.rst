@@ -52,6 +52,10 @@ References
 
 **D**
 
+.. [LPTWY17] \Daniel Lokshtanov, Ramamohan Paturi, Suguru Tamaki, Ryan Williams, and Huacheng Yu.
+            *Beating Brute Force for Systems of Polynomial Equation over Finite Fields*
+            https://people.csail.mit.edu/rrw/polyEqSoda2017Submit.pdf
+
 .. _ref-E:
 
 **E**
