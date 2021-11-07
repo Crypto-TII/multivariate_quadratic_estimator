@@ -9,7 +9,7 @@ class DinurSecond(BaseAlgorithm):
     """
     Construct an instance of Dinur's second estimator
 
-    Dinur's second is a probabilistic algorithm to solve the MQ problem over GF(2) [Din21b]_. It is based on ideas from 
+    Dinur's second is a probabilistic algorithm to solve the MQ problem over GF(2) [Din21b]_. It is based on ideas from
     [Din21a]_.
 
     INPUT:

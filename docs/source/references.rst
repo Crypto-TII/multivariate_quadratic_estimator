@@ -32,6 +32,10 @@ References
 
 **A**
 
+.. [BKW19]  \Andreas Björklund, Petteri Kaski, and Ryan Williams.
+            *Solving Systems of Polynomial Equations over GF(2) by a Parity-Counting Self-Reduction*
+            https://drops.dagstuhl.de/opus/volltexte/2019/10602/pdf/LIPIcs-ICALP-2019-26.pdf
+
 .. [JV18] \Antoine Joux and Vanessa Vitse.
           *A Crossbred Algorithm for Solving Boolean Polynomial Systems*
           https://link.springer.com/chapter/10.1007/978-3-319-76620-1_1

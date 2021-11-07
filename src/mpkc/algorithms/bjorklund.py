@@ -1,13 +1,4 @@
-"""
-Module to compute the time and memory complexity of Bjöklund et al.'s algorithm
 
-The Bjöklund et al.'s is an algorithm to solve the MQ problem over F_2
-
-[BKW19]  Björklund, A., Kaski, P.,  and  Williams, R. Solving  Systemsof Polynomial Equations over GF(2) by a
-Parity-Counting Self-Reduction. In International Colloquium on Automata, Languages, and Programming (ICALP 2019),
-volume 132 of Leibniz International Proceedings in Informatics (LIPIcs), pages 26:1–26:13, Dagstuhl, Germany, 2019.
-Schloss Dagstuhl–Leibniz-Zentrum fuer Informatik.
-"""
 from sage.rings.infinity import Infinity
 from sage.functions.log import log
 from sage.functions.other import floor
@@ -16,8 +7,11 @@ from ..utils import sum_of_binomial_coefficients
 
 
 class Bjorklund(BaseAlgorithm):
-    """
-    Construct an instance of bjorklund et al.'s estimator
+    r"""
+    Construct an instance of Bjorklund et al.'s estimator
+
+    Bjorklund et al.'s is a probabilistic algorithm to solve the MQ problem of GF(2) [BKW19]_. It finds a solution of a qudractic
+    system by computing the parity of it number of solutions.
 
     INPUT:
 
@@ -194,3 +188,159 @@ class Bjorklund(BaseAlgorithm):
 
     def __repr__(self):
         return f"Björklund et al.'s estimator for the MQ problem"
+
+    # all methods below are implemented to overwrite the parent's docstring while keeping the implementation
+
+    def has_optimal_parameter(self):
+        """
+        Return `True` if the algorithm has optimal parameter
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.has_optimal_parameter()
+            True
+        """
+        return super().has_optimal_parameter()
+
+    def is_defined_over_finite_field(self):
+        """
+        Return `True` if the algorithm is defined over a finite field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.is_defined_over_finite_field()
+            True
+        """
+        return super().is_defined_over_finite_field()
+
+    def is_overdefined_system(self):
+        """
+        Return `True` if the system is overdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.is_overdefined_system()
+            True
+            sage: E = Bjorklund(n=10, m=10)
+            sage: E.is_overdefined_system()
+            False
+        """
+        return super().is_overdefined_system()
+
+    def is_square_system(self):
+        """
+        Return `True` if the system is square, there are equal no. of variables and polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.is_square_system()
+            False
+            sage: E = Bjorklund(n=10, m=10)
+            sage: E.is_square_system()
+            True
+        """
+        return super().is_square_system()
+
+    def is_underdefined_system(self):
+        """
+        Return `True` if the system is underdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.is_underdefined_system()
+            False
+            sage: E = Bjorklund(n=10, m=5)
+            sage: E.is_underdefined_system()
+            True
+        """
+        return super().is_underdefined_system()
+
+    def linear_algebra_constant(self):
+        """
+        Return the linear algebra constant
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.linear_algebra_constant()
+            <BLANKLINE>
+        """
+
+    def npolynomials(self):
+        """
+        Return the number of polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.npolynomials()
+            10
+        """
+        return super().npolynomials()
+
+    def nvariables(self):
+        """
+        Return the number of variables
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.nvariables()
+            5
+        """
+        return super().nvariables()
+
+    def nvariables_reduced(self):
+        """
+        Return the no. of variables after fixing some values
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.nvariables_reduced()
+            5
+            sage: E = Bjorklund(n=12, m=10)
+            sage: E.nvariables_reduced()
+            10
+        """
+        return super().nvariables_reduced()
+
+    def optimal_parameters(self):
+        """
+        Return a dictionary of optimal parameters
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=15, m=10)
+            sage: H.optimal_parameters()
+            {'λ': 3/10}
+        """
+        return super().optimal_parameters()
+
+    def order_of_the_field(self):
+        """
+        Return the order of the field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=15, m=10)
+            sage: H.order_of_the_field()
+            2
+        """
+        return super().order_of_the_field()
