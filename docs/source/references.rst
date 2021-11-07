@@ -72,6 +72,10 @@ References
             *Improved Algorithms for Solving Polynomial Systems over GF(2) by Multiple Parity-Counting*
             https://arxiv.org/pdf/2005.04800.pdf
 
+.. [Din21b] \Itai Dinur.
+            *Cryptanalytic Applications of the Polynomial Method for Solving Multivariate Equation Systems over GF(2)*
+            https://eprint.iacr.org/2021/578.pdf
+
 .. _ref-J:
 
 **J**
