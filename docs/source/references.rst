@@ -68,6 +68,10 @@ References
 
 **I**
 
+.. [Din21a] \Itai Dinur.
+            *Improved Algorithms for Solving Polynomial Systems over GF(2) by Multiple Parity-Counting*
+            https://arxiv.org/pdf/2005.04800.pdf
+
 .. _ref-J:
 
 **J**

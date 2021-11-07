@@ -1,12 +1,3 @@
-"""
-Module to compute the time and memory complexity of Dinur's first algorithm
-
-The Dinur's first is an algorithm to solve the MQ problem over F_2
-
-[Din21]  Dinur, I. Improved algorithms for solving polynomial systems over GF(2) by multiple parity-counting.
-In Proceedings of the 2021 ACM-SIAM Symposium on Discrete Algorithms (SODA), pages 2550–2564.
-"""
-
 from sage.functions.log import log
 from sage.functions.other import floor
 from sage.rings.infinity import Infinity
@@ -15,8 +6,13 @@ from ..utils import sum_of_binomial_coefficients
 
 
 class DinurFirst(BaseAlgorithm):
-    """
+    r"""
     Construct an instance of Dinur's first estimator
+
+    The Dinur's first is a probabilistic algorithm to solve the MQ problem over GF(2) [Din21a]_. It computes the parity
+    of the number of solutions of many quadratic polynomial systems. These systems come from the specialization, in the
+    original system, of the values in a fixed set of variables.
+
 
     INPUT:
 
@@ -201,3 +197,160 @@ class DinurFirst(BaseAlgorithm):
 
     def __repr__(self):
         return f"Dinur's first estimator for the MQ problem"
+
+    # all methods below are implemented to overwrite the parent's docstring while keeping the implementation
+
+    def has_optimal_parameter(self):
+        """
+        Return `True` if the algorithm has optimal parameter
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.has_optimal_parameter()
+            True
+        """
+        return super().has_optimal_parameter()
+
+    def is_defined_over_finite_field(self):
+        """
+        Return `True` if the algorithm is defined over a finite field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.is_defined_over_finite_field()
+            True
+        """
+        return super().is_defined_over_finite_field()
+
+    def is_overdefined_system(self):
+        """
+        Return `True` if the system is overdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.is_overdefined_system()
+            True
+            sage: E = DinurFirst(n=10, m=10)
+            sage: E.is_overdefined_system()
+            False
+        """
+        return super().is_overdefined_system()
+
+    def is_square_system(self):
+        """
+        Return `True` if the system is square, there are equal no. of variables and polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.is_square_system()
+            False
+            sage: E = DinurFirst(n=10, m=10)
+            sage: E.is_square_system()
+            True
+        """
+        return super().is_square_system()
+
+    def is_underdefined_system(self):
+        """
+        Return `True` if the system is underdefined
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.is_underdefined_system()
+            False
+            sage: E = DinurFirst(n=10, m=5)
+            sage: E.is_underdefined_system()
+            True
+        """
+        return super().is_underdefined_system()
+
+    def linear_algebra_constant(self):
+        """
+        Return the linear algebra constant
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.linear_algebra_constant()
+            <BLANKLINE>
+        """
+        return super().linear_algebra_constant()
+
+    def npolynomials(self):
+        """
+        Return the number of polynomials
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.npolynomials()
+            10
+        """
+        return super().npolynomials()
+
+    def nvariables(self):
+        """
+        Return the number of variables
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.nvariables()
+            5
+        """
+        return super().nvariables()
+
+    def nvariables_reduced(self):
+        """
+        Return the no. of variables after fixing some values
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.nvariables_reduced()
+            5
+            sage: E = DinurFirst(n=12, m=10)
+            sage: E.nvariables_reduced()
+            10
+        """
+        return super().nvariables_reduced()
+
+    def optimal_parameters(self):
+        """
+        Return a dictionary of optimal parameters
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=15, m=10)
+            sage: H.optimal_parameters()
+            {'λ': 1/9, 'κ': 2/9}
+        """
+        return super().optimal_parameters()
+
+    def order_of_the_field(self):
+        """
+        Return the order of the field
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=15, m=10)
+            sage: H.order_of_the_field()
+            2
+        """
+        return super().order_of_the_field()
