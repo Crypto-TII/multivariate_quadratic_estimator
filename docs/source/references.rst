@@ -112,9 +112,17 @@ References
 
 **M**
 
+.. [BFSS11] \Magali Bardet, Jean-Charles Faugère, Bruno Salvy, and Pierre-Jean Spaenlehauer.
+            *On the Complexity of Solving Quadratic Boolean Systems*
+            https://www.sciencedirect.com/science/article/pii/S0885064X12000611
+
 .. _ref-N:
 
 **N**
+
+.. [CKPS]   \Nicolas Courtois, Alexander Klimov, Jacques Patarin, and Adi Shamir.
+            *Efficient Algorithms for Solving Overdefined Systems of Multivariate Polynomial Equations*
+            https://www.iacr.org/archive/eurocrypt2000/1807/18070398-new.pdf
 
 .. _ref-O:
 

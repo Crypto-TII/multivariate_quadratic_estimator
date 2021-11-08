@@ -176,7 +176,7 @@ class Lokshtanov(BaseAlgorithm):
 
     def __repr__(self):
         return f"Lokshtanov et al.'s estimator for the MQ problem"
-    
+
     # all methods below are implemented to overwrite the parent's docstring while keeping the implementation
 
     def has_optimal_parameter(self):
