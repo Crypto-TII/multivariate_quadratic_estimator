@@ -48,6 +48,10 @@ References
 
 **C**
 
+.. [BCCCNSY10]  \Charles Bouillaguet, Hsieh-Chung Chen, Chen-Mou Cheng, Tung Chou, Ruben Niederhagen, Adi Shamir, and Bo-Yin Yang.
+                *Fast Exhaustive Search for Polynomial Systems in F_2*
+                https://www.iacr.org/archive/ches2010/62250195/62250195.pdf
+
 .. _ref-D:
 
 **D**
