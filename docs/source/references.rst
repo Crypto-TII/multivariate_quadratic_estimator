@@ -40,6 +40,10 @@ References
           *A Crossbred Algorithm for Solving Boolean Polynomial Systems*
           https://link.springer.com/chapter/10.1007/978-3-319-76620-1_1
 
+.. [KPG99]  \Aviad Kipnis, Jacques Patarin, and Louis Goubin.
+            *Unbalanced  Oil  and Vinegar Signature Schemes*
+            https://link.springer.com/chapter/10.1007/3-540-48910-X_15
+
 .. _ref-B:
 
 **B**
@@ -75,6 +79,10 @@ References
 .. _ref-H:
 
 **H**
+
+.. [MHT13]  \Hiroyuki Miura, Yasufumi Hashimoto, and Tsuyoshi Takagi.
+            *Extended Algorithm for Solving Underdefined Multivariate Quadratic Equations*
+            https://link.springer.com/chapter/10.1007/978-3-642-38616-9_8
 
 .. _ref-I:
 
@@ -127,6 +135,10 @@ References
 .. [CKPS]   \Nicolas Courtois, Alexander Klimov, Jacques Patarin, and Adi Shamir.
             *Efficient Algorithms for Solving Overdefined Systems of Multivariate Polynomial Equations*
             https://www.iacr.org/archive/eurocrypt2000/1807/18070398-new.pdf
+
+.. [CGMT02] \Nicolas Courtois, Louis Goubin, Willi Meier, and Jean-Daniel Tacier.
+            *Solving Underdefined Systems of Multivariate Quadratic Equations*
+            https://link.springer.com/chapter/10.1007/3-540-45664-3_15
 
 .. _ref-O:
 
