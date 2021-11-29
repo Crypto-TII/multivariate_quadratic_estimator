@@ -262,7 +262,7 @@ class BaseAlgorithm:
         import inspect
 
         def is_optimal_parameter_method(object):
-            return inspect.ismethod(object) and object.__name__ == "optimal_parameter"
+            return inspect.ismethod(object) and hasattr(object, "__wrapped__")
         return [f for (_, f) in inspect.getmembers(self, predicate=is_optimal_parameter_method)]
 
 

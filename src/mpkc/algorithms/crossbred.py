@@ -498,7 +498,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: H = Crossbred(q=256, n=15, m=10)
             sage: H.optimal_parameters()
-            {'D': 6, 'k': 8, 'd': 3}
+            {'D': 6, 'd': 3, 'k': 8}
         """
         return super().optimal_parameters()
 

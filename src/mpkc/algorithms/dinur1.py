@@ -338,7 +338,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: H = DinurFirst(n=15, m=10)
             sage: H.optimal_parameters()
-            {'λ': 1/9, 'κ': 2/9}
+            {'κ': 2/9, 'λ': 1/9}
         """
         return super().optimal_parameters()
 
