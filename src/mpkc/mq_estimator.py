@@ -3,6 +3,7 @@ from prettytable import PrettyTable
 from sage.functions.log import log
 from .algorithms.base import BaseAlgorithm
 from .algorithms import HybridF5
+from .utils import ngates, nbits, truncate
 
 
 class MQEstimator(object):
@@ -15,6 +16,8 @@ class MQEstimator(object):
     - ``m`` -- no. of polynomials
     - ``q`` -- order of the finite field (default: None)
     - ``w`` -- linear algebra constant (default: 2)
+    - ``theta`` -- bit complexity exponent (default: 0)
+    - ``h`` -- external hybridization parameter (default: 0)
     - ``nsolutions`` -- no. of solutions (default: 1)
     - ``excluded_algorithms`` -- a list/tuple of excluded algorithms (default: None)
 
@@ -24,9 +27,9 @@ class MQEstimator(object):
         sage: MQEstimator(n=10, m=5)
         MQ Estimator for system with 10 variables and 5 equations
     """
-    def __init__(self, n, m, q=None, w=2, nsolutions=1, **kwargs):
+    def __init__(self, n, m, q=None, w=2, theta=0, h=0, nsolutions=1, **kwargs):
         constructor_args = {arg: value for (arg, value) in locals().items()
-                            if arg in ('n', 'm', 'q', 'w', 'nsolutions')}
+                            if arg in ('n', 'm', 'q', 'w', 'h', 'nsolutions')}
 
         excluded_algorithms = kwargs.get("excluded_algorithms", tuple())
         if excluded_algorithms and any(not issubclass(Algorithm, BaseAlgorithm) for Algorithm in excluded_algorithms):
@@ -50,6 +53,9 @@ class MQEstimator(object):
                 continue
 
             self._algorithms.append(algorithm)
+            self._q = q
+            self._theta = theta
+            self._h = h
             setattr(self, algorithm.__module__.split('.')[-1], algorithm)
 
     def algorithms(self):
@@ -138,13 +144,14 @@ class MQEstimator(object):
         """
         return len(self.algorithms())
 
-    def table(self, use_tilde_o_time=False):
+    def table(self, use_tilde_o_time=False, precision=3):
         """
         Return the table describing the complexity of each algorithm and its optimal parameters
 
         INPUT:
 
         - ``use_tilde_o_time`` -- use Ō time complexity (default: False)
+         - ``precision`` -- number of decimal places in the complexities exponent
 
         EXAMPLES::
 
@@ -152,58 +159,66 @@ class MQEstimator(object):
             sage: E = MQEstimator(n=15, m=15, q=2)
             sage: table = E.table()
             sage: print(table)
-            +------------------+------------------+------------------+---------------------------+
-            |    algorithm     |       time       |      memory      |         parameters        |
-            +------------------+------------------+------------------+---------------------------+
-            |        F5        | 62.0451351868504 | 23.1586318751600 |                           |
-            |     HybridF5     | 17.1699250014423 | 3.90689059560852 |           k: 14           |
-            |    DinurFirst    | 23.6655729769094 | 20.4938554492408 |      λ: 9/14, κ: 3/14     |
-            |   DinurSecond    | 20.3499998825216 | 15.8017083589165 |           n1: 2           |
-            | ExhaustiveSearch | 17.9660208563962 | 11.7206717868256 |                           |
-            |    Bjorklund     | 42.4516669331353 | 15.3160789459123 |           λ: 1/5          |
-            |    Lokshtanov    | 67.1234362737997 | 16.1050592581276 |          δ: 1/15          |
-            | BooleanSolveFXL  | 20.3398500028846 | 5.82580271452019 | k: 14, variant: las_vegas |
-            |    Crossbred     | 17.9309653178356 | 8.98013957763916 |      D: 3, k: 7, d: 1     |
-            +------------------+------------------+------------------+---------------------------+
+            +------------------+--------+--------+---------------------------+
+            |    algorithm     |  time  | memory |         parameters        |
+            +------------------+--------+--------+---------------------------+
+            |        F5        | 62.045 | 23.158 |                           |
+            |     HybridF5     | 17.169 | 3.906  |           k: 14           |
+            |    DinurFirst    | 23.665 | 20.493 |      λ: 9/14, κ: 3/14     |
+            |   DinurSecond    | 20.349 | 15.801 |           n1: 2           |
+            | ExhaustiveSearch | 17.966 | 11.72  |                           |
+            |    Bjorklund     | 42.451 | 15.316 |           λ: 1/5          |
+            |    Lokshtanov    | 67.123 | 16.105 |          δ: 1/15          |
+            | BooleanSolveFXL  | 20.339 | 5.825  | k: 14, variant: las_vegas |
+            |    Crossbred     | 17.93  |  8.98  |      D: 3, k: 7, d: 1     |
+            +------------------+--------+--------+---------------------------+
+
 
         TESTS::
 
             sage: E = MQEstimator(n=15, m=15, q=3)  # DinurFirst, DinurSecond, and Bjorklund are skipped for q != 2
             sage: print(E.table())
-            +------------------+------------------+------------------+---------------------------+
-            |    algorithm     |       time       |      memory      |         parameters        |
-            +------------------+------------------+------------------+---------------------------+
-            |        F5        | 62.0451351868504 | 30.4845619006049 |                           |
-            |     HybridF5     | 24.6342598527691 | 8.55074678538324 |           k: 10           |
-            | ExhaustiveSearch | 24.0760096597596 | 11.7206717868256 |                           |
-            |    Lokshtanov    | 98.2276112460722 | 24.2667243293558 |          δ: 1/15          |
-            | BooleanSolveFXL  | 28.5293250129808 | 5.71135505102049 | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.9402101398093 | 16.0457809877246 |      D: 4, k: 6, d: 1     |
-            +------------------+------------------+------------------+---------------------------+
+            +------------------+--------+--------+---------------------------+
+            |    algorithm     |  time  | memory |         parameters        |
+            +------------------+--------+--------+---------------------------+
+            |        F5        | 62.045 | 30.484 |                           |
+            |     HybridF5     | 24.634 |  8.55  |           k: 10           |
+            | ExhaustiveSearch | 24.076 | 11.72  |                           |
+            |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
+            | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
+            |    Crossbred     | 23.94  | 16.045 |      D: 4, k: 6, d: 1     |
+            +------------------+--------+--------+---------------------------+
+
             sage: from mpkc.algorithms import F5, HybridF5
             sage: E = MQEstimator(n=15, m=15, q=3, excluded_algorithms=[F5, HybridF5])  # tests excluded algorithms
             sage: print(E.table())
-            +------------------+------------------+------------------+---------------------------+
-            |    algorithm     |       time       |      memory      |         parameters        |
-            +------------------+------------------+------------------+---------------------------+
-            | ExhaustiveSearch | 24.0760096597596 | 11.7206717868256 |                           |
-            |    Lokshtanov    | 98.2276112460722 | 24.2667243293558 |          δ: 1/15          |
-            | BooleanSolveFXL  | 28.5293250129808 | 5.71135505102049 | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.9402101398093 | 16.0457809877246 |      D: 4, k: 6, d: 1     |
-            +------------------+------------------+------------------+---------------------------+
+            +------------------+--------+--------+---------------------------+
+            |    algorithm     |  time  | memory |         parameters        |
+            +------------------+--------+--------+---------------------------+
+            | ExhaustiveSearch | 24.076 | 11.72  |                           |
+            |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
+            | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
+            |    Crossbred     | 23.94  | 16.045 |      D: 4, k: 6, d: 1     |
+            +------------------+--------+--------+---------------------------+
         """
         table = PrettyTable()
         table.field_names = ['algorithm', 'time', 'memory', 'parameters']
 
+        h = self._h
         for algorithm in self.algorithms():
             name = algorithm.__class__.__name__
             time_complexity = algorithm.tilde_o_time() if use_tilde_o_time else algorithm.time_complexity()
             memory_complexity = algorithm.memory_complexity()
             optimal_parameters = ', '.join([f"{k}: {v}" for k, v in algorithm.optimal_parameters().items()])
 
+            time_complexity *= 2 ** h
+            if self._q is not None and self._theta > 0:
+                time_complexity = ngates(self._q, time_complexity, theta=self._theta)
+                memory_complexity *= nbits(self._q, memory_complexity)
+
             table.add_row([name,
-                           log(time_complexity, 2).numerical_approx(),
-                           log(memory_complexity, 2).numerical_approx(),
+                           truncate(log(time_complexity, 2), precision),
+                           truncate(log(memory_complexity, 2), precision),
                            optimal_parameters])
 
         return table
