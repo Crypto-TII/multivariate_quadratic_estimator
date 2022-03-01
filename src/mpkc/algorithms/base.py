@@ -110,9 +110,9 @@ class BaseAlgorithm:
 
             sage: from mpkc.algorithms.base import BaseAlgorithm
             sage: BaseAlgorithm(n=5, m=10).npolynomials_reduced()
-                10
+            10
             sage: BaseAlgorithm(n=60, m=20).npolynomials_reduced()
-                18
+            18
         """
         if self._m_reduced is not None:
             return self._m_reduced
