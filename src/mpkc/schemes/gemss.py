@@ -772,8 +772,10 @@ class GeMSS:
             sage: G_V.complexity_classical_boolean_solve()
             256
         """
+        from mpkc.algorithms.boolean_solve_fxl import BooleanSolveFXL
         m = self.npolynomials()
-        return floor(0.792 * m)
+        E = BooleanSolveFXL(n=m, m=m, q=2)
+        return floor(log(E.tilde_o_time(),2))
 
     def complexity_quantum_boolean_solve(self):
         """

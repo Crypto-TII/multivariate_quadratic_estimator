@@ -158,7 +158,9 @@ class BooleanSolveFXL(BaseAlgorithm):
         variant = self.variant()
         wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
 
-        if variant == 'las_vegas':
+        if n == m and q == 2:
+            return 2 ** (0.792 * m)
+        elif variant == 'las_vegas':
             complexity = q ** k * binomial(n - k + wit_deg, wit_deg) ** 2
         else:
             complexity = q ** k * binomial(n - k + wit_deg, wit_deg) ** w

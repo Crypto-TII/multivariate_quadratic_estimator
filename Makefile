@@ -14,7 +14,7 @@ install: build
 	$(SAGE_BIN) -pip install .
 
 test: install
-	$(SAGE_BIN) -t src/mpkc
+	$(SAGE_BIN) -t -T 600 src/mpkc  # timeout is set to 600 seconds
 
 doc: install
 	cd docs/ && $(SAGE_BIN) -sh -c "make html"

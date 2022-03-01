@@ -947,7 +947,7 @@ class Rainbow:
             sage: from mpkc.schemes import Rainbow
             sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
             sage: R_I.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 164
-            152
+            146
             sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
             sage: R_III.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 234
             221
@@ -990,10 +990,18 @@ class Rainbow:
         - ``use_gate_count`` -- whether to return the complexity in the number of gate counts (True/False)
         """
         from ..algorithms import HybridF5
+        from mpkc.mq_estimator import MQEstimator
         q = self.base_field.order()
         m = self.npolynomials
 
-        nmul = HybridF5(n=m, m=m, q=q, use_quantum=use_quantum).time_complexity()
+        if use_quantum:
+            nmul = HybridF5(n=m, m=m, q=q, use_quantum=True).time_complexity()
+        else:
+            E = MQEstimator(n=m, m=m, q=q, w=2)
+            E.crossbred.max_D = 40
+            nmul = E.fastest_algorithm().time_complexity()
+
+
         if use_gate_count:
             complexity = self._ngates_(nmul)
         else:
