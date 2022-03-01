@@ -33,7 +33,10 @@ class F5(BaseAlgorithm):
 
         super().__init__(n, m, q=q, w=w)
         self._nsolutions = nsolutions
-        self._degrees = degrees
+        if degrees == [2]*m:
+            self._degrees = [2]*self.npolynomials_reduced()
+        else:
+            self._degrees = degrees
         self._time_complexity = None
         self._memory_complexity = None
 
@@ -124,17 +127,17 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=5)
             sage: F5_.time_complexity_regular_system()
-            1102500
+            50176
 
         TESTS::
 
             sage: F5(n=15, m=5, degrees=[2]*5).time_complexity_regular_system()
-            1102500
+            2025
         """
         if not (self.is_square_system() or self.is_underdefined_system()):
             raise ValueError("regularity assumption is valid only on square or underdefined system")
 
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.regular_system(n, degrees)
@@ -185,7 +188,7 @@ class F5(BaseAlgorithm):
             True
         """
         if self._memory_complexity is None:
-            n, m = self.nvariables_reduced(), self.npolynomials()
+            n, m = self.nvariables_reduced(), self.npolynomials_reduced()
             q = self.order_of_the_field()
             degrees = self.degree_of_polynomials()
             dreg = degree_of_regularity.generic_system(n=n, degrees=degrees, q=q)

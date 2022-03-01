@@ -42,7 +42,10 @@ class HybridF5(BaseAlgorithm):
 
         super().__init__(n, m, q=q, w=w)
         self._use_quantum = use_quantum
-        self._degrees = degrees
+        if degrees == [2] * m:
+            self._degrees = [2] * self.npolynomials_reduced()
+        else:
+            self._degrees = degrees
         self._time_complexity = None
         self._memory_complexity = None
 
@@ -166,7 +169,7 @@ class HybridF5(BaseAlgorithm):
             7056
         """
         if self._memory_complexity is None:
-            n, m = self.nvariables_reduced(), self.npolynomials()
+            n, m = self.nvariables_reduced(), self.npolynomials_reduced()
             q = self.order_of_the_field()
             w = self.linear_algebra_constant()
             degrees = self.degree_of_polynomials()
@@ -200,7 +203,7 @@ class HybridF5(BaseAlgorithm):
 
         - ``k`` -- no. of fixed variables
         """
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         q = self.order_of_the_field()
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
@@ -208,7 +211,7 @@ class HybridF5(BaseAlgorithm):
         return q ** (k / 2 if self.use_quantum() else k) * F5(n=n-k, m=m, q=q, w=w, degrees=degrees).time_complexity()
 
     def __repr__(self):
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables(), self.npolynomials_reduced()
         return f"Complexity estimator for hybrid approach with {n} variables and {m} polynomials"
 
     # all methods below are implemented to overwrite the parent's docstring while keeping the implementation
@@ -338,9 +341,22 @@ class HybridF5(BaseAlgorithm):
             5
             sage: E = HybridF5(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import HybridF5
+            sage: H = HybridF5(q=256, n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """

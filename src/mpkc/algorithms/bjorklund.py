@@ -62,7 +62,7 @@ class Bjorklund(BaseAlgorithm):
         if self._λ is not None:
             return self._λ
 
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         k = self._k
         min_complexity = Infinity
         optimal_λ = None
@@ -144,7 +144,7 @@ class Bjorklund(BaseAlgorithm):
                 l = floor(_λ * _n)
                 return S(l, l + 2, _λ) + 2 ** (_n - l) * log(s, 2) + _m * sum_of_binomial_coefficients(_n, 2)
 
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         λ = self.λ()
         self._memory_complexity = S(n, m, λ)
         return self._memory_complexity
@@ -181,7 +181,7 @@ class Bjorklund(BaseAlgorithm):
 
         - ``λ`` -- the λ value
         """
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         k = self._k
 
         return 8 * k * log(n, 2) * sum([Bjorklund._T(n - i, m + k + 2, λ) for i in range(1, n)])
@@ -315,9 +315,25 @@ class Bjorklund(BaseAlgorithm):
             5
             sage: E = Bjorklund(n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Bjorklund
+            sage: H = Bjorklund(n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+            sage: E = Bjorklund(n=12, m=10)
+            sage: E.npolynomials_reduced()
+            9
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """
@@ -328,7 +344,7 @@ class Bjorklund(BaseAlgorithm):
             sage: from mpkc.algorithms import Bjorklund
             sage: H = Bjorklund(n=15, m=10)
             sage: H.optimal_parameters()
-            {'λ': 3/10}
+            {'λ': 1/3}
         """
         return super().optimal_parameters()
 

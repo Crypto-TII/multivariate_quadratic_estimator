@@ -1,10 +1,11 @@
 import functools
 
 from sage.arith.misc import is_prime_power
+from sage.functions.other import floor
 
 
 class BaseAlgorithm:
-    def __init__(self, n, m, q=None, w=None):
+    def __init__(self, n, m, q=None, w=None, h=0):
         """
         Base class for algorithms complexity estimator
 
@@ -14,6 +15,7 @@ class BaseAlgorithm:
         - ``m`` -- no. of polynomials
         - ``q`` -- order of the field (default: None)
         - ``w`` -- linear algebra constant (default: None)
+        - ``h`` -- external hybridization parameter (default: 0)
 
         TESTS::
 
@@ -48,12 +50,17 @@ class BaseAlgorithm:
         if w is not None and not 2 <= w <= 3:
             raise ValueError("w must be in the range 2 <= w <= 3")
 
+        if h < 0:
+            raise ValueError("h must be >= 0")
+
         self._n = n
         self._m = m
         self._q = q
         self._w = w
+        self._h = h
         self._optimal_parameters = dict()
         self._n_reduced = None
+        self._m_reduced = None
 
     def nvariables(self):
         """
@@ -77,14 +84,45 @@ class BaseAlgorithm:
             sage: BaseAlgorithm(n=5, m=10).nvariables_reduced()
             5
             sage: BaseAlgorithm(n=25, m=20).nvariables_reduced()
-            20
+            19
         """
         if self._n_reduced is not None:
             return self._n_reduced
 
         n, m = self.nvariables(), self.npolynomials()
-        self._n_reduced = n - (n - m) if self.is_underdefined_system() else n
+        if self.is_underdefined_system():
+            a = 1
+            alpha = floor(n / m)
+            if m % alpha == 0:
+                a = 0
+            self._n_reduced = m - alpha + a
+        else:
+            self._n_reduced = n
+
+        self._n_reduced -= self._h
         return self._n_reduced
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        TESTS::
+
+            sage: from mpkc.algorithms.base import BaseAlgorithm
+            sage: BaseAlgorithm(n=5, m=10).npolynomials_reduced()
+                10
+            sage: BaseAlgorithm(n=60, m=20).npolynomials_reduced()
+                18
+        """
+        if self._m_reduced is not None:
+            return self._m_reduced
+
+        n, m = self.nvariables(), self.npolynomials()
+        if self.is_underdefined_system():
+            self._m_reduced = self.nvariables_reduced()
+        else:
+            self._m_reduced = m
+        return self._m_reduced
 
     def npolynomials(self):
         """"

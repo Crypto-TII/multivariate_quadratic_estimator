@@ -203,7 +203,7 @@ class Crossbred(BaseAlgorithm):
             sage: E.admissible_parameter_series(2)
             -1 - 3*x - 3*y - 10*x^2 - 3*x*y + 6*y^2 + O(x, y)^3
         """
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         q = self.order_of_the_field()
         max_D = self.max_D
 
@@ -345,7 +345,7 @@ class Crossbred(BaseAlgorithm):
         return np ** 2 + q ** (n - k) * nl ** w
 
     def _time_complexity_(self, k, D, d):
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         w = self.linear_algebra_constant()
         q = self.order_of_the_field()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
@@ -485,9 +485,25 @@ class Crossbred(BaseAlgorithm):
             5
             sage: E = Crossbred(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Crossbred
+            sage: H = Crossbred(q=256, n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+            sage: E = Crossbred(q=256, n=12, m=10)
+            sage: E.npolynomials_reduced()
+            9
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """
@@ -498,7 +514,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: H = Crossbred(q=256, n=15, m=10)
             sage: H.optimal_parameters()
-            {'D': 6, 'd': 3, 'k': 8}
+            {'D': 7, 'd': 2, 'k': 7}
         """
         return super().optimal_parameters()
 

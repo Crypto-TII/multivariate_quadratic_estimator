@@ -104,7 +104,7 @@ class DinurSecond(BaseAlgorithm):
         return self._memory_complexity
 
     def _compute_time_complexity_(self):
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         max_n1 = ((m - 2) // 2) - 1
         min_time_complexity = Infinity
         optimal_n1 = None
@@ -274,9 +274,25 @@ class DinurSecond(BaseAlgorithm):
             5
             sage: E = DinurSecond(n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurSecond
+            sage: H = DinurSecond(n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+            sage: E = DinurSecond(n=12, m=10)
+            sage: E.npolynomials_reduced()
+            9
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """

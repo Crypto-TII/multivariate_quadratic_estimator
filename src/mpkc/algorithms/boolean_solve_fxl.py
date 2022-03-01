@@ -341,6 +341,19 @@ class BooleanSolveFXL(BaseAlgorithm):
         """
         return super().nvariables_reduced()
 
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import BooleanSolveFXL
+            sage: H = BooleanSolveFXL(q=256, n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+        """
+        return super().npolynomials_reduced()
+
     def optimal_parameters(self):
         """
         Return a dictionary of optimal parameters

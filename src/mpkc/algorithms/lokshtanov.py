@@ -52,7 +52,7 @@ class Lokshtanov(BaseAlgorithm):
         """
         min_complexity = Infinity
         optimal_δ = None
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
 
         for np in range(1, min(m - 2, n)):
             δ = np / n
@@ -304,9 +304,22 @@ class Lokshtanov(BaseAlgorithm):
             5
             sage: E = Lokshtanov(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import Lokshtanov
+            sage: H = Lokshtanov(q=256, n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """
@@ -317,7 +330,7 @@ class Lokshtanov(BaseAlgorithm):
             sage: from mpkc.algorithms import Lokshtanov
             sage: H = Lokshtanov(q=256, n=15, m=10)
             sage: H.optimal_parameters()
-            {'δ': 1/10}
+            {'δ': 1/9}
         """
         return super().optimal_parameters()
 

@@ -145,7 +145,7 @@ class DinurFirst(BaseAlgorithm):
 
     def _compute_kappa_and_lambda_(self):
         min_complexity = Infinity
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         k = self._k
         optimal_kappa = None
         optimal_lambda = None
@@ -183,7 +183,7 @@ class DinurFirst(BaseAlgorithm):
         t = 48 * n + 1
         n2 = floor(n1 - lambda_ * n)
         l = n2 + 2
-        m = self.npolynomials()
+        m = self.npolynomials_reduced()
         k = self._k
 
         if n2 <= 0:
@@ -325,9 +325,25 @@ class DinurFirst(BaseAlgorithm):
             5
             sage: E = DinurFirst(n=12, m=10)
             sage: E.nvariables_reduced()
-            10
+            9
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import DinurFirst
+            sage: H = DinurFirst(n=5, m=10)
+            sage: H.npolynomials_reduced()
+            10
+            sage: E = DinurFirst(n=12, m=10)
+            sage: E.npolynomials_reduced()
+            9
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """
@@ -336,9 +352,9 @@ class DinurFirst(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import DinurFirst
-            sage: H = DinurFirst(n=15, m=10)
+            sage: H = DinurFirst(n=15, m=15)
             sage: H.optimal_parameters()
-            {'κ': 2/9, 'λ': 1/9}
+            {'κ': 3/14, 'λ': 9/14}
         """
         return super().optimal_parameters()
 

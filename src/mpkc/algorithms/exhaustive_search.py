@@ -91,7 +91,7 @@ class ExhaustiveSearch(BaseAlgorithm):
             sage: E0.memory_complexity() == E1.memory_complexity()
             True
         """
-        n, m = self.nvariables_reduced(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         return m * n ** 2
 
     def tilde_o_time(self):
@@ -239,6 +239,19 @@ class ExhaustiveSearch(BaseAlgorithm):
             10
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import ExhaustiveSearch
+            sage: H = ExhaustiveSearch(q=256, n=10, m=10)
+            sage: H.npolynomials_reduced()
+            10
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """

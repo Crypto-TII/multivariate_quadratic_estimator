@@ -38,6 +38,7 @@ class MHT(BaseAlgorithm):
 
         super().__init__(n=n, m=m, q=q, w=w)
         self._n_reduced = n
+        self._m_reduced = m
 
     def time_complexity(self):
         """
@@ -208,6 +209,19 @@ class MHT(BaseAlgorithm):
             183
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import MHT
+            sage: H = MHT(n=183, m=12, q=4, w=2.8)
+            sage: H.npolynomials_reduced()
+            12
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """

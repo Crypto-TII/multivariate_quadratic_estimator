@@ -50,6 +50,7 @@ class CGMTA(BaseAlgorithm):
             raise ValueError(f'The condition m - 2k < 2k^2 <= n - 2k must be satisfied')
 
         self._n_reduced = n
+        self._m_reduced = m
 
     def time_complexity(self):
         """
@@ -219,6 +220,19 @@ class CGMTA(BaseAlgorithm):
             41
         """
         return super().nvariables_reduced()
+
+    def npolynomials_reduced(self):
+        """
+        Return the no. of polynomials after applying the Thomae and Wolf strategy
+
+        EXAMPLES::
+
+            sage: from mpkc.algorithms import CGMTA
+            sage: H = CGMTA(n=41, m=10, q=3)
+            sage: H.npolynomials_reduced()
+            10
+        """
+        return super().npolynomials_reduced()
 
     def optimal_parameters(self):
         """
