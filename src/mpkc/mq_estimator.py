@@ -214,7 +214,7 @@ class MQEstimator(object):
             time_complexity *= 2 ** h
             if self._q is not None and self._theta > 0:
                 time_complexity = ngates(self._q, time_complexity, theta=self._theta)
-                memory_complexity *= nbits(self._q, memory_complexity)
+                memory_complexity = nbits(self._q, memory_complexity)
 
             table.add_row([name,
                            truncate(log(time_complexity, 2), precision),
