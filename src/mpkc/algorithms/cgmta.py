@@ -3,6 +3,7 @@ from sage.all import Integer
 from sage.functions.other import sqrt, floor
 from sage.misc.functional import numerical_approx
 from .base import BaseAlgorithm
+from sage.functions.other import binomial
 
 
 class CGMTA(BaseAlgorithm):
@@ -60,13 +61,14 @@ class CGMTA(BaseAlgorithm):
 
             sage: from mpkc.algorithms import CGMTA
             sage: E = CGMTA(n=41, m=10, q=3)
-            sage: E.time_complexity()
-            4374.00000000000
+            sage: float(log(E.time_complexity(),2))
+            23.137080884841783
         """
+        n = self.nvariables()
         m = self.npolynomials()
         q = self.order_of_the_field()
         k = self._k
-        return numerical_approx(2 * q ** (m - k))
+        return numerical_approx(2 * k * binomial(n - k, 2) * q ** (m - k))
 
     def memory_complexity(self):
         """
