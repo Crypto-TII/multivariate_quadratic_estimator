@@ -15,6 +15,7 @@ class F5(BaseAlgorithm):
     - ``w`` -- linear algebra constant (default: 2)
     - ``nsolutions`` -- no. of solutions (default: 1)
     - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m)
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -23,7 +24,7 @@ class F5(BaseAlgorithm):
         sage: F5_
         Complexity estimator for F5 with 10 variables and 5 polynomials
     """
-    def __init__(self, n, m, q=None, w=2, nsolutions=1, **kwargs):
+    def __init__(self, n, m, q=None, w=2, nsolutions=1, h=0, **kwargs):
         if not nsolutions >= 1:
             raise ValueError("nsolutions must be >= 1")
 
@@ -31,7 +32,7 @@ class F5(BaseAlgorithm):
         if len(degrees) != m:
             raise ValueError(f"len(degrees) must be equal to {m}")
 
-        super().__init__(n, m, q=q, w=w)
+        super().__init__(n, m, q=q, w=w, h=h)
         self._nsolutions = nsolutions
         if degrees == [2]*m:
             self._degrees = [2]*self.npolynomials_reduced()
@@ -141,7 +142,8 @@ class F5(BaseAlgorithm):
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.regular_system(n, degrees)
-        return (m * binomial(n + dreg - 1, dreg)) ** w
+        h = self._h
+        return 2 ** h * (m * binomial(n + dreg - 1, dreg)) ** w
 
     def time_complexity_semi_regular_system(self):
         """
@@ -167,7 +169,8 @@ class F5(BaseAlgorithm):
         q = self.order_of_the_field()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.semi_regular_system(n, degrees, q)
-        return binomial(n + dreg, dreg) ** w
+        h = self._h
+        return 2 ** h *  binomial(n + dreg, dreg) ** w
 
     def memory_complexity(self):
         """

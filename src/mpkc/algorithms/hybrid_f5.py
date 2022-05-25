@@ -24,6 +24,7 @@ class HybridF5(BaseAlgorithm):
     - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
     - ``use_quantum`` -- return the complexity using quantum computer (default: False)
     - ``degrees`` -- a list/tuple of degree of the polynomials (default: [2]*m, i.e. quadratic system)
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -32,15 +33,16 @@ class HybridF5(BaseAlgorithm):
         sage: H
         Complexity estimator for hybrid approach with 5 variables and 10 polynomials
     """
-    def __init__(self, n, m, q, w=2, use_quantum=False, **kwargs):
+    def __init__(self, n, m, q, w=2, use_quantum=False, h=0, **kwargs):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
         degrees = kwargs.get('degrees', [2] * m)
+
         if len(degrees) != m:
             raise ValueError(f"len(degrees) must be equal to {m}")
 
-        super().__init__(n, m, q=q, w=w)
+        super().__init__(n, m, q=q, w=w, h=h)
         self._use_quantum = use_quantum
         if degrees == [2] * m:
             self._degrees = [2] * self.npolynomials_reduced()
@@ -151,11 +153,22 @@ class HybridF5(BaseAlgorithm):
             else:
                 time_complexity = self._time_complexity_(k)
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
-    def memory_complexity(self):
+    def memory_complexity(self, **kwargs):
         """
         Return the memory complexity of HybridF5
+
+        INPUT:
+
+        - ``k`` -- no. of fixed variables (default: None)
+
+        .. NOTE::
+
+            If ``k`` is specified, the function returns the time complexity w.r.t the given parameter
+
 
         .. SEEALSO::
 
@@ -167,16 +180,26 @@ class HybridF5(BaseAlgorithm):
             sage: E = HybridF5(n=10, m=12, q=7)
             sage: E.memory_complexity()
             7056
+            sage: E.memory_complexity(k=1)
+            1656369
         """
-        if self._memory_complexity is None:
-            n, m = self.nvariables_reduced(), self.npolynomials_reduced()
-            q = self.order_of_the_field()
-            w = self.linear_algebra_constant()
-            degrees = self.degree_of_polynomials()
-            k = self.k()
-            self._memory_complexity = F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+        k = kwargs.get('k', self.k())
 
-        return self._memory_complexity
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
+        q = self.order_of_the_field()
+        w = self.linear_algebra_constant()
+        degrees = self.degree_of_polynomials()
+
+        if k == self.k():
+            if self._memory_complexity is None:
+                memory_complexity = F5(n=n-k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+                self._memory_complexity = memory_complexity
+            else:
+                memory_complexity = self._memory_complexity
+        else:
+            memory_complexity = F5(n=n - k, m=m, q=q, w=w, degrees=degrees).memory_complexity()
+
+        return memory_complexity
 
     def tilde_o_time(self):
         """

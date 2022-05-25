@@ -20,6 +20,7 @@ class BooleanSolveFXL(BaseAlgorithm):
     - ``m`` -- no. of polynomials
     - ``q`` -- order of the finite field
     - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -30,17 +31,16 @@ class BooleanSolveFXL(BaseAlgorithm):
     """
     _variants = ("las_vegas", "deterministic")
 
-    def __init__(self, n, m, q, w=2):
+    def __init__(self, n, m, q, w=2, h=0):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
-
-        super().__init__(n=n, m=m, q=q, w=w)
+        super().__init__(n=n, m=m, q=q, w=w, h=h)
 
         if self.is_defined_over_finite_field():
-            if not self.is_overdefined_system() and not self.is_square_system():
+            if not self.npolynomials_reduced() >= self.nvariables_reduced() and not self.npolynomials_reduced() == self.nvariables_reduced():
                 raise ValueError("the no. of polynomials must be >= than the no. of variables")
         else:
-            if not self.is_overdefined_system():
+            if not self.npolynomials_reduced() >= self.nvariables_reduced():
                 raise ValueError("the no. of polynomials must be > than the no. of variables")
 
         self._k = None
@@ -112,6 +112,8 @@ class BooleanSolveFXL(BaseAlgorithm):
             self._compute_time_complexity_()
             time_complexity = self._time_complexity
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -126,7 +128,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             3136
         """
         if self._memory_complexity is None:
-            n, m = self.nvariables(), self.npolynomials()
+            n, m = self.nvariables_reduced(), self.npolynomials_reduced()
             q = self.order_of_the_field()
             k = self.k()
             wit_deg = witness_degree.quadratic_system(n=n - k, m=m, q=q)
@@ -151,7 +153,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             sage: float(log(E.tilde_o_time(), 2))
             24.014054533787938
         """
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         q = self.order_of_the_field()
         w = self.linear_algebra_constant()
         k = self.k()
@@ -165,12 +167,13 @@ class BooleanSolveFXL(BaseAlgorithm):
         else:
             complexity = q ** k * binomial(n - k + wit_deg, wit_deg) ** w
 
-        return complexity
+        h = self._h
+        return 2 ** h * complexity
 
     def _compute_time_complexity_(self):
         min_time_complexity = Infinity
 
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
 
         optimal_k = optimal_variant = None
 
@@ -198,7 +201,7 @@ class BooleanSolveFXL(BaseAlgorithm):
         - ``k`` -- the value `k`
         - ``variant`` -- the variant of the algorithm
         """
-        n, m = self.nvariables(), self.npolynomials()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         q = self.order_of_the_field()
         w = self.linear_algebra_constant()
 

@@ -31,6 +31,7 @@ class Crossbred(BaseAlgorithm):
     - ``q`` -- order of the finite field
     - ``w`` -- linear algebra constant (2 <= w <= 3) (default: 2)
     - ``max_D`` -- upper bound to the parameter D (default: 10)
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -39,11 +40,11 @@ class Crossbred(BaseAlgorithm):
         sage: E
         Crossbred estimator for the MQ problem
     """
-    def __init__(self, n, m, q, w=2, max_D=10):
+    def __init__(self, n, m, q, w=2, max_D=10, h=0):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
-        super().__init__(n=n, m=m, q=q, w=w)
+        super().__init__(n=n, m=m, q=q, w=w, h=h)
         self._max_D = max_D
         self._k = None
         self._D = None
@@ -280,8 +281,9 @@ class Crossbred(BaseAlgorithm):
         D = kwargs.get('D', None)
         d = kwargs.get('d', None)
 
+        h = self._h
         if all(var is not None for var in (k, D, d)):
-            return self._time_complexity_(k, D, d)
+            return 2 ** h * self._time_complexity_(k, D, d)
 
         min_time_complexity = Infinity
         if self._time_complexity is None:
@@ -292,13 +294,21 @@ class Crossbred(BaseAlgorithm):
                     self._k = k
                     self._D = D
                     self._d = d
-            self._time_complexity = min_time_complexity
+            self._time_complexity = 2 ** h * min_time_complexity
 
         return self._time_complexity
 
-    def memory_complexity(self):
+    def memory_complexity(self, **kwargs):
         """
         Return the memory complexity
+
+        INPUT:
+
+        - ``k`` -- no. of variables in the resulting system (default: None)
+        - ``D`` -- degree of the initial Macaulay matrix (default: None)
+        - ``d`` -- degree resulting Macaulay matrix (default: None)
+
+        If `k`, `D`, and `d` are specified, the function returns the memory complexity w.r.t to the given parameters
 
         EXAMPLES::
 
@@ -306,6 +316,8 @@ class Crossbred(BaseAlgorithm):
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.memory_complexity(), 2))
             8.027905996569885
+            sage: float(log(E.memory_complexity(k=4, D=6, d=4), 2))
+            12.892542816648552
 
         TESTS::
 
@@ -314,6 +326,16 @@ class Crossbred(BaseAlgorithm):
             sage: E0.memory_complexity().numerical_approx() == E1.memory_complexity().numerical_approx()
             True
         """
+
+        k = kwargs.get('k', None)
+        D = kwargs.get('D', None)
+        d = kwargs.get('d', None)
+
+        if all(var is not None for var in (k, D, d)):
+            ncols_pre_step = self.ncols_in_preprocessing_step(k, D, d)
+            ncols_lin_step = self.ncols_in_linearization_step(k, d)
+            return ncols_pre_step ** 2 + ncols_lin_step ** 2
+
         if self._memory_complexity is None:
             D = self.D()
             k = self.k()
@@ -341,8 +363,8 @@ class Crossbred(BaseAlgorithm):
         q = self.order_of_the_field()
         n = self.nvariables_reduced()
         w = self.linear_algebra_constant()
-
-        return np ** 2 + q ** (n - k) * nl ** w
+        h = self._h
+        return 2 ** h * np ** 2 + q ** (n - k) * nl ** w
 
     def _time_complexity_(self, k, D, d):
         n, m = self.nvariables_reduced(), self.npolynomials_reduced()

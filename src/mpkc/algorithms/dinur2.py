@@ -16,6 +16,7 @@ class DinurSecond(BaseAlgorithm):
 
     - ``n`` -- no. of variables
     - ``m`` -- no. of polynomials
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -24,8 +25,8 @@ class DinurSecond(BaseAlgorithm):
         sage: E
         Dinur's second estimator for the MQ problem
     """
-    def __init__(self, n, m):
-        super().__init__(n=n, m=m, q=2)
+    def __init__(self, n, m, h=0):
+        super().__init__(n=n, m=m, q=2, h=h)
         self._n1 = None
         self._time_complexity = None
         self._memory_complexity = None
@@ -82,11 +83,19 @@ class DinurSecond(BaseAlgorithm):
                 self._compute_time_complexity_()
             time_complexity = self._time_complexity
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
-    def memory_complexity(self):
+    def memory_complexity(self, **kwargs):
         """
         Return the memory complexity of the Dinur's second algorithm
+
+        INPUT:
+
+        - ``n1`` -- the parameter $n_1$ (default: None)
+
+        If $n_1$ is provided, the function returns the memory complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -94,13 +103,21 @@ class DinurSecond(BaseAlgorithm):
             sage: E = DinurSecond(n=10, m=12)
             sage: E.memory_complexity()
             2560
+            sage: E.memory_complexity(n1=2)
+            5256
         """
+        n = self.nvariables_reduced()
+        n1 = kwargs.get("n1", None)
+
+        if n1 is not None:
+            return 8 * (n1 + 1) * sum_of_binomial_coefficients(n - n1, n1 + 3)
+
         if self._memory_complexity is not None:
             return self._memory_complexity
 
         n1 = self.n1()
-        n = self.nvariables_reduced()
         self._memory_complexity = 8 * (n1 + 1) * sum_of_binomial_coefficients(n - n1, n1 + 3)
+
         return self._memory_complexity
 
     def _compute_time_complexity_(self):
@@ -143,7 +160,9 @@ class DinurSecond(BaseAlgorithm):
             sage: E.tilde_o_time()
             283.68541077888506
         """
-        return 2 ** ((1 - 1./(2.7*2)) * self._n)
+        n = self.nvariables_reduced()
+        h = self._h
+        return 2 ** h * 2 ** ((1 - 1./(2.7*2)) * n)
 
     def __repr__(self):
         return f"Dinur's second estimator for the MQ problem"

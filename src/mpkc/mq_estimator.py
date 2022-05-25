@@ -204,14 +204,14 @@ class MQEstimator(object):
         table = PrettyTable()
         table.field_names = ['algorithm', 'time', 'memory', 'parameters']
 
-        h = self._h
+        #h = self._h
         for algorithm in self.algorithms():
             name = algorithm.__class__.__name__
             time_complexity = algorithm.tilde_o_time() if use_tilde_o_time else algorithm.time_complexity()
             memory_complexity = algorithm.memory_complexity()
             optimal_parameters = ', '.join([f"{k}: {v}" for k, v in algorithm.optimal_parameters().items()])
 
-            time_complexity *= 2 ** h
+ #           time_complexity *= 2 ** h
             if self._q is not None and self._theta > 0:
                 time_complexity = ngates(self._q, time_complexity, theta=self._theta)
                 memory_complexity = nbits(self._q, memory_complexity)

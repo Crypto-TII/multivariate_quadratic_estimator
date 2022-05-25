@@ -19,6 +19,7 @@ class DinurFirst(BaseAlgorithm):
     - ``n`` -- no. of variables
     - ``m`` -- no. of polynomials
     - ``nsolutions`` -- number of solutions (default: 1)
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -27,8 +28,8 @@ class DinurFirst(BaseAlgorithm):
         sage: E
         Dinur's first estimator for the MQ problem
     """
-    def __init__(self, n, m, nsolutions=1):
-        super().__init__(n=n, m=m, q=2)
+    def __init__(self, n, m, nsolutions=1, h=0):
+        super().__init__(n=n, m=m, q=2, h=h)
         self._nsolutions = nsolutions
 
         self._k = floor(log(nsolutions + 1, 2))
@@ -116,6 +117,8 @@ class DinurFirst(BaseAlgorithm):
             time_complexity = 8 * k * log(n, 2) * \
                               sum([self._T(n - i, n1(i, kappa), w(i, kappa), lambda_) for i in range(1, n)])
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -177,7 +180,8 @@ class DinurFirst(BaseAlgorithm):
             6.943
         """
         n = self.nvariables_reduced()
-        return 2 ** (0.6943 * n)
+        h = self._h
+        return 2 ** h * 2 ** (0.6943 * n)
 
     def _T(self, n, n1, w, lambda_):
         t = 48 * n + 1

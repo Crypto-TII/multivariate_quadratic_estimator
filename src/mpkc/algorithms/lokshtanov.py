@@ -22,6 +22,7 @@ class Lokshtanov(BaseAlgorithm):
     - ``n`` -- no. of variables
     - ``m`` -- no. of polynomials
     - ``q`` -- order of the finite field
+    - ``h`` -- external hybridization parameter (default: 0)
 
     EXAMPLES::
 
@@ -30,11 +31,11 @@ class Lokshtanov(BaseAlgorithm):
         sage: E
         Lokshtanov et al.'s estimator for the MQ problem
     """
-    def __init__(self, n, m, q):
+    def __init__(self, n, m, q, h=0):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
-        super().__init__(n=n, m=m, q=q)
+        super().__init__(n=n, m=m, q=q, h=h)
         self._time_complexity = None
         self._memory_complexity = None
 
@@ -92,7 +93,6 @@ class Lokshtanov(BaseAlgorithm):
         q = self.order_of_the_field()
         n = self.nvariables_reduced()
         δ = kwargs.get('δ', self.δ())
-
         if δ is None:
             return Infinity
         else:
@@ -108,6 +108,8 @@ class Lokshtanov(BaseAlgorithm):
             else:
                 time_complexity = 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -165,7 +167,8 @@ class Lokshtanov(BaseAlgorithm):
             d = GF(q).degree()
             time = q ** n * (log(q, 2) / (2 * e * d))
 
-        return time
+        h = self._h
+        return 2 ** h * time
 
     def _C(self, n, delta):
         q = self.order_of_the_field()

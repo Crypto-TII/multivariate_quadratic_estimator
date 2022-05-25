@@ -1,9 +1,16 @@
 from mpkc import MQEstimator
+from mpkc.utils import ngates, nbits
 
 rainbow_parameters = {
     'Rainbow-I': (16, 100, 64),
     'Rainbow-III': (256, 148, 80),
-    'Rainbow-V': (256, 148, 80),
+    'Rainbow-V': (256, 196, 100),
+}
+
+mqdss_parameters = {
+    'MQDSS-I': (4, 88, 88),
+    'MQDSS-III': (4, 128, 128),
+    'MQDSS-V': (4, 160, 160),
 }
 
 gemss_parameters = {
@@ -21,25 +28,28 @@ mayo_parameters = {
     'MAYO-Vb': (7, 3874, 157),
 }
 
-
-def security_direct_attack(scheme_parameters):
+theta=2
+def security_direct_attack(scheme_parameters, maxD):
     print(70 * '-')
     print(f' Scheme \t Security \t Algorithm \t Optimal parameters')
     print(70 * '-')
     for name in scheme_parameters:
         q, n, m = scheme_parameters[name]
         E = MQEstimator(q=q, n=n, m=m, w=2.81)
+        E.crossbred.max_D = maxD
         F = E.fastest_algorithm()
         alg_name = F.__class__.__name__
+        time= ngates(q=q, n=F.time_complexity(), theta=theta)
         if F.has_optimal_parameter():
-            print('{} \t {:.3f} \t {} \t {}'.format(name, float(log(F.time_complexity(),2)), alg_name, F.optimal_parameters()))
+            print('{} \t {:.3f} \t {} \t {}'.format(name, float(log(time,2)), alg_name, F.optimal_parameters()))
         else:
-            print('{} \t {:.3f} {} '.format(name, float(log(F.time_complexity(),2)), alg_name))
+            print('{} \t {:.3f} {} '.format(name, float(log(time,2)), alg_name))
     print(70 * '-')
     print('')
 
-security_direct_attack(rainbow_parameters)
-security_direct_attack(gemss_parameters)
-security_direct_attack(mayo_parameters)
+security_direct_attack(rainbow_parameters, 30)
+security_direct_attack(mqdss_parameters, 35)
+security_direct_attack(mayo_parameters, 45)
+security_direct_attack(gemss_parameters, 40)
 
 

@@ -26,8 +26,8 @@ class Bjorklund(BaseAlgorithm):
         sage: E
         Björklund et al.'s estimator for the MQ problem
     """
-    def __init__(self, n, m, nsolutions=1):
-        super().__init__(n=n, m=m, q=2)
+    def __init__(self, n, m, nsolutions=1, h=0):
+        super().__init__(n=n, m=m, q=2, h=h)
         self._nsolutions = nsolutions
         self._k = floor(log(nsolutions + 1, 2))
         self._time_complexity = None
@@ -113,6 +113,8 @@ class Bjorklund(BaseAlgorithm):
             else:
                 time_complexity = self._time_complexity = self._time_complexity_(self.λ())
 
+        h = self._h
+        time_complexity *= 2 ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -161,7 +163,8 @@ class Bjorklund(BaseAlgorithm):
             8.03225
         """
         n = self.nvariables_reduced()
-        return 2 ** (0.803225 * n)
+        h = self._h
+        return 2 ** h * 2 ** (0.803225 * n)
 
     @staticmethod
     def _T(n, m, λ):
