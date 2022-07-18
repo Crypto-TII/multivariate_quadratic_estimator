@@ -1,4 +1,42 @@
+# *****************************************************************************
+# Multivariate Quadratic (MQ) Estimator
+# Copyright (C) 2021-2022 Emanuele Bellini, Rusydi H. Makarim, Javier Verbel
+# Cryptography Research Centre, Technology Innovation Institute LLC
+#
+# This file is part of MQ Estimator
+#
+# MQ Estimator is free software: you can redistribute it and/or modify it under
+# the terms of the GNU General Public License as published by the Free Software
+# Foundation, either version 3 of the License, or (at your option) any later
+# version.
+#
+# MQ Estimator is distributed in the hope that it will be useful, but WITHOUT
+# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# MQ Estimator. If not, see <https://www.gnu.org/licenses/>.
+# *****************************************************************************
 
+
+"""
+Module to compute the time and memory complexity of the algorithms BooleanSolve and FXL
+
+The BooleanSolve and the FXL are algorithms to solve the MQ problem
+
+[BFS+11] Bardet, M., Faugère, J.-C., Salvy, B., and Spaenlehauer, P.-J. On the complexity of solving quadratic
+boolean systems. CoRR,abs/1112.6263, 2011.
+
+[YC04]  Courtois, N., and Klimov, A., and Patarin, J., and Shamir, A. Efficient  algorithms  for  solving overdefined
+systems of multivariate polynomial equations, In B. Preneel, editor,Advancesin Cryptology — EUROCRYPT 2000,
+pages 392–407, Berlin, Heidelberg, 2000. SpringerBerlin Heidelberg.
+
+For the space complexity of the variant las_vegas
+
+[Nie12] Niederhagen, R. Parallel Cryptanalysis. PhD thesis, Eindhoven University of Technology, 2012.
+http://polycephaly.org/thesis/index.shtml.30
+
+"""
 from sage.all import Integer
 from sage.arith.misc import binomial
 from sage.functions.log import log
