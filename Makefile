@@ -11,6 +11,7 @@ uninstall:
 	$(SAGE_BIN) -pip uninstall $(PACKAGE) -y
 
 install: build
+	$(SAGE_BIN) -pip install -r requirements.txt
 	$(SAGE_BIN) -pip install .
 
 test: install
