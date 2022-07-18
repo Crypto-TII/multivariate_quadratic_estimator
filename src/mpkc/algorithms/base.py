@@ -105,18 +105,15 @@ class BaseAlgorithm:
             sage: BaseAlgorithm(n=5, m=10).nvariables_reduced()
             5
             sage: BaseAlgorithm(n=25, m=20).nvariables_reduced()
-            19
+            20
         """
         if self._n_reduced is not None:
             return self._n_reduced
 
         n, m = self.nvariables(), self.npolynomials()
         if self.is_underdefined_system():
-            a = 1
             alpha = floor(n / m)
-            if m % alpha == 0:
-                a = 0
-            self._n_reduced = m - alpha + a
+            self._n_reduced = m - alpha + 1
         else:
             self._n_reduced = n
 

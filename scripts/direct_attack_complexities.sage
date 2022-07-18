@@ -68,9 +68,10 @@ def security_direct_attack(scheme_parameters, maxD):
     print(70 * '-')
     print('')
 
-security_direct_attack(rainbow_parameters, 30)
-security_direct_attack(mqdss_parameters, 35)
+
 security_direct_attack(mayo_parameters, 45)
+security_direct_attack(mqdss_parameters, 35)
+security_direct_attack(rainbow_parameters, 35)
 security_direct_attack(gemss_parameters, 40)
 
 

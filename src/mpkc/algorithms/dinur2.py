@@ -313,7 +313,7 @@ class DinurSecond(BaseAlgorithm):
             5
             sage: E = DinurSecond(n=12, m=10)
             sage: E.nvariables_reduced()
-            9
+            10
         """
         return super().nvariables_reduced()
 
@@ -329,7 +329,7 @@ class DinurSecond(BaseAlgorithm):
             10
             sage: E = DinurSecond(n=12, m=10)
             sage: E.npolynomials_reduced()
-            9
+            10
         """
         return super().npolynomials_reduced()
 

@@ -968,7 +968,7 @@ class Rainbow:
             sage: from mpkc.schemes import Rainbow
             sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
             sage: R_I.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 164
-            146
+            144
             sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
             sage: R_III.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 234
             221

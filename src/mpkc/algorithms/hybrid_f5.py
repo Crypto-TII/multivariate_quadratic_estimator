@@ -385,7 +385,7 @@ class HybridF5(BaseAlgorithm):
             5
             sage: E = HybridF5(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            9
+            10
         """
         return super().nvariables_reduced()
 

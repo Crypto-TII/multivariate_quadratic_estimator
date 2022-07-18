@@ -21,6 +21,7 @@
 
 from sage.all import Integer
 from sage.functions.log import log
+from sage.functions.other import binomial
 from sage.rings.all import QQ
 from sage.rings.infinity import Infinity
 from sage.rings.power_series_ring import PowerSeriesRing
@@ -172,7 +173,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.k()
-            5
+            7
         """
         if self._k is None:
             _ = self.time_complexity()
@@ -188,7 +189,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: E.D()
-            3
+            5
         """
         if self._D is None:
             _ = self.time_complexity()
@@ -287,9 +288,9 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.time_complexity(), 2))
-            20.3663736923649
+            19.56992234329735
             sage: float(log(E.time_complexity(k=4, D=6, d=4), 2))
-            29.775157881382952
+            29.77510134996699
 
         TESTS::
 
@@ -336,7 +337,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.memory_complexity(), 2))
-            8.027905996569885
+            19.380131266596905
             sage: float(log(E.memory_complexity(k=4, D=6, d=4), 2))
             12.892542816648552
 
@@ -376,7 +377,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: E = Crossbred(n=10, m=12, q=5)
             sage: float(log(E.tilde_o_time(), 2))
-            16.782447984412244
+            19.396813798959137
         """
         k, D, d = self.k(), self.D(), self.d()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
@@ -393,9 +394,12 @@ class Crossbred(BaseAlgorithm):
         q = self.order_of_the_field()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
         nl = self.ncols_in_linearization_step(k=k, d=d)
+        complexity_wiedemann = 3 * binomial(k + d, d) * binomial(k + 2, 2) * np ** 2
+        complexity_gaussian = np ** w
         complexity = Infinity
+
         if np > 1 and log(np, 2) > 1:
-            complexity = (np ** 2 * log(np, 2) * log(log(np, 2), 2)) + (m * q ** (n - k) * nl ** w)
+            complexity = min(complexity_gaussian, complexity_wiedemann) + (m * q ** (n - k) * nl ** w)
         return complexity
 
     def __repr__(self):
@@ -528,7 +532,7 @@ class Crossbred(BaseAlgorithm):
             5
             sage: E = Crossbred(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            9
+            10
         """
         return super().nvariables_reduced()
 
@@ -544,7 +548,7 @@ class Crossbred(BaseAlgorithm):
             10
             sage: E = Crossbred(q=256, n=12, m=10)
             sage: E.npolynomials_reduced()
-            9
+            10
         """
         return super().npolynomials_reduced()
 
@@ -557,7 +561,7 @@ class Crossbred(BaseAlgorithm):
             sage: from mpkc.algorithms import Crossbred
             sage: H = Crossbred(q=256, n=15, m=10)
             sage: H.optimal_parameters()
-            {'D': 7, 'd': 2, 'k': 7}
+            {'D': 8, 'd': 2, 'k': 8}
         """
         return super().optimal_parameters()
 

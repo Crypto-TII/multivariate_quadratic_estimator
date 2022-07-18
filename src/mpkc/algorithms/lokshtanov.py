@@ -327,7 +327,7 @@ class Lokshtanov(BaseAlgorithm):
             5
             sage: E = Lokshtanov(q=256, n=12, m=10)
             sage: E.nvariables_reduced()
-            9
+            10
         """
         return super().nvariables_reduced()
 
@@ -353,7 +353,7 @@ class Lokshtanov(BaseAlgorithm):
             sage: from mpkc.algorithms import Lokshtanov
             sage: H = Lokshtanov(q=256, n=15, m=10)
             sage: H.optimal_parameters()
-            {'δ': 1/9}
+            {'δ': 1/10}
         """
         return super().optimal_parameters()
 

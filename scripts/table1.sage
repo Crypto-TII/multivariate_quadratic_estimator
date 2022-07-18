@@ -69,7 +69,7 @@ print("Row 4 (Type II)")
 print(float(log(time, 2)), float(log(memory, 2)))
 
 #Row 5
-n = 28; m = 19; q = 2**8; w = 2.81; theta = 2; h = 0;
+n = 28; m = 19; q = 2**8; w = 2.81; theta = 2; h = 1;
 E = MQEstimator(n=n, m=m, q=q, w=w, h=h)
 time = E.hybrid_f5.time_complexity(k=1)
 time = ngates(q=q, n=time, theta=theta)
@@ -89,7 +89,7 @@ print("Row 6 (Type III)")
 print(float(log(time, 2)), float(log(memory, 2)))
 
 #Row 7
-n = 30; m = 20; q = 31; w = 2.81; theta=2; h=0;
+n = 30; m = 20; q = 31; w = 2.81; theta=2; h=2;
 E = MQEstimator(n=n, m=m, q=q, w=w, h=h)
 time = E.hybrid_f5.time_complexity(k=2)
 time = ngates(q=q, n=time, theta=theta)
