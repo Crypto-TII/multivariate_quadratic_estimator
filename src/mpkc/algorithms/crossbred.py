@@ -394,7 +394,7 @@ class Crossbred(BaseAlgorithm):
         q = self.order_of_the_field()
         np = self.ncols_in_preprocessing_step(k=k, D=D, d=d)
         nl = self.ncols_in_linearization_step(k=k, d=d)
-        complexity_wiedemann = 3 * binomial(k + d, d) * binomial(k + 2, 2) * np ** 2
+        complexity_wiedemann = 3 * binomial(k + d, d) * binomial(n + 2, 2) * np ** 2
         complexity_gaussian = np ** w
         complexity = Infinity
 
