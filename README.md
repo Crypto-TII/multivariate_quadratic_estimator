@@ -1,7 +1,5 @@
 # Multivariate Quadratic (MQ) Complexity Estimator
 
----
-
 This repository is a SageMath package providing functions to estimate to complexity of MQ problem. The result of this
 estimator is published in the following paper
 
@@ -14,8 +12,6 @@ An eprint version is available as
 
 
 ## Quick Start
-
----
 
 The easiest way to install the MQ estimator is by using the configured docker image under the folder `docker/`. You
 need to first download [Docker Desktop](https://www.docker.com/get-started/) (see
@@ -33,8 +29,6 @@ This will install the MQ estimator inside the Docker image.
 
 
 ## Local Installation
-
----
 
 If you already have sage installed in your local machine, make sure that the `sage` binary is in your `PATH` environment
 variable. To do so, run the following command
@@ -66,24 +60,19 @@ by replacing `/home/user/sage` with the path where sage binary is located. After
 
 ## Directory Structures
 
----
-
 - `docker/` -- Dockerfile to generate the docker image
 - `docs/` -- Sphinx-generated documentation
 - `scripts/` -- scripts to generate the tables in the paper (requires the installation of the estimator)
 - `src/mpkc/` -- source codes of the estimator
 
-## Bugs and Contributions
 
----
+## Bugs and Contributions
 
 Please reports bugs or new ideas/features through 
 [GitHub issue tracker](https://github.com/Crypto-TII/multivariate_quadratic_estimator/issues). 
 
 
 ## Contributors
-
----
 
 - Emanuele Bellini - emanuele.bellini@tii.ae
 - Rusydi H. Makarim - rusydi.makarim@tii.ae
@@ -92,14 +81,10 @@ Please reports bugs or new ideas/features through
 
 ## License
 
----
-
 This estimator is licensed under the [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html) license.
 
 
 ## Estimators for Other Hard Problems
-
----
 
 - Lattice Estimator -- https://github.com/malb/lattice-estimator
 - Syndrome Decoding Estimator -- https://github.com/Crypto-TII/syndrome_decoding_estimator
