@@ -21,11 +21,7 @@ We configure the Docker image with a pre-installed sage (v9.5). To build and run
 
     $ make rundocker
 
-Once completed, you will be prompted the shell inside the docker image. From there, simply run
-
-    $ make
-
-This will install the MQ estimator inside the Docker image.
+Once completed, you will be able to use the estimator inside the sage shell.
 
 
 ## Local Installation

@@ -1,8 +1,4 @@
 FROM sagemath/sagemath:9.5
-
-RUN sudo apt-get update \
-    && sudo apt-get install -y make \
-    && sudo rm -r /var/lib/apt/lists/*
-
-WORKDIR "/home/sage/mq_estimator"
-CMD ["/bin/bash"]
+RUN sage -pip install prettytable
+WORKDIR "/home/sage/mq_estimator/src"
+CMD ["sage"]
