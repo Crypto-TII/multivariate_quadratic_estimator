@@ -44,7 +44,7 @@ by replacing `/home/user/sage` with the path where sage binary is located. After
 
     sage: from mpkc import MQEstimator
     sage: E = MQEstimator(q=31, m=10, n=15)
-    sage: E.table()
+    sage: print(E.table())
     +------------------+---------+--------+------------------------------+
     |    algorithm     |   time  | memory |          parameters          |
     +------------------+---------+--------+------------------------------+
