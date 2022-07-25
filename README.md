@@ -17,7 +17,8 @@ The easiest way to install the MQ estimator is by using the configured docker im
 need to first download [Docker Desktop](https://www.docker.com/get-started/) (see
 https://docs.docker.com/get-started/overview/ to get an overview of what docker is).
 
-We configure the Docker image with a pre-installed sage (v9.5). To build and run the docker image, simply execute
+We configure the Docker image with a pre-installed sage (v9.5). To build and run the docker image, simply start the Docker program and then execute in 
+your local terminal the following command:
 
     $ make rundocker
 
