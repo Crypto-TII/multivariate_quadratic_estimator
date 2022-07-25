@@ -61,8 +61,8 @@ class DinurFirst(BaseAlgorithm):
 
     @optimal_parameter
     def λ(self):
-        """
-        Return the optimal λ
+        r"""
+        Return the optimal `\lambda`
 
         EXAMPLES::
 
@@ -77,8 +77,8 @@ class DinurFirst(BaseAlgorithm):
 
     @optimal_parameter
     def κ(self):
-        """
-        Return the optimal κ
+        r"""
+        Return the optimal `\kappa`
 
         EXAMPLES::
 
@@ -92,15 +92,15 @@ class DinurFirst(BaseAlgorithm):
         return self._kappa
 
     def time_complexity(self, **kwargs):
-        """
+        r"""
         Return the time complexity of Dinur's first algorithm
 
         INPUT:
 
-        - ``κ`` -- the parameter `κ` (kappa)
-        - ``λ`` -- the parameter `λ`
+        - ``κ`` -- the parameter `\kappa` (kappa)
+        - ``λ`` -- the parameter `\lambda`
 
-        If `κ` and `λ` are specified, the function returns the time complexity w.r.t. the given parameter
+        If `\kappa` and `\lambda` are specified, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -189,36 +189,36 @@ class DinurFirst(BaseAlgorithm):
         self._kappa = optimal_kappa
         self._lambda = optimal_lambda
 
-    def tilde_o_time(self):
-        """
-        Return the Ō time complexity of dinur's first algorithm
-
-        EXAMPLES::
-
-            sage: from mpkc.algorithms import DinurFirst
-            sage: E = DinurFirst(n=10, m=12)
-            sage: float(log(E.tilde_o_time(), 2))
-            6.943
-        """
-        n = self.nvariables_reduced()
-        h = self._h
-        return 2 ** h * 2 ** (0.6943 * n)
-
-    def _T(self, n, n1, w, lambda_):
-        t = 48 * n + 1
-        n2 = floor(n1 - lambda_ * n)
-        l = n2 + 2
-        m = self.npolynomials_reduced()
-        k = self._k
-
-        if n2 <= 0:
-            return n * sum_of_binomial_coefficients(n - n1, w) * 2 ** n1
-        else:
-            temp1 = self._T(n, n2, n2 + 4, lambda_)
-            temp2 = n * sum_of_binomial_coefficients(n - n1, w) * 2 ** (n1 - n2)
-            temp3 = n * sum_of_binomial_coefficients(n - n2, n2 + 4)
-            temp4 = l * (m + k + 2) * sum_of_binomial_coefficients(n, 2)
-            return t * (temp1 + temp2 + temp3 + temp4)
+    # def tilde_o_time(self):
+    #     """
+    #     Return the `Ō` time complexity of Dinur's first algorithm
+    #
+    #     EXAMPLES::
+    #
+    #         sage: from mpkc.algorithms import DinurFirst
+    #         sage: E = DinurFirst(n=10, m=12)
+    #         sage: float(log(E.tilde_o_time(), 2))
+    #         6.943
+    #     """
+    #     n = self.nvariables_reduced()
+    #     h = self._h
+    #     return 2 ** h * 2 ** (0.6943 * n)
+    #
+    # def _T(self, n, n1, w, lambda_):
+    #     t = 48 * n + 1
+    #     n2 = floor(n1 - lambda_ * n)
+    #     l = n2 + 2
+    #     m = self.npolynomials_reduced()
+    #     k = self._k
+    #
+    #     if n2 <= 0:
+    #         return n * sum_of_binomial_coefficients(n - n1, w) * 2 ** n1
+    #     else:
+    #         temp1 = self._T(n, n2, n2 + 4, lambda_)
+    #         temp2 = n * sum_of_binomial_coefficients(n - n1, w) * 2 ** (n1 - n2)
+    #         temp3 = n * sum_of_binomial_coefficients(n - n2, n2 + 4)
+    #         temp4 = l * (m + k + 2) * sum_of_binomial_coefficients(n, 2)
+    #         return t * (temp1 + temp2 + temp3 + temp4)
 
     def __repr__(self):
         return f"Dinur's first estimator for the MQ problem"

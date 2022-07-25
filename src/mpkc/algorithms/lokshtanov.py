@@ -61,8 +61,8 @@ class Lokshtanov(BaseAlgorithm):
 
     @optimal_parameter
     def δ(self):
-        """
-        Return the optimal δ for Lokshtanov et al.'s algorithm
+        r"""
+        Return the optimal `\delta` for Lokshtanov et al.'s algorithm
 
         EXAMPLES::
 
@@ -85,14 +85,14 @@ class Lokshtanov(BaseAlgorithm):
         return optimal_δ
 
     def time_complexity(self, **kwargs):
-        """
+        r"""
         Return the time complexity of lokshtanov et al.'s algorithm
 
         INPUT:
 
-        - ``δ`` -- the parameter `δ`
+        - ``δ`` -- the parameter `\delta`
 
-        If `δ` is specified, the function returns the time complexity w.r.t. the given parameter
+        If `\delta` is specified, the function returns the time complexity w.r.t. the given parameter
 
         EXAMPLES::
 
@@ -164,8 +164,8 @@ class Lokshtanov(BaseAlgorithm):
         return self._memory_complexity
 
     def tilde_o_time(self):
-        """
-        Return the Ō time complexity of Lokshtanov et al.'s algorithm
+        r"""
+        Return the `\widetilde{O}` time complexity of Lokshtanov et al.'s algorithm
 
         EXAMPLES::
 

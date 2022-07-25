@@ -66,7 +66,7 @@ html_theme = 'alabaster'
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
+html_static_path = [] # ['_static']
 
 # -- Options copied from Sagemath conf.py file -------------------------------
 
@@ -80,17 +80,20 @@ if os.environ.get('SAGE_DOC_MATHJAX', 'no') != 'no' and os.environ.get('SAGE_DOC
     extensions.append('sphinx.ext.mathjax')
     mathjax_path = 'MathJax.js?config=TeX-AMS_HTML-full,../mathjax_sage.js'
 
-    from sage.misc.latex_macros import sage_mathjax_macros
-    html_theme_options['mathjax_macros'] = sage_mathjax_macros()
+    # from sage.misc.latex_macros import sage_mathjax_macros
+    # html_theme_options['mathjax_macros'] = sage_mathjax_macros()
 
-    mathjax_relative = os.path.basename(MATHJAX_DIR)
+    # mathjax_relative = os.path.basename(MATHJAX_DIR)
 
     # It would be really nice if sphinx would copy the entire mathjax directory,
     # (so we could have a _static/mathjax directory), rather than the contents of the directory
 
-    html_static_path.append(MATHJAX_DIR)
-    exclude_patterns += ['**/'+os.path.join(mathjax_relative, i) for i in ('docs', 'README*', 'test',
-                                                                           'unpacked', 'LICENSE')]
+    # html_static_path.append(MATHJAX_DIR)
+    # exclude_patterns += ['**/'+os.path.join(mathjax_relative, i) for i in ('docs', 'README*', 'test',
+    #                                                                       'unpacked', 'LICENSE')]
+    from sage.env import SAGE_LOCAL, SAGE_SHARE
+    html_static_path.append(SAGE_LOCAL + "/lib/mathjax")  # conda
+    html_static_path.append(SAGE_SHARE + "/mathjax")  # sage distribution
 else:
     extensions.append('sphinx.ext.imgmath')
 

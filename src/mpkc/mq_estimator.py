@@ -172,7 +172,7 @@ class MQEstimator(object):
         INPUT:
 
         - ``use_tilde_o_time`` -- use Ō time complexity (default: False)
-         - ``precision`` -- number of decimal places in the complexities exponent
+        - ``precision`` -- number of decimal places in the complexities exponent
 
         EXAMPLES::
 

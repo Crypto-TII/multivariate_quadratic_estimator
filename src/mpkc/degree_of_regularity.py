@@ -88,7 +88,7 @@ def regular_system(n, degrees):
 
 
 def semi_regular_system(n, degrees, q=None):
-    """
+    r"""
     Return the degree of regularity for semi-regular system
 
     The degree of regularity of a semi-regular system $(f_1, \ldots, f_m)$ of respective degrees $d_1, \ldots, d_m$ is
