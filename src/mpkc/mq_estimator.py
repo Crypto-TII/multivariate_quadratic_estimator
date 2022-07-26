@@ -155,7 +155,7 @@ class MQEstimator(object):
             9
             sage: E1 = MQEstimator(n=183, m=12, q=4)
             sage: E1.nalgorithms()
-            8
+            9
 
         TESTS::
 
@@ -191,7 +191,7 @@ class MQEstimator(object):
             |    Bjorklund     | 42.451 | 15.316 |           λ: 1/5          |
             |    Lokshtanov    | 67.123 | 16.105 |          δ: 1/15          |
             | BooleanSolveFXL  | 20.339 | 5.825  | k: 14, variant: las_vegas |
-            |    Crossbred     | 17.93  |  8.98  |      D: 3, k: 7, d: 1     |
+            |    Crossbred     | 17.672 | 16.785 |      D: 4, k: 9, d: 1     |
             +------------------+--------+--------+---------------------------+
 
 
@@ -207,7 +207,7 @@ class MQEstimator(object):
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.94  | 16.045 |      D: 4, k: 6, d: 1     |
+            |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
 
             sage: from mpkc.algorithms import F5, HybridF5
@@ -219,7 +219,7 @@ class MQEstimator(object):
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.94  | 16.045 |      D: 4, k: 6, d: 1     |
+            |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
         """
         table = PrettyTable()
