@@ -408,8 +408,8 @@ class GeMSS:
         X, v = P.gens()[0], P.gens()[1:]
         g = self.extension_field.gen()
 
-        values = {X: sum([g ** i * x[i] for i in range(self.nvariables())])}
         n = self.extension_field.degree()
+        values = {X: sum([g ** i * x[i] for i in range(n)])}
         values.update({v[i]: x[n + i] for i in range(self.nvinegar_vars)})
 
         F_subs = F.subs(values).coefficients()[0]
