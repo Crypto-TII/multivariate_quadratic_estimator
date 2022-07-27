@@ -21,3 +21,4 @@
 
 from .gemss import GeMSS
 from .rainbow import Rainbow
+from .uov import UOV
