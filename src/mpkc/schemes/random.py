@@ -1,7 +1,7 @@
 from sage.rings.finite_rings.all import FiniteField
 from sage.rings.polynomial.polynomial_ring_constructor import PolynomialRing
 from sage.structure.sequence import Sequence
-from ..series.nmonomial import NMonomialSeries
+from ..utils import nmonomials_up_to_degree
 
 
 def random_posso(q, n, m, d):
@@ -30,7 +30,7 @@ def random_posso(q, n, m, d):
         True
     """
     R = PolynomialRing(FiniteField(q), n, 'x', order="degrevlex")
-    max_nterms = NMonomialSeries(q=q, n=n).nmonomials_up_to_degree(d)
+    max_nterms = nmonomials_up_to_degree(q=q, n=n, d=d)
     F = Sequence([R.random_element(degree=d, terms=max_nterms) for _ in range(m)])
 
     if m >= n:
