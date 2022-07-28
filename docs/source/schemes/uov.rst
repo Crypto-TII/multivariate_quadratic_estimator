@@ -1,4 +1,4 @@
-Uonbalanced Oil-Vinegar (UOV)
+Unbalanced Oil-Vinegar (UOV)
 =============================
 
 .. automodule:: mpkc.schemes.uov
