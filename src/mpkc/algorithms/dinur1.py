@@ -190,8 +190,8 @@ class DinurFirst(BaseAlgorithm):
         self._lambda = optimal_lambda
 
     def tilde_o_time(self):
-        """
-        Return the `Ō` time complexity of Dinur's first algorithm
+        r"""
+        Return the `\widetilde{O}` time complexity of Dinur's first algorithm
 
         EXAMPLES::
 
