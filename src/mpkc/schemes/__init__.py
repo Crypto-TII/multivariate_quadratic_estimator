@@ -21,4 +21,5 @@
 
 from .gemss import GeMSS
 from .rainbow import Rainbow
+from .random import random_posso, random_mq
 from .uov import UOV
