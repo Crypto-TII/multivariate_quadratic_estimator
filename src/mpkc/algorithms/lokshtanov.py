@@ -185,7 +185,7 @@ class Lokshtanov(BaseAlgorithm):
             time = q ** (0.9975 * n)
         else:
             d = GF(q).degree()
-            time = q ** n * (log(q, 2) / (2 * e * d))
+            time = q ** n * (log(q, 2) / (2 * e * d)) ** (-d * n)
 
         h = self._h
         return 2 ** h * time

@@ -6,7 +6,7 @@ from ..utils import nmonomials_up_to_degree
 
 def random_posso(q, n, m, d):
     """
-    Return a random instance of PoSSo (Polynomial System Solving) problem
+    Return a random instance of PoSSo (Polynomial System Solving) problem with a random solution
 
     INPUT:
 
@@ -46,7 +46,7 @@ def random_posso(q, n, m, d):
 
 def random_mq(q, n, m):
     """
-    Return a random instance of random MQ problem
+    Return a random instance of random MQ problem with a random solution
 
     INPUT:
 
