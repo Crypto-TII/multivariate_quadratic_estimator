@@ -174,12 +174,12 @@ class DinurFirst(BaseAlgorithm):
         optimal_kappa = None
         optimal_lambda = None
 
-        for n1 in range(1, min(m + k, (n - 1) // 3)):
+        for n1 in range(1, min(m + k, (n - 1) // 3) + 1):
             kappa = n1 / (n - 1)
             for n2 in range(1, n1):
                 lambda_ = (n1 - n2) / (n - 1)
-                n1 = floor((n - 1) * (1 - kappa))
-                w = floor((n - 1) * kappa)
+                w = floor((n - 1) * (1 - kappa))
+                n1 = floor((n - 1) * kappa)
                 complexity = self._T(n - 1, n1, w, lambda_)
                 if complexity < min_complexity:
                     min_complexity = complexity
@@ -379,7 +379,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: H = DinurFirst(n=15, m=15)
             sage: H.optimal_parameters()
-            {'κ': 3/14, 'λ': 9/14}
+            {'κ': 1/7, 'λ': 1/14}
         """
         return super().optimal_parameters()
 
