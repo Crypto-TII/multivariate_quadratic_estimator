@@ -31,7 +31,9 @@ Schemes
 .. toctree::
 
    schemes/rainbow
+   schemes/random
    schemes/gemss
+   schemes/uov
 
 
 Series
