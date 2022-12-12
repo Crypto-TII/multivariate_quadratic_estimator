@@ -160,9 +160,9 @@ class F5(BaseAlgorithm):
             raise ValueError("regularity assumption is valid only on square or underdefined system")
 
         n, m = self.nvariables_reduced(), self.npolynomials_reduced()
+        q = self.order_of_the_field()
         w = self.linear_algebra_constant()
-        degrees = self.degree_of_polynomials()
-        dreg = degree_of_regularity.regular_system(n, degrees)
+        dreg = degree_of_regularity.quadratic_system(n, m, q=q)
         h = self._h
         return 2 ** h * (m * binomial(n + dreg - 1, dreg)) ** w
 

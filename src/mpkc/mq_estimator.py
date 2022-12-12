@@ -183,7 +183,7 @@ class MQEstimator(object):
             +------------------+--------+--------+---------------------------+
             |    algorithm     |  time  | memory |         parameters        |
             +------------------+--------+--------+---------------------------+
-            |        F5        | 62.045 | 23.158 |                           |
+            |        F5        | 30.972 | 23.158 |                           |
             |     HybridF5     | 17.169 | 3.906  |           k: 14           |
             |    DinurFirst    | 32.111 | 21.493 |      λ: 1/14, κ: 1/7      |
             |   DinurSecond    | 20.349 | 15.801 |           n1: 2           |
@@ -202,13 +202,14 @@ class MQEstimator(object):
             +------------------+--------+--------+---------------------------+
             |    algorithm     |  time  | memory |         parameters        |
             +------------------+--------+--------+---------------------------+
-            |        F5        | 62.045 | 30.484 |                           |
+            |        F5        | 38.298 | 30.484 |                           |
             |     HybridF5     | 24.634 |  8.55  |           k: 10           |
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
             |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
+
 
             sage: from mpkc.algorithms import F5, HybridF5
             sage: E = MQEstimator(n=15, m=15, q=3, excluded_algorithms=[F5, HybridF5])  # tests excluded algorithms
