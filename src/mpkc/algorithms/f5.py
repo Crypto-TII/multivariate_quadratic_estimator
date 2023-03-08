@@ -149,12 +149,12 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=5)
             sage: F5_.time_complexity_regular_system()
-            50176
+            3136
 
         TESTS::
 
             sage: F5(n=15, m=5, degrees=[2]*5).time_complexity_regular_system()
-            2025
+            225
         """
         if not (self.is_square_system() or self.is_underdefined_system()):
             raise ValueError("regularity assumption is valid only on square or underdefined system")

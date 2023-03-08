@@ -66,7 +66,7 @@ class Crossbred(BaseAlgorithm):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
-        self._max_D = min(n - 1, max_D)
+        self._max_D = min(max_D, min(n, m))
         super().__init__(n=n, m=m, q=q, w=w, h=h)
         self._k = None
         self._D = None
