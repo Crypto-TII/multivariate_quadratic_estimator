@@ -395,7 +395,7 @@ class GeMSS:
             sage: hfev_vars = HFEv_F.variables()
             sage: E = G.extension_field
             sage: n = E.degree()
-            sage: e = E.fetch_int(ZZ(values[:n], base=2))
+            sage: e = E.from_integer(ZZ(values[:n], base=2))
             sage: Y = HFEv_F.subs(dict(zip(hfev_vars, [e] + values[n:]))).constant_coefficient()._vector_().list()
             sage: y == Y
             True
@@ -637,7 +637,7 @@ class GeMSS:
         while len(roots) == 0:
             appended_msg = list(msg) + self.random_vector(self.nminus)
             y = vector(self.base_field, appended_msg)
-            Y = E.fetch_int(ZZ((Si * y + si).list(), base=2))
+            Y = E.from_integer(ZZ((Si * y + si).list(), base=2))
             v = self.random_vector(self.nvinegar_vars)
             Fs = F.subs(dict(zip(vinegar_vars, v))).univariate_polynomial() - Y
             roots = Fs.roots(multiplicities=False)

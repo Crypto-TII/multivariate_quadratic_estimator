@@ -6,7 +6,7 @@ all: install
 
 build:
 	$(SAGE_BIN) -pip install build
-	$(SAGE_BIN) -python -m build
+	$(SAGE_BIN) -python -m pip install .
 
 builddocker:
 	docker build -f docker/Dockerfile -t $(DOCKER_IMG_NAME) docker/

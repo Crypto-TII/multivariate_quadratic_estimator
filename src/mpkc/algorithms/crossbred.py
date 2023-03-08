@@ -62,12 +62,12 @@ class Crossbred(BaseAlgorithm):
         sage: E
         Crossbred estimator for the MQ problem
     """
-    def __init__(self, n, m, q, w=2, max_D=10, h=0):
+    def __init__(self, n, m, q, w=2, max_D=30, h=0):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
+        self._max_D = min(max_D, min(n, m))
         super().__init__(n=n, m=m, q=q, w=w, h=h)
-        self._max_D = max_D
         self._k = None
         self._D = None
         self._d = None
