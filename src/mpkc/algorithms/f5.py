@@ -163,8 +163,9 @@ class F5(BaseAlgorithm):
         w = self.linear_algebra_constant()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.regular_system(n, degrees)
+        print("d_reg = %d", dreg);
         h = self._h
-        return 2 ** h * (m * binomial(n + dreg - 1, dreg)) ** w
+        return 2 ** h *  binomial(n + dreg - 1, dreg) ** w
 
     def time_complexity_semi_regular_system(self):
         """
