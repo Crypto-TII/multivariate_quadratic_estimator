@@ -53,8 +53,7 @@ References
 **C**
 
 .. [BCCCNSY10]  \Charles Bouillaguet, Hsieh-Chung Chen, Chen-Mou Cheng, Tung Chou, Ruben Niederhagen, Adi Shamir, and Bo-Yin Yang.
-                *Fast Exhaustive Search for Polynomial Systems in F_2*
-                https://www.iacr.org/archive/ches2010/62250195/62250195.pdf
+                *Fast Exhaustive Search for Polynomial Systems in F_2* https://www.iacr.org/archive/ches2010/62250195/62250195.pdf
 
 .. _ref-D:
 
@@ -102,7 +101,6 @@ References
 
 .. [Dua20] \João Diogo Duarte.
             *On the Complexity of the Crossbred Algorithm*
-            https://eprint.iacr.org/2020/1058.
 
 .. _ref-K:
 
