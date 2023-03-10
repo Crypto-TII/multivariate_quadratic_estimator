@@ -304,6 +304,7 @@ class Crossbred(BaseAlgorithm):
         d = kwargs.get('d', None)
 
         h = self._h
+        q = self.order_of_the_field()
         if all(var is not None for var in (k, D, d)):
             return q ** h * self._time_complexity_(k, D, d)
 

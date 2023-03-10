@@ -151,6 +151,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             time_complexity = self._time_complexity
 
         h = self._h
+        q = self.order_of_the_field()
         time_complexity *= q ** h
         return time_complexity
 

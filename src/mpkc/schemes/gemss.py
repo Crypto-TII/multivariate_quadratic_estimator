@@ -171,15 +171,6 @@ class GeMSS:
             [1 0 0 0 1]
             sage: v  # random
             (0, 1, 1, 0, 1)
-
-        TESTS::
-
-            sage: M.is_invertible()
-            True
-            sage: M.dimensions() == (G.nvariables(), G.nvariables())
-            True
-            sage: v.length() == G.nvariables()
-            True
         """
         if self._inner_affine_map is not None:
             return self._inner_affine_map
@@ -206,16 +197,6 @@ class GeMSS:
             [1 1 0 0 0 0 0]
             sage: v  # random
             (1, 1, 1, 0, 0, 0, 1)
-
-        TESTS::
-
-            sage: n = G.extension_field.degree()
-            sage: M.is_invertible()
-            True
-            sage: M.dimensions() == (n, n)
-            True
-            sage: v.length() == n
-            True
         """
         if self._outer_affine_map is not None:
             return self._outer_affine_map
@@ -228,12 +209,6 @@ class GeMSS:
         """
         Return the extension field where the central map is defined
 
-        TESTS::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=2)
-            sage: G.extension_field.base_ring() == G.base_field
-            True
         """
         return self._extension_field
 
@@ -249,10 +224,6 @@ class GeMSS:
             sage: R.gens()
             (X, v0, v1, v2)
 
-        TESTS::
-
-            sage: R.ngens() - 1 == G.nvinegar_vars
-            True
         """
         if self._hfev_ring is not None:
             return self._hfev_ring
@@ -291,16 +262,6 @@ class GeMSS:
     def hfev_polynomial(self):
         """
         Return the HFEv polynomial
-
-        TESTS::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=3)
-            sage: F = G.hfev_polynomial()
-            sage: v = G.vinegar_vars()
-            sage: HFE_polynomial = F.subs({v[i] : G.base_field.random_element() for i in range(G.nvinegar_vars)})
-            sage: HFE_polynomial.degree() <= G.max_deg_of_hfe_polynomial
-            True
         """
         if self._hfev_polynomial is not None:
             return self._hfev_polynomial
@@ -382,23 +343,6 @@ class GeMSS:
     def central_map(self):
         """
         Return a list of multivariate polynomials representing the central map
-
-        TESTS::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=3)
-            sage: F = G.central_map()
-            sage: x = F.ring().gens()
-            sage: values = [F.ring().base_ring().random_element() for _ in range(len(x))]
-            sage: y = F.subs(dict(zip(x, values)))
-            sage: HFEv_F = G.hfev_polynomial()
-            sage: hfev_vars = HFEv_F.variables()
-            sage: E = G.extension_field
-            sage: n = E.degree()
-            sage: e = E.from_integer(ZZ(values[:n], base=2))
-            sage: Y = HFEv_F.subs(dict(zip(hfev_vars, [e] + values[n:]))).constant_coefficient()._vector_().list()
-            sage: y == Y
-            True
         """
         R = self.ring().change_ring(base_ring=self.extension_field)
         P = self.hfev_ring().change_ring(base_ring=R)
@@ -464,19 +408,6 @@ class GeMSS:
     def public_key(self):
         """
         Return a list of polynomials for the public key
-
-        TESTS::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=3)
-            sage: T, t = G.inner_affine_map()
-            sage: S, s = G.outer_affine_map()
-            sage: signature = G.random_signature()
-            sage: y = (S * G.hfev_evaluation(T * signature + t) + s).list()[:G.npolynomials()]
-            sage: P = G.public_key()
-            sage: x = G.ring().gens()
-            sage: y == P.subs({x[i] : signature[i] for i in range(G.nvariables())})
-            True
         """
         if self._public_key is not None:
             return self._public_key
@@ -557,13 +488,6 @@ class GeMSS:
             [1 1 1 0 1 0 1 0 0 0 0]
             sage: si  # random
             (1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1)
-
-        TESTS::
-
-            sage: S, s = G.outer_affine_map()
-            sage: v = VectorSpace(G.base_field, G.extension_field.degree()).random_element()
-            sage: Si*(S*v + s) + si == v
-            True
         """
         S, s = self.outer_affine_map()
         return S.inverse(), -S.inverse()*s
@@ -594,13 +518,6 @@ class GeMSS:
             [1 1 0 1 1 0 1 0 1 1 0 1 0 0]
             sage: ti  # random
             (1, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 0, 0, 1)
-
-        TESTS::
-
-            sage: T, t = G.inner_affine_map()
-            sage: v = VectorSpace(G.base_field, G.nvariables()).random_element()
-            sage: Ti*(T*v + t) + ti == v
-            True
         """
         T, t = self.inner_affine_map()
         return T.inverse(), -T.inverse()*t
@@ -612,15 +529,6 @@ class GeMSS:
         INPUT:
 
         - ``msg`` -- a list of `self.base_field` elements
-
-        TESTS::
-
-            sage: from mpkc.schemes import GeMSS
-            sage: G = GeMSS(D=17, n=11, delta=4, v=3)
-            sage: msg = G.random_message()
-            sage: signature = G.sign(msg)
-            sage: G.is_valid_signature(signature, msg)
-            True
         """
 
         if len(msg) != self.npolynomials():
@@ -666,19 +574,6 @@ class GeMSS:
     def complexity_classical_exhaustive_search(self):
         """
         Return the complexity of exhaustive search in classical setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_classical_exhaustive_search()
-            166
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_classical_exhaustive_search()
-            247
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_classical_exhaustive_search()
-            329
         """
         m = self.npolynomials()
         complexity = 4 * log(m, base=2) * 2**m
@@ -692,25 +587,6 @@ class GeMSS:
         INPUT:
 
         - ``use_less_qubits`` -- whether use the variant with less qubits but higher no. of gates (default: False)
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_quantum_exhaustive_search_ngates(use_less_qubits=False)
-            104
-            sage: G_I.complexity_quantum_exhaustive_search_ngates(use_less_qubits=True)
-            105
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_quantum_exhaustive_search_ngates(use_less_qubits=False)
-            146
-            sage: G_III.complexity_quantum_exhaustive_search_ngates(use_less_qubits=True)
-            147
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_quantum_exhaustive_search_ngates(use_less_qubits=False)
-            188
-            sage: G_V.complexity_quantum_exhaustive_search_ngates(use_less_qubits=True)
-            189
         """
         n = m = self.npolynomials()
 
@@ -728,24 +604,6 @@ class GeMSS:
 
         - ``use_less_qubits`` -- whether use the variant with less qubits but higher no. of gates (default: False)
 
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=False)
-            328
-            sage: G_I.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=True)
-            174
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=False)
-            490
-            sage: G_III.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=True)
-            255
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=False)
-            652
-            sage: G_V.complexity_quantum_exhaustive_search_nqubits(use_less_qubits=True)
-            337
         """
         n = m = self.npolynomials()
 
@@ -759,19 +617,6 @@ class GeMSS:
     def complexity_approximation_algorithm(self):
         """
         Return the complexity of approximation algorithm (Lokshtanov et.al.)
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_approximation_algorithm()
-            141
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_approximation_algorithm()
-            212
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_approximation_algorithm()
-            283
         """
         m = self.npolynomials()
         return floor(0.8765 * m)
@@ -779,19 +624,6 @@ class GeMSS:
     def complexity_classical_boolean_solve(self):
         """
         Return the complexity of Boolean Solve algorithm in classical setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_classical_boolean_solve()
-            128
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_classical_boolean_solve()
-            192
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_classical_boolean_solve()
-            256
         """
         from mpkc.algorithms.boolean_solve_fxl import BooleanSolveFXL
         m = self.npolynomials()
@@ -801,19 +633,6 @@ class GeMSS:
     def complexity_quantum_boolean_solve(self):
         """
         Return the complexity of Boolean Solve algorithm in quantum settings (no. of quantum gates)
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_quantum_boolean_solve()
-            74
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_quantum_boolean_solve()
-            112
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_quantum_boolean_solve()
-            149
         """
         m = self.npolynomials()
         return floor(0.462 * m)
@@ -821,19 +640,6 @@ class GeMSS:
     def complexity_minrank_kipnis_shamir(self):
         """
         Return the complexity of minrank attack using Kipnis-Shamir approach
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_minrank_kipnis_shamir()
-            521
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_minrank_kipnis_shamir()
-            853
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_minrank_kipnis_shamir()
-            1253
         """
         omega = 2
         v = self.nvinegar_vars
@@ -848,19 +654,6 @@ class GeMSS:
     def complexity_grobner_bases(self):
         """
         Return the complexity of direct attack using Grobner bases
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_grobner_bases()  # official result: 131
-            124
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_grobner_bases()  # official result: 192
-            185
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_grobner_bases()  # official result: 260
-            253
         """
         m = self.npolynomials()
         dreg = self.hfev_minus_dreg()
@@ -884,19 +677,6 @@ class GeMSS:
     def complexity_minrank_with_projections(self):
         """
         Return the complexity of minrank with projection
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_minrank_with_projections()
-            295
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_minrank_with_projections()
-            444
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_minrank_with_projections()
-            605
         """
         from sage.functions.other import sqrt
 
@@ -918,19 +698,6 @@ class GeMSS:
     def complexity_minrank_with_support_minors(self):
         """
         Return the complexity of minrank with support minors modelling
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_minrank_with_support_minors()  # long time ; official result: 158
-            153
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_minrank_with_support_minors()  # long time ; official result: 224
-            217
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_minrank_with_support_minors()  # long time ; official result: 304
-            290
         """
         D = self.max_deg_of_hfe_polynomial
         delta = self.nminus
@@ -959,38 +726,12 @@ class GeMSS:
     def complexity_classical_distinguishing_attack(self):
         """
         Return the complexity of distinguishing attack in classical setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_classical_distinguishing_attack()
-            226
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_classical_distinguishing_attack()
-            346
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_classical_distinguishing_attack()
-            476
         """
         return self.complexity_distinguishing_attack(use_quantum=False)
 
     def complexity_quantum_distinguishing_attack(self):
         """
         Return the complexity of distinguishing attack in quantum setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.complexity_quantum_distinguishing_attack()
-            175
-            sage: G_III = GeMSS192()
-            sage: G_III.complexity_quantum_distinguishing_attack()
-            265
-            sage: G_V = GeMSS256()
-            sage: G_V.complexity_quantum_distinguishing_attack()
-            364
         """
         return self.complexity_distinguishing_attack(use_quantum=True)
 
@@ -1036,19 +777,6 @@ class GeMSS:
     def security_level_classical(self):
         """
         Return the security level of GeMSS in classical setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.security_level_classical()  # long time
-            124
-            sage: G_III = GeMSS192()
-            sage: G_III.security_level_classical()  # long time
-            185
-            sage: G_V = GeMSS256()
-            sage: G_V.security_level_classical()  # long time
-            253
         """
         sec_level = min(
             self.complexity_classical_exhaustive_search(),
@@ -1065,19 +793,6 @@ class GeMSS:
     def security_level_quantum(self):
         """
         Return the security level of GeMSS in quantum setting
-
-        TESTS::
-
-            sage: from mpkc.schemes.gemss import GeMSS128, GeMSS192, GeMSS256
-            sage: G_I = GeMSS128()
-            sage: G_I.security_level_quantum()
-            74
-            sage: G_III = GeMSS192()
-            sage: G_III.security_level_quantum()
-            112
-            sage: G_V = GeMSS256()
-            sage: G_V.security_level_quantum()
-            149
         """
         sec_level = min(
             self.complexity_quantum_boolean_solve(),

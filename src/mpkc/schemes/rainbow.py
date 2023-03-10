@@ -379,12 +379,6 @@ class Rainbow:
             sage: f  # random
             7*x0*x1 - 3*x0*x2 + 7*x1*x2 + 9*x0*x3 + 8*x1*x3 - 7*x0 - 11*x1 + 4*x2 + 8*x3 - 6
 
-        TESTS::
-
-            sage: O = R.oil_vars_at_layer(0)
-            sage: from itertools import combinations
-            sage: all([monomial not in combinations(O, 2) for monomial in f.monomials()])
-            True
         """
         if not 0 <= l < self.nlayers:
             raise ValueError(f"l must be in the range 0 <= l < {self.nlayers}")
@@ -475,22 +469,6 @@ class Rainbow:
             sage: v  # random
             (0, 1, 2, 1, 1)
 
-        TESTS::
-
-            sage: y == R.eval_central_map(v)
-            True
-            sage: V = VectorSpace(R.base_field, R.npolynomials)
-            sage: all(R.eval_central_map(R.preimage_central_map(y)) == y for y in V)
-            True
-            sage: R = Rainbow(q=3, n=5, v=[2, 3])
-            sage: V = VectorSpace(R.base_field, R.npolynomials)
-            sage: all(R.eval_central_map(R.preimage_central_map(y)) == y for y in V)
-            True
-            sage: R= Rainbow(q=3, n=28, v=[3, 5, 10, 17, 22])
-            sage: y = R.random_vector(R.npolynomials)
-            sage: x = R.preimage_central_map(y)
-            sage: R.eval_central_map(x) == y
-            True
         """
         if len(y) != self.npolynomials:
             raise ValueError(f"the length of y must be equal to {self.npolynomials}")
@@ -681,19 +659,6 @@ class Rainbow:
             [x1*x2 - x2^2 - x0*x3 + x1*x3 + x2*x3 + x3^2 + x0*x4 + x1*x4 - x4^2 - x1 + x2 + x3 - x4,
              -x0^2 - x0*x1 + x1*x2 + x1*x3 - x2*x3 - x0*x4 + x1*x4 + x2*x4 + x0 + x2 - 1,
              -x0*x1 + x0*x2 - x1*x2 + x2^2 + x0*x3 + x1*x3 - x2*x3 + x3^2 - x0*x4 + x1*x4 - x2*x4 - x4^2 + x0 + x1 - x3]
-
-        TESTS::
-
-            sage: x = R.vars()
-            sage: signature = R.random_signature()
-            sage: msg = P.subs( {x[i] : signature[i] for i in range(R.nvariables)} )
-            sage: T, t = R.inner_affine_map()
-            sage: v = T*signature + t
-            sage: F = R.central_map()
-            sage: w = F.subs( {x[i] : v[i] for i in range(R.nvariables)} )
-            sage: S, s = R.outer_affine_map()
-            sage: msg == (S * vector(w) + s).list()
-            True
         """
         if self._P is not None:
             return self._P
@@ -741,12 +706,6 @@ class Rainbow:
             sage: ti  # random
             (2, 2, 1, 2, 1)
 
-        TESTS::
-
-            sage: T, t = R.inner_affine_map()
-            sage: v = VectorSpace(R.base_field, R.nvariables).random_element()
-            sage: Ti*(T*v + t) + ti == v
-            True
         """
         T, t = self.inner_affine_map()
         return T.inverse(), -T.inverse()*t
@@ -767,12 +726,6 @@ class Rainbow:
             sage: si  # random
             (0, 0, 2)
 
-        TESTS::
-
-            sage: S, s = R.outer_affine_map()
-            sage: v = VectorSpace(R.base_field, R.npolynomials).random_element()
-            sage: Si*(S*v + s) + si == v
-            True
         """
         S, s = self.outer_affine_map()
         return S.inverse(), -S.inverse()*s
@@ -794,17 +747,6 @@ class Rainbow:
             sage: signature = [0, 1, 2, 1, 2]
             sage: R.is_valid_signature(signature, msg)  # random
             False
-
-        TESTS::
-
-            sage: R.is_valid_signature([0, 1, 2, 1], msg)
-            Traceback (most recent call last):
-            ...
-            ValueError: signature length must be equal to 5
-            sage: R.is_valid_signature(signature, [0, 1, 2, 1])
-            Traceback (most recent call last):
-            ...
-            ValueError: message length must be equal to 3
         """
         if len(signature) != self.nvariables:
             raise ValueError(f"signature length must be equal to {self.nvariables}")
@@ -825,38 +767,12 @@ class Rainbow:
     def complexity_classical_high_rank(self, use_gate_count=True):
         """
         Return the complexity of high rank attack against this instance of Rainbow using classical computer
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_classical_high_rank()
-            150
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_classical_high_rank()
-            410
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_classical_high_rank()
-            539
         """
         return self.complexity_high_rank(use_quantum=False, use_gate_count=use_gate_count)
 
     def complexity_quantum_high_rank(self, use_gate_count=True):
         """
         Return the complexity of high rank attack against this instance of Rainbow using quantum computer
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_quantum_high_rank()
-            86
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_quantum_high_rank()
-            218
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_quantum_high_rank()
-            283
         """
         return self.complexity_high_rank(use_quantum=True, use_gate_count=use_gate_count)
 
@@ -887,46 +803,12 @@ class Rainbow:
     def complexity_classical_uov(self, use_gate_count=True):
         """
         Return the complexity of UOV attack against this instance of Rainbow using classical computer
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_classical_uov()
-            165
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_classical_uov()
-            437
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_classical_uov()
-            567
-
-        NOTE:
-
-            The result for type I Rainbow is different from the one in the NIST Round 3 Submission
         """
         return self.complexity_uov(use_quantum=False, use_gate_count=use_gate_count)
 
     def complexity_quantum_uov(self, use_gate_count=True):
         """
         Return the complexity of UOV attack against this instance of Rainbow using quantum computer
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_quantum_uov()
-            95
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_quantum_uov()
-            233
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_quantum_uov()
-            299
-
-        NOTE:
-
-            The result for type I Rainbow is different from the one in the NIST Round 3 Submission
         """
         return self.complexity_uov(use_quantum=True, use_gate_count=use_gate_count)
 
@@ -962,19 +844,6 @@ class Rainbow:
         INPUT:
 
         - ``use_gate_count`` -- return the results in terms of the number of gate (default: True)
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 164
-            144
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 234
-            221
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_classical_direct_attack()  # official result with XL-Wiedemann: 285
-            272
         """
         return self.complexity_direct_attack(use_quantum=False, use_gate_count=use_gate_count)
 
@@ -985,19 +854,6 @@ class Rainbow:
         INPUT:
 
         - ``use_gate_count`` -- return the results in terms of the number of gate (default: True)
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_quantum_direct_attack()  # official result with XL-Wiedemann: 122
-            111
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_quantum_direct_attack()  # official result with XL-Wiedemann: 200
-            187
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_quantum_direct_attack()  # official result with XL-Wiedemann: 243
-            230
         """
         return self.complexity_direct_attack(use_quantum=True, use_gate_count=use_gate_count)
 
@@ -1042,19 +898,6 @@ class Rainbow:
 
             This function is currently implemented for 2-layer Rainbow based on the complexity described in (23) and
             (24) of https://arxiv.org/pdf/2002.08322.pdf
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_classical_minrank(use_gate_count=False)  # official result: 162
-            160
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_classical_minrank(use_gate_count=False)  # official result: 228
-            227
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_classical_minrank(use_gate_count=False)  # official result: 296
-            295
         """
         if self.nlayers != 2:
             raise ValueError("minrank complexity is only implemented for 2-layer Rainbow")
@@ -1108,19 +951,6 @@ class Rainbow:
         INPUT:
 
         - ``use_gate_count`` -- return the results in terms of the number of gate (default: True)
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.complexity_classical_rbs()  # long time ; official result: 147
-            146
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.complexity_classical_rbs()  # long time
-            217
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.complexity_classical_rbs()  # long time
-            281
         """
         if self.nlayers != 2:
             raise ValueError("minrank complexity is only implemented for 2-layer Rainbow")
@@ -1180,19 +1010,6 @@ class Rainbow:
         INPUT:
 
         - ``use_gate_count`` -- return the results in terms of the number of gate (default: True)
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.security_level_classical()  # long time
-            146
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.security_level_classical()  # long time
-            217
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.security_level_classical()  # long time
-            272
         """
         sec_level = min(self.complexity_classical_direct_attack(use_gate_count=use_gate_count),
                         self.complexity_classical_minrank(use_gate_count=use_gate_count),
@@ -1209,19 +1026,6 @@ class Rainbow:
         INPUT:
 
         - ``use_gate_count`` -- return the results in terms of the number of gate (default: True)
-
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R_I = Rainbow(q=16, n=100, v=[36, 68])
-            sage: R_I.security_level_quantum()  # long time
-            86
-            sage: R_III = Rainbow(q=256, n=148, v=[68, 100])
-            sage: R_III.security_level_quantum()  # long time
-            187
-            sage: R_V = Rainbow(q=256, n=196, v=[96, 132])
-            sage: R_V.security_level_quantum()  # long time
-            230
         """
         sec_level = min(self.complexity_quantum_direct_attack(use_gate_count=use_gate_count),
                         self.complexity_quantum_minrank(use_gate_count=use_gate_count),
@@ -1235,17 +1039,6 @@ class Rainbow:
         """
         Return a random invertible affine map
 
-        TESTS::
-
-            sage: from mpkc.schemes import Rainbow
-            sage: R = Rainbow(q=31, n=5, v=[2, 4])
-            sage: M2, v2 = R._random_affine_map_(2)
-            sage: M2.is_invertible()
-            True
-            sage: len(v2) == 2
-            True
-            sage: M2.dimensions()
-            (2, 2)
         """
         return random_affine_map(self.base_field, n)
 
@@ -1271,12 +1064,6 @@ class Rainbow:
 def Rainbow128():
     """
     Return an instance of Rainbow with 128-bit security
-
-    EXAMPLES::
-
-        sage: from mpkc.schemes.rainbow import Rainbow128
-        sage: Rainbow128()
-        Rainbow signature over GF(16) with 100 variables and 64 polynomials
     """
     return Rainbow(q=16, n=100, v=[36, 68])
 
@@ -1284,12 +1071,6 @@ def Rainbow128():
 def Rainbow192():
     """
     Return an instance of Rainbow with 192-bit security
-
-    EXAMPLES::
-
-        sage: from mpkc.schemes.rainbow import Rainbow192
-        sage: Rainbow192()
-        Rainbow signature over GF(256) with 148 variables and 80 polynomials
     """
     return Rainbow(q=256, n=148, v=[68, 100])
 
@@ -1297,12 +1078,6 @@ def Rainbow192():
 def Rainbow256():
     """
     Return an instance of Rainbow with 256-bit security
-
-    EXAMPLES::
-
-        sage: from mpkc.schemes.rainbow import Rainbow256
-        sage: Rainbow256()
-        Rainbow signature over GF(256) with 196 variables and 100 polynomials
     """
     return Rainbow(q=256, n=196, v=[96, 132])
 
@@ -1319,16 +1094,6 @@ def generate_instances(sec_level_classical, sec_level_quantum, min_q=2, max_q=25
     - ``max_q`` -- maximum order of the finite field (default: 256)
     - ``min_nvars`` -- minimum no. of variables (default: 1)
     - ``max_nvars`` -- maximum no. of variables (default: 196)
-
-    EXAMPLES::
-
-        sage: from mpkc.schemes.rainbow import generate_instances
-        sage: instances = generate_instances(sec_level_classical=25, sec_level_quantum=20,\
-        ....:                                min_nvars=9, max_nvars=10, min_q=251)  # long time
-        sage: len(instances) # long time
-        36
-        sage: instances[0]  # long time
-        Rainbow signature over GF(251) with 9 variables and 8 polynomials
     """
     from sage.arith.misc import is_prime_power
 

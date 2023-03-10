@@ -175,6 +175,7 @@ class HybridF5(BaseAlgorithm):
                 time_complexity = self._time_complexity_(k)
 
         h = self._h
+        q = self.order_of_the_field()
         time_complexity *= q ** h
         return time_complexity
 

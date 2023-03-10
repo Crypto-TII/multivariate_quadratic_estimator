@@ -95,7 +95,7 @@ class F5(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import F5
-            sage: F5_ = F5(n=10, m=15, degrees=[3]*15)
+            sage: F5_ = F5(n=10, m=15, degrees=[3]*15, q=31)
             sage: F5_.time_complexity()
             8533694884
 
@@ -105,8 +105,8 @@ class F5(BaseAlgorithm):
             64128064
             sage: F5(n=10, m=12, q=5).time_complexity()
             64128064
-            sage: F0 = F5(n=15, m=12)
-            sage: F1 = F5(n=17, m=12)
+            sage: F0 = F5(n=15, m=12, q=5)
+            sage: F1 = F5(n=17, m=12, q=5)
             sage: F0.time_complexity() == F1.time_complexity()
             True
         """
@@ -147,13 +147,13 @@ class F5(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import F5
-            sage: F5_ = F5(n=10, m=5)
+            sage: F5_ = F5(n=10, m=5, q=31)
             sage: F5_.time_complexity_regular_system()
             50176
 
         TESTS::
 
-            sage: F5(n=15, m=5, degrees=[2]*5).time_complexity_regular_system()
+            sage: F5(n=15, m=5, degrees=[2]*5, q=31).time_complexity_regular_system()
             2025
         """
         if not (self.is_square_system() or self.is_underdefined_system()):
@@ -173,13 +173,13 @@ class F5(BaseAlgorithm):
         EXAMPLES::
 
             sage: from mpkc.algorithms import F5
-            sage: F5_ = F5(n=5, m=10)
+            sage: F5_ = F5(n=5, m=10, q=7)
             sage: F5_.time_complexity_semi_regular_system()
             3136
 
         TESTS::
 
-            sage: F5(n=5, m=15, degrees=[2]*15).time_complexity_semi_regular_system()
+            sage: F5(n=5, m=15, degrees=[2]*15, q=7).time_complexity_semi_regular_system()
             441
         """
         if not self.is_overdefined_system():
