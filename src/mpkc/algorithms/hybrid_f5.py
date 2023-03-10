@@ -175,7 +175,7 @@ class HybridF5(BaseAlgorithm):
                 time_complexity = self._time_complexity_(k)
 
         h = self._h
-        time_complexity *= 2 ** h
+        time_complexity *= q ** h
         return time_complexity
 
     def memory_complexity(self, **kwargs):

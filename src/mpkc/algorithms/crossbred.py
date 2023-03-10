@@ -305,7 +305,7 @@ class Crossbred(BaseAlgorithm):
 
         h = self._h
         if all(var is not None for var in (k, D, d)):
-            return 2 ** h * self._time_complexity_(k, D, d)
+            return q ** h * self._time_complexity_(k, D, d)
 
         min_time_complexity = Infinity
         if self._time_complexity is None:
@@ -316,7 +316,7 @@ class Crossbred(BaseAlgorithm):
                     self._k = k
                     self._D = D
                     self._d = d
-            self._time_complexity = 2 ** h * min_time_complexity
+            self._time_complexity = q ** h * min_time_complexity
 
         return self._time_complexity
 
@@ -386,7 +386,7 @@ class Crossbred(BaseAlgorithm):
         n = self.nvariables_reduced()
         w = self.linear_algebra_constant()
         h = self._h
-        return 2 ** h * np ** 2 + q ** (n - k) * nl ** w
+        return q ** h * np ** 2 + q ** (n - k) * nl ** w
 
     def _time_complexity_(self, k, D, d):
         n, m = self.nvariables_reduced(), self.npolynomials_reduced()

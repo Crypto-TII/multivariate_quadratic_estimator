@@ -164,7 +164,7 @@ class F5(BaseAlgorithm):
         w = self.linear_algebra_constant()
         dreg = degree_of_regularity.quadratic_system(n, m, q=q)
         h = self._h
-        return 2 ** h * (m * binomial(n + dreg - 1, dreg)) ** w
+        return q ** h * (m * binomial(n + dreg - 1, dreg)) ** w
 
     def time_complexity_semi_regular_system(self):
         """
@@ -191,7 +191,7 @@ class F5(BaseAlgorithm):
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.semi_regular_system(n, degrees, q)
         h = self._h
-        return 2 ** h *  binomial(n + dreg, dreg) ** w
+        return q ** h *  binomial(n + dreg, dreg) ** w
 
     def memory_complexity(self):
         """

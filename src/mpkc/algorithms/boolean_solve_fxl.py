@@ -151,7 +151,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             time_complexity = self._time_complexity
 
         h = self._h
-        time_complexity *= 2 ** h
+        time_complexity *= q ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -206,7 +206,7 @@ class BooleanSolveFXL(BaseAlgorithm):
             complexity = q ** k * binomial(n - k + wit_deg, wit_deg) ** w
 
         h = self._h
-        return 2 ** h * complexity
+        return q ** h * complexity
 
     def _compute_time_complexity_(self):
         min_time_complexity = Infinity

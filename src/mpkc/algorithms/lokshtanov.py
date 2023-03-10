@@ -129,7 +129,7 @@ class Lokshtanov(BaseAlgorithm):
                 time_complexity = 100 * log(q, 2) * (q - 1) * sum([self._C(n - i, δ) for i in range(1, n)])
 
         h = self._h
-        time_complexity *= 2 ** h
+        time_complexity *= q ** h
         return time_complexity
 
     def memory_complexity(self):
@@ -188,7 +188,7 @@ class Lokshtanov(BaseAlgorithm):
             time = q ** n * (log(q, 2) / (2 * e * d)) ** (-d * n)
 
         h = self._h
-        return 2 ** h * time
+        return q ** h * time
 
     def _C(self, n, delta):
         q = self.order_of_the_field()
