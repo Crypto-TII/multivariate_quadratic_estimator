@@ -54,8 +54,10 @@ class HilbertSeries(object):
         if q is not None:
             if not is_prime_power(q):
                 raise ValueError("the order of finite field q must be a prime power")
-
-            self._series = prod([(1 - z ** d) / (1 - z ** (d * q)) for d in degrees]) * ((1 - z ** q) / (1 - z)) ** n
+            if q < 2*len(self._degrees):
+                self._series = prod([(1 - z ** d) / (1 - z ** (d * q)) for d in degrees]) * ((1 - z ** q) / (1 - z)) ** n
+            else:
+                self._series = prod([1 - z ** d for d in degrees]) / (1 - z) ** n
         else:
             self._series = prod([1 - z ** d for d in degrees]) / (1 - z) ** n
 

@@ -55,6 +55,9 @@ class Lokshtanov(BaseAlgorithm):
         if not isinstance(q, (int, Integer)):
             raise TypeError("q must be an integer")
 
+        if q > 1024:
+            raise TypeError("q too big to run this algorithm")
+
         super().__init__(n=n, m=m, q=q, h=h)
         self._time_complexity = None
         self._memory_complexity = None
@@ -113,6 +116,7 @@ class Lokshtanov(BaseAlgorithm):
         q = self.order_of_the_field()
         n = self.nvariables_reduced()
         δ = kwargs.get('δ', self.δ())
+
         if δ is None:
             return Infinity
         else:
@@ -156,8 +160,9 @@ class Lokshtanov(BaseAlgorithm):
                 return Infinity
 
             n = self.nvariables_reduced()
-            np = floor(n * δ)
             q = self.order_of_the_field()
+
+            np = floor(n * δ)
             resulting_degree = 2 * (q - 1) * (np + 2)
             M = NMonomialSeries(n=n - np, q=q, max_prec=resulting_degree + 1).nmonomials_up_to_degree(resulting_degree)
             self._memory_complexity = M + log(n, 2) * q ** (n - np)
