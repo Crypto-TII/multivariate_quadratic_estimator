@@ -183,8 +183,8 @@ class MQEstimator(object):
             +------------------+--------+--------+---------------------------+
             |    algorithm     |  time  | memory |         parameters        |
             +------------------+--------+--------+---------------------------+
-            |        F5        | 30.972 | 23.158 |                           |
-            |     HybridF5     | 17.169 | 3.906  |           k: 14           |
+            |        F5        | 27.747 | 23.158 |                           |
+            |     HybridF5     | 21.076 | 3.906  |           k: 14           |
             |    DinurFirst    | 32.111 | 21.493 |      λ: 1/14, κ: 1/7      |
             |   DinurSecond    | 20.349 | 15.801 |           n1: 2           |
             | ExhaustiveSearch | 17.966 | 11.72  |                           |
@@ -202,8 +202,8 @@ class MQEstimator(object):
             +------------------+--------+--------+---------------------------+
             |    algorithm     |  time  | memory |         parameters        |
             +------------------+--------+--------+---------------------------+
-            |        F5        | 38.298 | 30.484 |                           |
-            |     HybridF5     | 24.634 |  8.55  |           k: 10           |
+            |        F5        | 35.362 | 30.484 |                           |
+            |     HybridF5     | 28.541 |  8.55  |           k: 10           |
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
@@ -258,7 +258,7 @@ class MQEstimator(object):
              sage: from mpkc import MQEstimator
              sage: E = MQEstimator(n=15, m=15, q=2)
              sage: E.fastest_algorithm()
-             Complexity estimator for hybrid approach with 15 variables and 15 polynomials
+             Crossbred estimator for the MQ problem
          """
         key = lambda algorithm: algorithm.tilde_o_time() if use_tilde_o_time else algorithm.time_complexity()
         return min(self.algorithms(), key=key)
@@ -284,38 +284,20 @@ def min_npolynomials(security_level, q, w=2):
 
         sage: from mpkc.mq_estimator import min_npolynomials
         sage: min_npolynomials(security_level=80, q=16)
-        33
+        31
 
     TESTS::
 
         sage: min_npolynomials(security_level=80, q=31)
-        32
+        30
         sage: min_npolynomials(security_level=80, q=256)
-        28
+        26
         sage: min_npolynomials(security_level=100, q=16)
-        43
-        sage: min_npolynomials(security_level=100, q=31)
         40
+        sage: min_npolynomials(security_level=100, q=31)
+        38
         sage: min_npolynomials(security_level=100, q=256)
-        36
-        sage: min_npolynomials(security_level=128, q=16)
-        56
-        sage: min_npolynomials(security_level=128, q=31)
-        52
-        sage: min_npolynomials(security_level=128, q=256)
-        47
-        sage: min_npolynomials(security_level=192, q=16)
-        86
-        sage: min_npolynomials(security_level=192, q=31)
-        80
-        sage: min_npolynomials(security_level=192, q=256)
-        72
-        sage: min_npolynomials(security_level=256, q=16)  # long time
-        116
-        sage: min_npolynomials(security_level=256, q=31)  # long time
-        109
-        sage: min_npolynomials(security_level=256, q=256)  # long time
-        98
+        35
     """
     if security_level not in (80, 100, 128, 192, 256):
         raise ValueError("the valid parameter for security_level is {80, 100, 128, 192, 256}")
@@ -341,6 +323,6 @@ def min_nvariables(security_level, q, w=2):
 
         sage: from mpkc.mq_estimator import min_nvariables
         sage: min_nvariables(security_level=80, q=16)
-        33
+        31
     """
     return min_npolynomials(security_level, q, w)

@@ -97,14 +97,14 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=15, degrees=[3]*15, q=31)
             sage: F5_.time_complexity()
-            8533694884
+            128005423260
 
         TESTS::
 
             sage: F5(n=10, m=15, q=3, degrees=[3]*15).time_complexity()
-            64128064
+            961920960
             sage: F5(n=10, m=12, q=5).time_complexity()
-            64128064
+            769536768
             sage: F0 = F5(n=15, m=12, q=5)
             sage: F1 = F5(n=17, m=12, q=5)
             sage: F0.time_complexity() == F1.time_complexity()
@@ -149,12 +149,12 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=10, m=5, q=31)
             sage: F5_.time_complexity_regular_system()
-            50176
+            63504
 
         TESTS::
 
             sage: F5(n=15, m=5, degrees=[2]*5, q=31).time_complexity_regular_system()
-            2025
+            3675
         """
         if not (self.is_square_system() or self.is_underdefined_system()):
             raise ValueError("regularity assumption is valid only on square or underdefined system")
@@ -164,7 +164,7 @@ class F5(BaseAlgorithm):
         w = self.linear_algebra_constant()
         dreg = degree_of_regularity.quadratic_system(n, m, q=q)
         h = self._h
-        return q ** h * (m * binomial(n + dreg - 1, dreg)) ** w
+        return q ** h * m * binomial(n + dreg, dreg) ** w
 
     def time_complexity_semi_regular_system(self):
         """
@@ -175,23 +175,23 @@ class F5(BaseAlgorithm):
             sage: from mpkc.algorithms import F5
             sage: F5_ = F5(n=5, m=10, q=7)
             sage: F5_.time_complexity_semi_regular_system()
-            3136
+            31360
 
         TESTS::
 
             sage: F5(n=5, m=15, degrees=[2]*15, q=7).time_complexity_semi_regular_system()
-            441
+            6615
         """
         if not self.is_overdefined_system():
             raise ValueError("semi regularity assumption is valid only on overdefined system")
 
-        n = self.nvariables_reduced()
+        n, m = self.nvariables_reduced(), self.npolynomials_reduced()
         w = self.linear_algebra_constant()
         q = self.order_of_the_field()
         degrees = self.degree_of_polynomials()
         dreg = degree_of_regularity.semi_regular_system(n, degrees, q)
         h = self._h
-        return q ** h *  binomial(n + dreg, dreg) ** w
+        return q ** h * m * binomial(n + dreg, dreg) ** w
 
     def memory_complexity(self):
         """
@@ -230,7 +230,7 @@ class F5(BaseAlgorithm):
             sage: E.tilde_o_time()
             64128064
         """
-        return self.time_complexity()
+        return self.time_complexity()/self.npolynomials()
 
     def __repr__(self):
         n, m = self.nvariables(), self.npolynomials()
