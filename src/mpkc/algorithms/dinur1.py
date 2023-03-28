@@ -179,7 +179,6 @@ class DinurFirst(BaseAlgorithm):
             for n2 in range(1, n1):
                 lambda_ = (n1 - n2) / (n - 1)
                 w = floor((n - 1) * (1 - kappa))
-                n1 = floor((n - 1) * kappa)
                 complexity = self._T(n - 1, n1, w, lambda_)
                 if complexity < min_complexity:
                     min_complexity = complexity
