@@ -89,7 +89,7 @@ class Bjorklund(BaseAlgorithm):
 
         for l in range(3, min(m, n - 1)):
             λ_ = l / n
-            complexity = Bjorklund._T(n, m + k + 2, λ_)
+            complexity = self._time_complexity_(λ_)
             if complexity < min_complexity:
                 min_complexity = complexity
                 optimal_λ = λ_
