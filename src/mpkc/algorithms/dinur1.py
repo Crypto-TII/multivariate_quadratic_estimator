@@ -69,7 +69,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: E = DinurFirst(n=10, m=12)
             sage: E.λ()
-            1/9
+            2/9
         """
         if self._lambda is None:
             self._compute_kappa_and_lambda_()
@@ -85,7 +85,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: E = DinurFirst(n=10, m=12)
             sage: E.κ()
-            2/9
+            1/3
         """
         if self._kappa is None:
             self._compute_kappa_and_lambda_()
@@ -107,7 +107,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: E = DinurFirst(n=10, m=12)
             sage: float(log(E.time_complexity(), 2))
-            26.819919688075288
+            26.81991353901186
             sage: float(log(E.time_complexity(κ=0.9, λ=0.9), 2))
             16.73237302312492
 
@@ -151,7 +151,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: E = DinurFirst(n=10, m=12)
             sage: float(log(E.memory_complexity(), 2))
-            15.909893083770042
+            14.909893083770042
 
         TESTS::
 
@@ -167,6 +167,18 @@ class DinurFirst(BaseAlgorithm):
 
         return self._memory_complexity
 
+    def _time_complexity_(self, kappa, lambda_):
+        k = self._k
+        n = self.nvariables_reduced()
+        def w(i, kappa):
+            return floor((n - i) * (1 - kappa))
+
+        def n1(i, kappa):
+            return floor((n - i) * kappa)
+
+        return 8 * k * log(n, 2) * sum([self._T(n - i, n1(i, kappa),
+                                   w(i, kappa), lambda_) for i in range(1, n)])
+
     def _compute_kappa_and_lambda_(self):
         min_complexity = Infinity
         n, m = self.nvariables_reduced(), self.npolynomials_reduced()
@@ -174,12 +186,11 @@ class DinurFirst(BaseAlgorithm):
         optimal_kappa = None
         optimal_lambda = None
 
-        for n1 in range(1, min(m + k, (n - 1) // 3) + 1):
+        for n1 in range(2, min(m + k, (n - 1) // 3) + 1):
             kappa = n1 / (n - 1)
             for n2 in range(1, n1):
                 lambda_ = (n1 - n2) / (n - 1)
-                w = floor((n - 1) * (1 - kappa))
-                complexity = self._T(n - 1, n1, w, lambda_)
+                complexity = self._time_complexity_(kappa, lambda_)
                 if complexity < min_complexity:
                     min_complexity = complexity
                     optimal_kappa = kappa
@@ -378,7 +389,7 @@ class DinurFirst(BaseAlgorithm):
             sage: from mpkc.algorithms import DinurFirst
             sage: H = DinurFirst(n=15, m=15)
             sage: H.optimal_parameters()
-            {'κ': 1/7, 'λ': 1/14}
+            {'κ': 2/7, 'λ': 3/14}
         """
         return super().optimal_parameters()
 
