@@ -10,6 +10,13 @@ An eprint version is available as
 
 > Cryptology ePrint Archive, Report 2022/708, 2022. https://eprint.iacr.org/2022/708.pdf.
 
+## Not Maintained since the August 18th 2023. 
+
+We launched another more comprehensive estimator project that incorporates the source code of this repository with some improvements. 
+**We highly recommend to use that new project** available at https://github.com/Crypto-TII/CryptographicEstimators to produce new estimates. 
+The current repository is not actively maintained (apart from bug fixes) and serves mainly for reference purposes. 
+The most up-to-date estimates are therefore obtained via the new project CrypographicEstimators.
+
 
 ## Quick Start
 
