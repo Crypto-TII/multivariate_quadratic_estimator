@@ -189,7 +189,7 @@ class MQEstimator(object):
             |   DinurSecond    | 20.349 | 15.801 |           n1: 2           |
             | ExhaustiveSearch | 17.966 | 11.72  |                           |
             |    Bjorklund     | 42.451 | 15.316 |           λ: 1/5          |
-            |    Lokshtanov    | 67.123 | 16.105 |          δ: 1/15          |
+            |    Lokshtanov    | 63.357 | 16.105 |          δ: 1/15          |
             | BooleanSolveFXL  | 20.339 | 5.825  | k: 14, variant: las_vegas |
             |    Crossbred     | 17.672 | 16.785 |      D: 4, k: 9, d: 1     |
             +------------------+--------+--------+---------------------------+
@@ -205,7 +205,7 @@ class MQEstimator(object):
             |        F5        | 35.362 | 30.484 |                           |
             |     HybridF5     | 28.541 |  8.55  |           k: 10           |
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
-            |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
+            |    Lokshtanov    | 94.438 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
             |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
@@ -218,7 +218,7 @@ class MQEstimator(object):
             |    algorithm     |  time  | memory |         parameters        |
             +------------------+--------+--------+---------------------------+
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
-            |    Lokshtanov    | 98.227 | 24.266 |          δ: 1/15          |
+            |    Lokshtanov    | 94.438 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
             |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
