@@ -191,7 +191,7 @@ class MQEstimator(object):
             |    Bjorklund     | 42.451 | 15.316 |           λ: 1/5          |
             |    Lokshtanov    | 63.357 | 16.105 |          δ: 1/15          |
             | BooleanSolveFXL  | 20.339 | 5.825  | k: 14, variant: las_vegas |
-            |    Crossbred     | 17.672 | 16.785 |      D: 4, k: 9, d: 1     |
+            |    Crossbred     | 18.174 | 15.616 |      D: 3, k: 7, d: 1     |
             +------------------+--------+--------+---------------------------+
 
 
@@ -207,7 +207,7 @@ class MQEstimator(object):
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 94.438 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
+            |    Crossbred     | 24.061 | 21.538 |      D: 4, k: 6, d: 1     |
             +------------------+--------+--------+---------------------------+
 
 
@@ -220,7 +220,7 @@ class MQEstimator(object):
             | ExhaustiveSearch | 24.076 | 11.72  |                           |
             |    Lokshtanov    | 94.438 | 24.266 |          δ: 1/15          |
             | BooleanSolveFXL  | 28.529 | 5.711  | k: 14, variant: las_vegas |
-            |    Crossbred     | 23.36  | 22.091 |      D: 5, k: 7, d: 1     |
+            |    Crossbred     | 24.061 | 21.538 |      D: 4, k: 6, d: 1     |
             +------------------+--------+--------+---------------------------+
         """
         table = PrettyTable()
@@ -258,7 +258,7 @@ class MQEstimator(object):
              sage: from mpkc import MQEstimator
              sage: E = MQEstimator(n=15, m=15, q=2)
              sage: E.fastest_algorithm()
-             Crossbred estimator for the MQ problem
+             Complexity estimator for hybrid approach with 15 variables and 15 polynomials
          """
         key = lambda algorithm: algorithm.tilde_o_time() if use_tilde_o_time else algorithm.time_complexity()
         return min(self.algorithms(), key=key)
