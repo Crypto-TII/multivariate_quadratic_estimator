@@ -158,6 +158,10 @@ References
 
 **S**
 
+.. [BBSV21] \Stefano Barbero Emanuele Bellini Carlo Sanna Javier Verbel.
+            *Practical complexities of probabilistic algorithms for solving Boolean polynomial systems*
+            https://eprint.iacr.org/2021/913.pdf
+
 .. _ref-T:
 
 **T**

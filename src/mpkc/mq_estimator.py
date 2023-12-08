@@ -188,7 +188,7 @@ class MQEstimator(object):
             |    DinurFirst    | 32.111 | 19.493 |      λ: 3/14, κ: 2/7      |
             |   DinurSecond    | 20.349 | 15.801 |           n1: 2           |
             | ExhaustiveSearch | 17.966 | 11.72  |                           |
-            |    Bjorklund     | 42.451 | 15.316 |           λ: 1/5          |
+            |    Bjorklund     | 39.823 | 15.316 |           λ: 1/5          |
             |    Lokshtanov    | 63.357 | 16.105 |          δ: 1/15          |
             | BooleanSolveFXL  | 20.339 | 5.825  | k: 14, variant: las_vegas |
             |    Crossbred     | 18.174 | 15.616 |      D: 3, k: 7, d: 1     |
